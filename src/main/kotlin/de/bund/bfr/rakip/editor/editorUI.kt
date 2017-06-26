@@ -492,11 +492,6 @@ class FixedJDateChooser : JDateChooser() {
     }
 }
 
-abstract class ValidatablePanel : javax.swing.JPanel(java.awt.GridBagLayout()) {
-
-    abstract fun validatePanel(): List<String>
-}
-
 class CreatorPanel(val creators: MutableList<VCard>) : javax.swing.JPanel(java.awt.BorderLayout()) {
 
     init {
