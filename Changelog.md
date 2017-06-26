@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [0.0.1a1] - 2017-06-26
+## [0.0.0a0] - 2017-06-26
 ### Added
 - Changelog
 - `de.bund.bfr.rakip.editor.validatableDialogs.kt`
