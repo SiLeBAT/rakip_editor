@@ -1,0 +1,33 @@
+group 'de.bund.bfr'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.kotlin_version = '1.1.2-5'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+    flatDir { dirs 'deps' }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compile group: 'com.googlecode.ez-vcard', name: 'ez-vcard', version: '0.10.2'
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.15'
+    compile group: 'com.google.guava', name: 'guava', version: '22.0'  // required by 'de.bund.bfr'
+
+    // Local jars
+    compile name: 'jris-1.0.0'
+    compile name: 'jcalendar-1.4'
+    compile name: 'de.bund.bfr'
+    compile name: 'rakip_models-0.0.0a1'
+}
