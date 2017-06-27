@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.3a0] - 2017-06-27
+### Changed
+- Fix layout in `ValidatableDialog`. Temporal solution before using FCL UI utils.
+- Fix property in MessagesBundle `EditHazardPanel.contaminationRangeTooltip`
+
 ## [0.0.2a0]
 ### Changed
 - Fixed advanced mode for `EditAssayPanel`

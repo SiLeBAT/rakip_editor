@@ -13,7 +13,7 @@ import javax.swing.*
  */
 class ValidatableDialog(panel: ValidatablePanel, dialogTitle: String) : JDialog(null as Frame?, true) {
 
-    private val optionPane = JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION)
+    private val optionPane = JOptionPane(JScrollPane(panel), JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION)
 
     init {
 
