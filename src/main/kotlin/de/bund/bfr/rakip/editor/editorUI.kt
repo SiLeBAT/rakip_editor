@@ -255,7 +255,7 @@ class GeneralInformationPanel(generalInformation: GeneralInformation) : Box(BoxL
     init {
 
         // init combo boxes
-        rightsField.setPossibleValues(vocabs["Rigthts"])
+        rightsField.setPossibleValues(vocabs["Rights"])
         formatField.setPossibleValues(vocabs["Format"])
         softwareField.setPossibleValues(vocabs["Software"])
         languageWrittenInField.setPossibleValues(vocabs["Language written in"])
