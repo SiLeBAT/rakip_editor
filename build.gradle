@@ -1,5 +1,5 @@
 group 'de.bund.bfr'
-version '0.0.1a0'
+version '0.0.2a0'
 
 buildscript {
     ext.kotlin_version = '1.1.2-5'

@@ -86,7 +86,7 @@ class EditAssayPanel(assay: Assay? = null, isAdvanced: Boolean) : ValidatablePan
 
         val pairList = mutableListOf<Pair<JLabel, JComponent>>()
         pairList.add(Pair(first = nameLabel, second = nameTextField))
-        descriptionTextArea?.let { Pair(first = descriptionLabel, second = it) }
+        descriptionTextArea?.let { pairList.add(Pair(first = descriptionLabel, second = it)) }
 
         addGridComponents(pairs = pairList)
     }
@@ -181,9 +181,9 @@ class EditDietaryAssessmentMethodPanel(dietaryAssessmentMethod: DietaryAssessmen
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
         if (!dataCollectionToolField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditDietaryAssessmentMethodPanel.dataCollectionToolLabel") }")
+            errors.add("Missing ${messages.getString("EditDietaryAssessmentMethodPanel.dataCollectionToolLabel")}")
         if (!nonConsecutiveOneDayTextField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysLabel") }")
+            errors.add("Missing ${messages.getString("EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysLabel")}")
 
         return errors
     }
@@ -355,11 +355,11 @@ class EditHazardPanel(hazard: Hazard? = null, isAdvanced: Boolean) : Validatable
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
         if (!hazardNameField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditHazardPanel.hazardNameLabel") }")
+            errors.add("Missing ${messages.getString("EditHazardPanel.hazardNameLabel")}")
         if (!hazardTypeField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditHazardPanel.hazardTypeLabel") }")
+            errors.add("Missing ${messages.getString("EditHazardPanel.hazardTypeLabel")}")
         if (!hazardUnitField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditHazardPanel.hazardUnitLabel") }")
+            errors.add("Missing ${messages.getString("EditHazardPanel.hazardUnitLabel")}")
 
         return errors
     }
@@ -401,9 +401,9 @@ class EditModelEquationPanel(equation: ModelEquation? = null, isAdvanced: Boolea
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
         if (!equationNameTextField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditModelEquationPanel.nameLabel") }")
+            errors.add("Missing ${messages.getString("EditModelEquationPanel.nameLabel")}")
         if (!scriptTextArea.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditModelEquationPanel.scriptLabel") }")
+            errors.add("Missing ${messages.getString("EditModelEquationPanel.scriptLabel")}")
 
         return errors
     }
@@ -515,17 +515,17 @@ class EditParameterPanel(parameter: Parameter? = null, isAdvanced: Boolean) : Va
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
         if (!idTextField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditParameterPanel.idLabel") }")
+            errors.add("Missing ${messages.getString("EditParameterPanel.idLabel")}")
         if (!classificationField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditParameterPanel.classificationLabel") }")
+            errors.add("Missing ${messages.getString("EditParameterPanel.classificationLabel")}")
         if (!nameTextField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditParameterPanel.parameterNameLabel") }")
+            errors.add("Missing ${messages.getString("EditParameterPanel.parameterNameLabel")}")
         if (!unitField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditParameterPanel.unitLabel") }")
+            errors.add("Missing ${messages.getString("EditParameterPanel.unitLabel")}")
         if (!unitCategoryField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditParameterPanel.unitCategoryLabel") }")
+            errors.add("Missing ${messages.getString("EditParameterPanel.unitCategoryLabel")}")
         if (!dataTypeField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditParameterPanel.dataTypeLabel") }")
+            errors.add("Missing ${messages.getString("EditParameterPanel.dataTypeLabel")}")
 
         return errors
     }
@@ -656,7 +656,7 @@ class EditPopulationGroupPanel(populationGroup: PopulationGroup? = null, isAdvan
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
         if (!populationNameTextField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditPopulationGroupPanel.populationNameLabel") }")
+            errors.add("Missing ${messages.getString("EditPopulationGroupPanel.populationNameLabel")}")
         return errors
     }
 }
@@ -775,9 +775,9 @@ class EditProductPanel(product: Product? = null, isAdvanced: Boolean) : Validata
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
         if (!envNameField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditProductPanel.envNameLabel") }")
+            errors.add("Missing ${messages.getString("EditProductPanel.envNameLabel")}")
         if (!envUnitField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditProductPanel.envUnitLabel") }")
+            errors.add("Missing ${messages.getString("EditProductPanel.envUnitLabel")}")
 
         return errors
     }
@@ -804,7 +804,6 @@ class EditReferencePanel(ref: Record? = null, isAdvanced: Boolean) : Validatable
     private val statusTextField = if (isAdvanced) JTextField(30) else null
     private val websiteTextField = if (isAdvanced) JTextField(30) else null
     private val commentTextField = if (isAdvanced) JTextArea(5, 30) else null
-
 
 
     init {
@@ -932,9 +931,9 @@ class EditReferencePanel(ref: Record? = null, isAdvanced: Boolean) : Validatable
     override fun validatePanel(): List<String> {
         val errorList = mutableListOf<String>()
         if (!doiTextField.hasValidValue())
-            errorList.add("Missing ${ messages.getString("EditReferencePanel.doiLabel") }")
+            errorList.add("Missing ${messages.getString("EditReferencePanel.doiLabel")}")
         if (!titleTextField.hasValidValue())
-            errorList.add("Missing ${ messages.getString("EditReferencePanel.titleLabel") }")
+            errorList.add("Missing ${messages.getString("EditReferencePanel.titleLabel")}")
 
         return errorList
     }
@@ -1070,15 +1069,15 @@ class EditStudySamplePanel(studySample: StudySample? = null, isAdvanced: Boolean
 
         val errors = mutableListOf<String>()
         if (!sampleNameTextField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditStudySamplePanel.sampleNameLabel") }")
+            errors.add("Missing ${messages.getString("EditStudySamplePanel.sampleNameLabel")}")
         if (!sampleProtocolTextField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditStudySamplePanel.sampleProtocolLabel") }")
+            errors.add("Missing ${messages.getString("EditStudySamplePanel.sampleProtocolLabel")}")
         if (!samplingPlanTextField.hasValidValue())
-            errors.add("Missing ${ messages.getString( "EditStudySamplePanel.samplingPlanLabel") }")
+            errors.add("Missing ${messages.getString("EditStudySamplePanel.samplingPlanLabel")}")
         if (!samplingWeightTextField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditStudySamplePanel.samplingWeightLabel") }")
+            errors.add("Missing ${messages.getString("EditStudySamplePanel.samplingWeightLabel")}")
         if (!samplingSizeTextField.hasValidValue())
-            errors.add("Missing ${ messages.getString("EditStudySamplePanel.samplingSizeLabel") }")
+            errors.add("Missing ${messages.getString("EditStudySamplePanel.samplingSizeLabel")}")
 
         return errors
     }
@@ -1089,7 +1088,7 @@ internal fun JTextField.hasValidValue() = text.isNotBlank()
 
 internal fun JTextArea.hasValidValue() = text.isNotBlank()
 
-internal fun AutoSuggestField.hasValidValue() : Boolean {
+internal fun AutoSuggestField.hasValidValue(): Boolean {
     val field = editor.editorComponent as JTextField
     return field.text.isNotBlank()
 }

@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.2a0]
+### Changed
+- Fixed advanced mode for `EditAssayPanel`
+- Fixed advanced mode for `EditParameterPanel`
+- Fixed advanced mode for `EditModelEquationPanel`
+
 ## [0.0.1a0]
 ### Added
 - Properties file with strings for JComponents `MessageBundle.properties`

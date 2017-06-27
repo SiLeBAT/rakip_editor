@@ -903,10 +903,16 @@ class ModelMathPanel(modelMath: ModelMath? = null) : Box(BoxLayout.PAGE_AXIS) {
         add(createAdvancedPanel(checkbox = advancedCheckBox))
         add(Box.createGlue())
         add(propertiesPanel)
+
+        advancedCheckBox.addItemListener {
+            parametersPanel.isAdvanced = advancedCheckBox.isSelected
+            modelEquationPanel.isAdvanced = advancedCheckBox.isSelected
+        }
     }
 }
 
-class ParameterPanel(val parameters: MutableList<Parameter> = mutableListOf(), isAdvanced: Boolean) : JPanel(BorderLayout()) {
+class ParameterPanel(val parameters: MutableList<Parameter> = mutableListOf(), var isAdvanced: Boolean)
+    : JPanel(BorderLayout()) {
 
     init {
         border = BorderFactory.createTitledBorder(de.bund.bfr.rakip.editor.ModelMathPanel.Companion.parameters)
@@ -976,7 +982,7 @@ class QualityMeasuresPanel(sse: Double? = null, mse: Double? = null, rmse: Doubl
 
 class ModelEquationsPanel(
         val equations: MutableList<ModelEquation> = mutableListOf(),
-        isAdvanced: Boolean
+        var isAdvanced: Boolean
 ) : JPanel(BorderLayout()) {
 
     init {
