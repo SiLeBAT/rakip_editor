@@ -7,8 +7,18 @@ import de.bund.bfr.rakip.generic.*
 import ezvcard.VCard
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import java.awt.BorderLayout
+import java.awt.Dimension
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
+import java.util.*
+import javax.swing.*
+import javax.swing.table.DefaultTableCellRenderer
 
 val logger: java.util.logging.Logger = java.util.logging.Logger.getAnonymousLogger()
+val messages = ResourceBundle.getBundle("MessagesBundle", Locale.getDefault())!!
 
 fun loadVocabularies(): Map<String, Set<String>> {
 
@@ -135,23 +145,23 @@ fun main(args: Array<String>) {
 
     var gi = createExampleGeneralInformation()
 
-    val frame = javax.swing.JFrame()
+    val frame = JFrame()
     val generalInformationPanel = de.bund.bfr.rakip.editor.GeneralInformationPanel(gi)
     generalInformationPanel.studyNameTextField.text = gi.name
     generalInformationPanel.identifierTextField.text = gi.identifier
     generalInformationPanel.creationDateChooser.date = gi.creationDate
-    generalInformationPanel.rightsField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Rights"])
+    generalInformationPanel.rightsField.setPossibleValues(vocabs["Rights"])
     generalInformationPanel.rightsField.selectedItem = gi.rights
     generalInformationPanel.availabilityCheckBox.isSelected = gi.isAvailable
     generalInformationPanel.urlTextField.text = gi.url.toString()
-    generalInformationPanel.formatField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Format"])
+    generalInformationPanel.formatField.setPossibleValues(vocabs["Format"])
     generalInformationPanel.formatField.selectedItem = gi.format
     generalInformationPanel.languageTextField.text = gi.language
-    generalInformationPanel.softwareField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Software"])
+    generalInformationPanel.softwareField.setPossibleValues(vocabs["Software"])
     generalInformationPanel.softwareField.selectedItem = gi.software
-    generalInformationPanel.languageWrittenInField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Language writte in"])
+    generalInformationPanel.languageWrittenInField.setPossibleValues(vocabs["Language writte in"])
     generalInformationPanel.languageWrittenInField.selectedItem = gi.languageWrittenIn
-    generalInformationPanel.statusField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Status"])
+    generalInformationPanel.statusField.setPossibleValues(vocabs["Status"])
     generalInformationPanel.statusField.selectedItem = gi.status
     generalInformationPanel.objectiveTextField.text = gi.objective
     generalInformationPanel.descriptionTextField.text = gi.description
@@ -161,53 +171,53 @@ fun main(args: Array<String>) {
     val modelMathPanel = de.bund.bfr.rakip.editor.ModelMathPanel()
 
     // Tabbed pane
-    val tabbedPane = javax.swing.JTabbedPane()
-    tabbedPane.addTab("General information", javax.swing.JScrollPane(generalInformationPanel))
-    tabbedPane.addTab("Scope", javax.swing.JScrollPane(scopePanel))
-    tabbedPane.addTab("Data background", javax.swing.JScrollPane(dataBackgroundPanel))
-    tabbedPane.addTab("Model math", javax.swing.JScrollPane(modelMathPanel))
+    val tabbedPane = JTabbedPane()
+    tabbedPane.addTab("General information", JScrollPane(generalInformationPanel))
+    tabbedPane.addTab("Scope", JScrollPane(scopePanel))
+    tabbedPane.addTab("Data background", JScrollPane(dataBackgroundPanel))
+    tabbedPane.addTab("Model math", JScrollPane(modelMathPanel))
 
     frame.add(tabbedPane)
-    frame.defaultCloseOperation = javax.swing.JFrame.EXIT_ON_CLOSE
+    frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
     frame.title = "JTree Example"
     frame.setSize(500, 300)
-    frame.minimumSize = java.awt.Dimension(800, 500)
+    frame.minimumSize = Dimension(800, 500)
     frame.isVisible = true
-    frame.addWindowListener(object : java.awt.event.WindowAdapter() {
+    frame.addWindowListener(object : WindowAdapter() {
         // Save changes on close
-        override fun windowClosing(windowEvent: java.awt.event.WindowEvent?) {
+        override fun windowClosing(windowEvent: WindowEvent?) {
             gi = generalInformationPanel.toGeneralInformation()
             System.exit(0)
         }
     })
 }
 
-fun javax.swing.JPanel.add(comp: javax.swing.JComponent, gridx: Int, gridy: Int, gridwidth: Int = 1, gridheight: Int = 1): Unit {
-    val constraints = java.awt.GridBagConstraints()
+fun JPanel.add(comp: JComponent, gridx: Int, gridy: Int, gridwidth: Int = 1, gridheight: Int = 1): Unit {
+    val constraints = GridBagConstraints()
     constraints.gridx = gridx
     constraints.gridy = gridy
     constraints.gridwidth = gridwidth
     constraints.gridheight = gridheight
     constraints.ipadx = 10
     constraints.ipady = 10
-    constraints.anchor = java.awt.GridBagConstraints.LINE_START
+    constraints.anchor = GridBagConstraints.LINE_START
 
     add(comp, constraints)
 }
 
-fun javax.swing.JPanel.addGridComponents(pairs: List<Pair<javax.swing.JLabel, javax.swing.JComponent>>) {
+fun JPanel.addGridComponents(pairs: List<Pair<JLabel, JComponent>>) {
 
-    val labelConstraints = java.awt.GridBagConstraints()
+    val labelConstraints = GridBagConstraints()
     labelConstraints.gridx = 0
     labelConstraints.ipadx = 10
     labelConstraints.ipady = 10
-    labelConstraints.anchor = java.awt.GridBagConstraints.LINE_START
+    labelConstraints.anchor = GridBagConstraints.LINE_START
 
-    val fieldConstraints = java.awt.GridBagConstraints()
+    val fieldConstraints = GridBagConstraints()
     fieldConstraints.gridx = 1
     fieldConstraints.ipadx = 10
     fieldConstraints.ipady = 10
-    fieldConstraints.anchor = java.awt.GridBagConstraints.LINE_START
+    fieldConstraints.anchor = GridBagConstraints.LINE_START
 
     for ((index, entry) in pairs.withIndex()) {
         val label = entry.first
@@ -222,75 +232,34 @@ fun javax.swing.JPanel.addGridComponents(pairs: List<Pair<javax.swing.JLabel, ja
     }
 }
 
-class GeneralInformationPanel(generalInformation: GeneralInformation) : javax.swing.Box(javax.swing.BoxLayout.PAGE_AXIS) {
+class GeneralInformationPanel(generalInformation: GeneralInformation) : Box(BoxLayout.PAGE_AXIS) {
 
-    companion object {
-        val studyName = "Study name"
-        val studyNameTooltip = "Name given to the model or data"
+    val advancedCheckBox = JCheckBox("Advanced")
 
-        val identifier = "Identifier"
-        val identifierTooltip = "Unambiguous ID given to the model or data"
-
-        val creationDate = "Creation date"
-        val creationDateTooltip = "Model creation date"
-
-        val rights = "Rights"
-        val rightsTooltip = "Rights held in over the resource"
-
-        val availability = "Is available"
-        val availabilityTooltip = "Availability of data or model"
-
-        val url = "URL"
-        val urlTooltip = "Web address referencing the resource location"
-
-        val format = "Format"
-        val formatTooltip = "Form of data (file extension)"
-
-        val language = "Language"
-        val languageTooltip = "Language used to write the model"
-
-        val software = "Software"
-        val softwareTooltip = "Program in which the model has been implemented"
-
-        val languageWrittenIn = "Language written in"
-        val languageWrittenInTooltip = "Language used to write the model"
-
-        val status = "Status"
-        val statusTooltip = "The curation status of the model"
-
-        val objective = "Objective"
-        val objectiveTooltip = "Objective of model or data"
-
-        val description = "Description"
-        val descriptionTooltip = "General assayDescription of the study, data or model"
-    }
-
-    val advancedCheckBox = javax.swing.JCheckBox("Advanced")
-
-    val studyNameTextField = javax.swing.JTextField(30)
-    val identifierTextField = javax.swing.JTextField(30)
+    val studyNameTextField = JTextField(30)
+    val identifierTextField = JTextField(30)
     val creatorPanel = de.bund.bfr.rakip.editor.CreatorPanel(generalInformation.creators)
     val creationDateChooser = de.bund.bfr.rakip.editor.FixedJDateChooser()
     val rightsField = AutoSuggestField(10)
-    val availabilityCheckBox = javax.swing.JCheckBox()
-    val urlTextField = javax.swing.JTextField(30)
+    val availabilityCheckBox = JCheckBox()
+    val urlTextField = JTextField(30)
     val formatField = AutoSuggestField(10)
     val referencePanel = de.bund.bfr.rakip.editor.ReferencePanel(refs = generalInformation.reference, isAdvanced = advancedCheckBox.isSelected)
-    val languageTextField = javax.swing.JTextField(30)
+    val languageTextField = JTextField(30)
     val softwareField = AutoSuggestField(10)
     val languageWrittenInField = AutoSuggestField(10)
     val statusField = AutoSuggestField(10)
-    val objectiveTextField = javax.swing.JTextField(30)
-    val descriptionTextField = javax.swing.JTextField(30)
+    val objectiveTextField = JTextField(30)
+    val descriptionTextField = JTextField(30)
 
     init {
 
         // init combo boxes
-        rightsField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Rigthts"])
-        formatField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Format"])
-        softwareField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Software"])
-        languageWrittenInField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Language written in"])
-        statusField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Status"])
+        rightsField.setPossibleValues(vocabs["Rigthts"])
+        formatField.setPossibleValues(vocabs["Format"])
+        softwareField.setPossibleValues(vocabs["Software"])
+        languageWrittenInField.setPossibleValues(vocabs["Language written in"])
+        statusField.setPossibleValues(vocabs["Status"])
 
         // initialize interface with `generalInformation`
         studyNameTextField.text = generalInformation.name
@@ -312,21 +281,34 @@ class GeneralInformationPanel(generalInformation: GeneralInformation) : javax.sw
 
     private fun initUI() {
 
-        val studyNameLabel = createLabel(text = studyName, tooltip = studyNameTooltip)
-        val identifierLabel = createLabel(text = identifier, tooltip = identifierTooltip)
-        val creationDateLabel = createLabel(text = creationDate, tooltip = creationDateTooltip)
-        val rightsLabel = createLabel(text = rights, tooltip = rightsTooltip)
-        val urlLabel = createLabel(text = url, tooltip = urlTooltip)
-        val formatLabel = createLabel(text = format, tooltip = formatTooltip)
-        val languageLabel = createLabel(text = language, tooltip = languageTooltip)
-        val softwareLabel = createLabel(text = software, tooltip = softwareTooltip)
-        val languageWrittenInLabel = createLabel(text = languageWrittenIn, tooltip = languageWrittenInTooltip)
-        val statusLabel = createLabel(text = status, tooltip = statusTooltip)
-        val objectiveLabel = createLabel(text = objective, tooltip = objectiveTooltip)
-        val descriptionLabel = createLabel(text = description, tooltip = descriptionTooltip)
+        val studyNameLabel = createLabel(text = messages.getString("GeneralInformationPanel.studyNameLabel"),
+                tooltip = messages.getString("GeneralInformationPanel.studyNameTooltip"))
+        val identifierLabel = createLabel(text = messages.getString("GeneralInformationPanel.identifierLabel"),
+                tooltip = messages.getString("GeneralInformationPanel.identifierTooltip"))
+        val creationDateLabel = createLabel(text = messages.getString("GeneralInformationPanel.creationDateLabel"),
+                tooltip = messages.getString("GeneralInformationPanel.creationDateTooltip"))
+        val rightsLabel = createLabel(text = messages.getString("GeneralInformationPanel.rightsLabel"),
+                tooltip = messages.getString("GeneralInformationPanel.rightsTooltip"))
+        val urlLabel = createLabel(text = messages.getString("GeneralInformationPanel.urlLabel"),
+                tooltip = messages.getString("GeneralInformationPanel.urlTooltip"))
+        val formatLabel = createLabel(text = messages.getString("GeneralInformationPanel.formatLabel"),
+                tooltip = messages.getString("GeneralInformationPanel.formatTooltip"))
+        val languageLabel = createLabel(text = messages.getString("GeneralInformationPanel.languageLabel"),
+                tooltip = messages.getString("GeneralInformationPanel.languageTooltip"))
+        val softwareLabel = createLabel(text = messages.getString("GeneralInformationPanel.softwareLabel"),
+                tooltip = messages.getString("GeneralInformationPanel.softwareTooltip"))
+        val languageWrittenInLabel = createLabel(
+                text = messages.getString("GeneralInformationPanel.languageWrittenInLabel"),
+                tooltip = messages.getString("GeneralInformationPanel.languageWrittenInTooltip"))
+        val statusLabel = createLabel(text = messages.getString("GeneralInformationPanel.statusLabel"),
+                tooltip = messages.getString("GeneralInformationPanel.statusTooltip"))
+        val objectiveLabel = createLabel(text = messages.getString("GeneralInformationPanel.objectiveLabel"),
+                tooltip = messages.getString("GeneralInformationPanel.objectiveTooltip"))
+        val descriptionLabel = createLabel(text = messages.getString("GeneralInformationPanel.descriptionLabel"),
+                tooltip = messages.getString("GeneralInformationPanel.descriptionTooltip"))
 
         // hide initially advanced comps
-        val advancedComps = listOf<javax.swing.JComponent>(
+        val advancedComps = listOf<JComponent>(
                 urlLabel, urlTextField,
                 formatLabel, formatField,
                 languageLabel, languageTextField,
@@ -337,7 +319,7 @@ class GeneralInformationPanel(generalInformation: GeneralInformation) : javax.sw
                 descriptionLabel, descriptionTextField)
         advancedComps.forEach { it.isVisible = false }
 
-        val propertiesPanel = javax.swing.JPanel(java.awt.GridBagLayout())
+        val propertiesPanel = JPanel(GridBagLayout())
 
         propertiesPanel.add(comp = studyNameLabel, gridy = 1, gridx = 0)
         propertiesPanel.add(comp = studyNameTextField, gridy = 1, gridx = 1, gridwidth = 2)
@@ -353,8 +335,8 @@ class GeneralInformationPanel(generalInformation: GeneralInformation) : javax.sw
         propertiesPanel.add(comp = rightsLabel, gridy = 5, gridx = 0)
         propertiesPanel.add(comp = rightsField, gridy = 5, gridx = 1, gridwidth = 2)
 
-        availabilityCheckBox.text = de.bund.bfr.rakip.editor.GeneralInformationPanel.Companion.availability
-        availabilityCheckBox.toolTipText = de.bund.bfr.rakip.editor.GeneralInformationPanel.Companion.availabilityTooltip
+        availabilityCheckBox.text = messages.getString("GeneralInformationPanel.availabilityLabel")
+        availabilityCheckBox.toolTipText = messages.getString("GeneralInformationPanel.availabilityTooltip")
         propertiesPanel.add(comp = availabilityCheckBox, gridy = 6, gridx = 0)
 
         propertiesPanel.add(comp = urlLabel, gridy = 7, gridx = 0)
@@ -390,7 +372,7 @@ class GeneralInformationPanel(generalInformation: GeneralInformation) : javax.sw
         }
 
         add(createAdvancedPanel(checkbox = advancedCheckBox))
-        add(javax.swing.Box.createGlue())
+        add(Box.createGlue())
         add(propertiesPanel)
     }
 
@@ -421,15 +403,15 @@ class GeneralInformationPanel(generalInformation: GeneralInformation) : javax.sw
     }
 }
 
-class ReferencePanel(val refs: MutableList<Record>, var isAdvanced: Boolean) : javax.swing.JPanel(java.awt.BorderLayout()) {
+class ReferencePanel(val refs: MutableList<Record>, var isAdvanced: Boolean) : JPanel(BorderLayout()) {
 
     init {
-        border = javax.swing.BorderFactory.createTitledBorder("References")
+        border = BorderFactory.createTitledBorder("References")
 
         val dtm = NonEditableTableModel()
         refs.forEach { dtm.addRow(arrayOf(it)) }
 
-        val renderer = object : javax.swing.table.DefaultTableCellRenderer() {
+        val renderer = object : DefaultTableCellRenderer() {
             override fun setValue(value: Any?) {
                 if (value == null) text = ""
                 else {
@@ -450,7 +432,7 @@ class ReferencePanel(val refs: MutableList<Record>, var isAdvanced: Boolean) : j
             val editPanel = EditReferencePanel(isAdvanced = isAdvanced)
 
             val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Create reference")
-            if (dlg.getValue() == javax.swing.JOptionPane.OK_OPTION) {
+            if (dlg.getValue() == JOptionPane.OK_OPTION) {
                 dtm.addRow(arrayOf(editPanel.toRecord()))
             }
         }
@@ -463,7 +445,7 @@ class ReferencePanel(val refs: MutableList<Record>, var isAdvanced: Boolean) : j
                 val editPanel = EditReferencePanel(ref, isAdvanced = isAdvanced)
 
                 val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Modify reference")
-                if (dlg.getValue() == javax.swing.JOptionPane.OK_OPTION) {
+                if (dlg.getValue() == JOptionPane.OK_OPTION) {
                     dtm.setValueAt(editPanel.toRecord(), rowToEdit, 0)
                 }
             }
@@ -474,8 +456,8 @@ class ReferencePanel(val refs: MutableList<Record>, var isAdvanced: Boolean) : j
             if (rowToDelete != -1) dtm.removeRow(rowToDelete)
         }
 
-        add(myTable, java.awt.BorderLayout.NORTH)
-        add(buttonsPanel, java.awt.BorderLayout.SOUTH)
+        add(myTable, BorderLayout.NORTH)
+        add(buttonsPanel, BorderLayout.SOUTH)
     }
 }
 
@@ -492,15 +474,15 @@ class FixedJDateChooser : JDateChooser() {
     }
 }
 
-class CreatorPanel(val creators: MutableList<VCard>) : javax.swing.JPanel(java.awt.BorderLayout()) {
+class CreatorPanel(val creators: MutableList<VCard>) : JPanel(BorderLayout()) {
 
     init {
-        border = javax.swing.BorderFactory.createTitledBorder("Creators")
+        border = BorderFactory.createTitledBorder("Creators")
 
         val dtm = NonEditableTableModel()
         creators.forEach { dtm.addRow(arrayOf(it)) }
 
-        val renderer = object : javax.swing.table.DefaultTableCellRenderer() {
+        val renderer = object : DefaultTableCellRenderer() {
             override fun setValue(value: Any?) {
                 value?.let {
                     val creator = value as VCard
@@ -520,7 +502,7 @@ class CreatorPanel(val creators: MutableList<VCard>) : javax.swing.JPanel(java.a
         buttonsPanel.addButton.addActionListener { _ ->
             val editPanel = de.bund.bfr.rakip.editor.EditCreatorPanel()
             val result = showConfirmDialog(panel = editPanel, title = "Create creator")
-            if (result == javax.swing.JOptionPane.OK_OPTION) {
+            if (result == JOptionPane.OK_OPTION) {
                 dtm.addRow(arrayOf(editPanel.toVCard()))
             }
         }
@@ -532,7 +514,7 @@ class CreatorPanel(val creators: MutableList<VCard>) : javax.swing.JPanel(java.a
 
                 val editPanel = de.bund.bfr.rakip.editor.EditCreatorPanel(creator)
                 val result = showConfirmDialog(panel = editPanel, title = "Modify creator")
-                if (result == javax.swing.JOptionPane.OK_OPTION) {
+                if (result == JOptionPane.OK_OPTION) {
                     dtm.setValueAt(editPanel.toVCard(), rowToEdit, 0)
                 }
             }
@@ -543,22 +525,16 @@ class CreatorPanel(val creators: MutableList<VCard>) : javax.swing.JPanel(java.a
             if (rowToDelete != -1) dtm.removeRow(rowToDelete)
         }
 
-        add(myTable, java.awt.BorderLayout.NORTH)
-        add(buttonsPanel, java.awt.BorderLayout.SOUTH)
+        add(myTable, BorderLayout.NORTH)
+        add(buttonsPanel, BorderLayout.SOUTH)
     }
 }
 
-class EditCreatorPanel(creator: VCard? = null) : javax.swing.JPanel(java.awt.GridBagLayout()) {
+class EditCreatorPanel(creator: VCard? = null) : JPanel(GridBagLayout()) {
 
-    private val givenNameField = javax.swing.JTextField(30)
-    private val familyNameField = javax.swing.JTextField(30)
-    private val contactField = javax.swing.JTextField(30)
-
-    companion object {
-        val givenName = "Given name"
-        val familyName = "Family name"
-        val contact = "Contact"
-    }
+    private val givenNameField = JTextField(30)
+    private val familyNameField = JTextField(30)
+    private val contactField = JTextField(30)
 
     init {
         initUI()
@@ -572,10 +548,10 @@ class EditCreatorPanel(creator: VCard? = null) : javax.swing.JPanel(java.awt.Gri
     }
 
     private fun initUI() {
-        val pairList = listOf<Pair<javax.swing.JLabel, javax.swing.JComponent>>(
-                Pair(first = javax.swing.JLabel(givenName), second = givenNameField),
-                Pair(first = javax.swing.JLabel(familyName), second = familyNameField),
-                Pair(first = javax.swing.JLabel(contact), second = contactField)
+        val pairList = listOf<Pair<JLabel, JComponent>>(
+                Pair(first = JLabel(messages.getString("EditCreatorPanel.givenNameLabel")), second = givenNameField),
+                Pair(first = JLabel(messages.getString("EditCreatorPanel.familyNameLabel")), second = familyNameField),
+                Pair(first = JLabel(messages.getString("EditCreatorPanel.contactLabel")), second = contactField)
         )
 
         addGridComponents(pairs = pairList)
@@ -591,43 +567,23 @@ class EditCreatorPanel(creator: VCard? = null) : javax.swing.JPanel(java.awt.Gri
     }
 }
 
-class ScopePanel(val scope: Scope) : javax.swing.Box(javax.swing.BoxLayout.PAGE_AXIS) {
+class ScopePanel(val scope: Scope) : Box(BoxLayout.PAGE_AXIS) {
 
-    val productButton = javax.swing.JButton()
-    val hazardButton = javax.swing.JButton()
-    val populationButton = javax.swing.JButton()
-    val commentField = javax.swing.JTextArea(5, 30)
+    val productButton = JButton()
+    val hazardButton = JButton()
+    val populationButton = JButton()
+    val commentField = JTextArea(5, 30)
     val dateChooser = de.bund.bfr.rakip.editor.FixedJDateChooser()
     val regionField = AutoSuggestField(10)
     val countryField = AutoSuggestField(10)
 
-    val advancedCheckBox = javax.swing.JCheckBox("Advanced")
-
-    companion object {
-        val product = "Product"
-
-        val hazard = "Hazard"
-
-        val populationGroup = "Population group"
-
-        val comment = "General comment"
-        val commentTooltip = "General comments on the scope"
-
-        val temporalInformation = "Temporal information"
-        val temporalInformationTooltip = "Temporal information on which the model or data applies"
-
-        val region = "Region"
-        val regionTooltip = "Spatial information (area) on which the model or data applies"
-
-        val country = "Country"
-        val countryTooltip = "Country on which the model or data applies"
-    }
+    val advancedCheckBox = JCheckBox("Advanced")
 
     init {
 
         // init combo boxes
-        regionField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Region"])
-        countryField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Country"])
+        regionField.setPossibleValues(vocabs["Region"])
+        countryField.setPossibleValues(vocabs["Country"])
 
         regionField.selectedItem = scope.region.firstOrNull()
         countryField.selectedItem = scope.country.firstOrNull()
@@ -636,7 +592,7 @@ class ScopePanel(val scope: Scope) : javax.swing.Box(javax.swing.BoxLayout.PAGE_
     }
 
     private fun initUI() {
-        val propertiesPanel = javax.swing.JPanel(java.awt.GridBagLayout())
+        val propertiesPanel = JPanel(GridBagLayout())
 
         productButton.toolTipText = "Click me to add a product"
         productButton.addActionListener { _ ->
@@ -644,7 +600,7 @@ class ScopePanel(val scope: Scope) : javax.swing.Box(javax.swing.BoxLayout.PAGE_
                     isAdvanced = advancedCheckBox.isSelected)
             val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Create a product")
 
-            if (dlg.getValue() == javax.swing.JOptionPane.OK_OPTION) {
+            if (dlg.getValue() == JOptionPane.OK_OPTION) {
                 val product = editPanel.toProduct()
                 productButton.text = "${product.environmentName} [${product.environmentUnit}]"
                 scope.product = product
@@ -657,7 +613,7 @@ class ScopePanel(val scope: Scope) : javax.swing.Box(javax.swing.BoxLayout.PAGE_
                     isAdvanced = advancedCheckBox.isSelected)
             val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Create a hazard")
 
-            if (dlg.getValue() == javax.swing.JOptionPane.OK_OPTION) {
+            if (dlg.getValue() == JOptionPane.OK_OPTION) {
                 val hazard = editPanel.toHazard()
                 hazardButton.text = "${hazard.hazardName} [${hazard.hazardUnit}]"
                 scope.hazard = hazard
@@ -670,21 +626,34 @@ class ScopePanel(val scope: Scope) : javax.swing.Box(javax.swing.BoxLayout.PAGE_
 
             val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Create a Population Group")
 
-            if (dlg.getValue() == javax.swing.JOptionPane.OK_OPTION) {
+            if (dlg.getValue() == JOptionPane.OK_OPTION) {
                 val populationGroup = editPanel.toPopulationGroup()
                 populationButton.text = populationGroup.populationName
                 scope.populationGroup = populationGroup
             }
         }
 
-        val pairList = listOf<Pair<javax.swing.JLabel, javax.swing.JComponent>>(
-                Pair(first = javax.swing.JLabel(product), second = productButton),
-                Pair(first = javax.swing.JLabel(hazard), second = hazardButton),
-                Pair(first = javax.swing.JLabel(populationGroup), second = populationButton),
-                Pair(first = createLabel(text = comment, tooltip = commentTooltip), second = commentField),
-                Pair(first = createLabel(text = temporalInformation, tooltip = temporalInformationTooltip), second = dateChooser),
-                Pair(first = createLabel(text = region, tooltip = regionTooltip), second = regionField),
-                Pair(first = createLabel(text = country, tooltip = countryTooltip), second = countryField)
+        val productLabel = JLabel(messages.getString("ScopePanel.productLabel"))
+        val hazardLabel = JLabel(messages.getString("ScopePanel.hazardLabel"))
+        val populationLabel = JLabel(messages.getString("ScopePanel.populationGroupLabel"))
+        val commentLabel = createLabel(text = messages.getString("ScopePanel.commentLabel"),
+                tooltip = messages.getString("ScopePanel.commentTooltip"))
+        val temporalInformationLabel = createLabel(text = messages.getString("ScopePanel.temporalInformationLabel"),
+                tooltip = messages.getString("ScopePanel.temporalInformationTooltip"))
+        val regionLabel = createLabel(text = messages.getString("ScopePanel.regionLabel"),
+                tooltip = messages.getString("ScopePanel.regionTooltip"))
+        val countryLabel = createLabel(text = messages.getString("ScopePanel.countryLabel"),
+                tooltip = messages.getString("ScopePanel.countryTooltip"))
+
+        val pairList = listOf<Pair<JLabel, JComponent>>(
+                Pair(first = productLabel, second = productButton),
+                Pair(first = hazardLabel, second = hazardButton),
+                Pair(first = populationLabel, second = populationButton),
+                Pair(first = commentLabel, second = commentField),
+                Pair(first = temporalInformationLabel, second = dateChooser),
+                Pair(first = temporalInformationLabel, second = dateChooser),
+                Pair(first = regionLabel, second = regionField),
+                Pair(first = countryLabel, second = countryField)
         )
         propertiesPanel.addGridComponents(pairs = pairList)
 
@@ -692,21 +661,14 @@ class ScopePanel(val scope: Scope) : javax.swing.Box(javax.swing.BoxLayout.PAGE_
         advancedCheckBox.addItemListener { _ -> println("dummy listener") }  // TODO: not implemented yet
 
         add(createAdvancedPanel(checkbox = advancedCheckBox))
-        add(javax.swing.Box.createGlue())
+        add(Box.createGlue())
         add(propertiesPanel)
     }
 }
 
-class DataBackgroundPanel(var dataBackground: DataBackground? = null) : javax.swing.Box(javax.swing.BoxLayout.PAGE_AXIS) {
+class DataBackgroundPanel(var dataBackground: DataBackground? = null) : Box(BoxLayout.PAGE_AXIS) {
 
-    companion object {
-        val studySample = "Study sample"
-        val dietaryAssessmentMethod = "Dietary assessment method"
-        val laboratoryAccreditation = "Laboratory accreditation"
-        val assay = "Assay"
-    }
-
-    val advancedCheckBox = javax.swing.JCheckBox("Advanced")
+    val advancedCheckBox = JCheckBox("Advanced")
 
     val laboratoryAccreditationField = AutoSuggestField(10)
 
@@ -717,16 +679,16 @@ class DataBackgroundPanel(var dataBackground: DataBackground? = null) : javax.sw
     private fun initUI() {
 
         val studyPanel = de.bund.bfr.rakip.editor.StudyPanel()
-        studyPanel.border = javax.swing.BorderFactory.createTitledBorder("Study")
+        studyPanel.border = BorderFactory.createTitledBorder("Study")
 
-        val studySampleButton = javax.swing.JButton()
+        val studySampleButton = JButton()
         studySampleButton.toolTipText = "Click me to add Study Sample"
         studySampleButton.addActionListener { _ ->
             val editPanel = EditStudySamplePanel(studySample = dataBackground?.studySample, isAdvanced = advancedCheckBox.isSelected)
 
             val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Create Study sample")
 
-            if (dlg.getValue() == javax.swing.JOptionPane.OK_OPTION) {
+            if (dlg.getValue() == JOptionPane.OK_OPTION) {
                 val studySample = editPanel.toStudySample()
 
                 if (dataBackground == null) dataBackground = DataBackground()
@@ -734,14 +696,14 @@ class DataBackgroundPanel(var dataBackground: DataBackground? = null) : javax.sw
             }
         }
 
-        val dietaryAssessmentMethodButton = javax.swing.JButton()
+        val dietaryAssessmentMethodButton = JButton()
         dietaryAssessmentMethodButton.toolTipText = "Click me to add Dietary assessment method"
         dietaryAssessmentMethodButton.addActionListener { _ ->
             val editPanel = EditDietaryAssessmentMethodPanel(
                     dietaryAssessmentMethod = dataBackground?.dietaryAssessmentMethod, isAdvanced = advancedCheckBox.isSelected)
 
             val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Create dietary assessment method")
-            if (dlg.getValue() == javax.swing.JOptionPane.OK_OPTION) {
+            if (dlg.getValue() == JOptionPane.OK_OPTION) {
                 val dietaryAssessmentMethod = editPanel.toDietaryAssessmentMethod()
 
                 if (dataBackground == null) dataBackground = DataBackground(dietaryAssessmentMethod = dietaryAssessmentMethod)
@@ -749,15 +711,15 @@ class DataBackgroundPanel(var dataBackground: DataBackground? = null) : javax.sw
             }
         }
 
-        laboratoryAccreditationField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Laboratory accreditation"])
+        laboratoryAccreditationField.setPossibleValues(vocabs["Laboratory accreditation"])
 
-        val assayButton = javax.swing.JButton()
+        val assayButton = JButton()
         assayButton.toolTipText = "Click me to add Assay"
         assayButton.addActionListener { _ ->
             val editPanel = EditAssayPanel(assay = dataBackground?.assay, isAdvanced = advancedCheckBox.isSelected)
 
             val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Create assay")
-            if (dlg.getValue() == javax.swing.JOptionPane.OK_OPTION) {
+            if (dlg.getValue() == JOptionPane.OK_OPTION) {
                 val assay = editPanel.toAssay()
 
                 if (dataBackground == null) dataBackground = DataBackground(assay = assay)
@@ -765,19 +727,24 @@ class DataBackgroundPanel(var dataBackground: DataBackground? = null) : javax.sw
             }
         }
 
-        val propertiesPanel = javax.swing.JPanel(java.awt.GridBagLayout())
+        val studySampleLabel = JLabel(messages.getString("DataBackgroundPanel.studySampleLabel"))
+        val dietaryAssessmentMethodLabel = JLabel(messages.getString("DataBackgroundPanel.dietaryAssessmentMethodLabel"))
+        val laboratoryAccreditationLabel = JLabel(messages.getString("DataBackgroundPanel.laboratoryAccreditationLabel"))
+        val assayLabel = JLabel(messages.getString("DataBackgroundPanel.assayLabel"))
+
+        val propertiesPanel = JPanel(GridBagLayout())
 
         propertiesPanel.add(comp = studyPanel, gridy = 0, gridx = 0, gridwidth = 3)
-        propertiesPanel.add(comp = javax.swing.JLabel(studySample), gridy = 1, gridx = 0)
+        propertiesPanel.add(comp = studySampleLabel, gridy = 1, gridx = 0)
         propertiesPanel.add(comp = studySampleButton, gridy = 1, gridx = 1)
 
-        propertiesPanel.add(comp = javax.swing.JLabel(dietaryAssessmentMethod), gridy = 2, gridx = 0)
+        propertiesPanel.add(comp = dietaryAssessmentMethodLabel, gridy = 2, gridx = 0)
         propertiesPanel.add(comp = dietaryAssessmentMethodButton, gridy = 2, gridx = 1)
 
-        propertiesPanel.add(comp = javax.swing.JLabel(laboratoryAccreditation), gridy = 3, gridx = 0)
+        propertiesPanel.add(comp = laboratoryAccreditationLabel, gridy = 3, gridx = 0)
         propertiesPanel.add(comp = laboratoryAccreditationField, gridy = 3, gridx = 1)
 
-        propertiesPanel.add(comp = javax.swing.JLabel(assay), gridy = 4, gridx = 0)
+        propertiesPanel.add(comp = assayLabel, gridy = 4, gridx = 0)
         propertiesPanel.add(comp = assayButton, gridy = 4, gridx = 1)
 
         // `Advanced` checkbox
@@ -787,111 +754,74 @@ class DataBackgroundPanel(var dataBackground: DataBackground? = null) : javax.sw
         }
 
         add(createAdvancedPanel(checkbox = advancedCheckBox))
-        add(javax.swing.Box.createGlue())
+        add(Box.createGlue())
         add(propertiesPanel)
     }
 }
 
-class StudyPanel(study: Study? = null) : javax.swing.JPanel(java.awt.GridBagLayout()) {
+class StudyPanel(study: Study? = null) : JPanel(GridBagLayout()) {
 
-    companion object {
-        val studyIdentifier = "Study identifier"
-        val studyIdentifierTooltip = "A user defined identifier for the study"
+    val studyIdentifierLabel = createLabel(text = messages.getString("StudyPanel.studyIdentifierLabel"),
+            tooltip = messages.getString("StudyPanel.studyIdentifierTooltip"))
+    val studyIdentifierTextField = JTextField(30)
 
-        val studyTitle = "Study title"
-        val studyTitleTooltip = "A title for the Study."
+    val studyTitleLabel = createLabel(text = messages.getString("StudyPanel.studyTitleLabel"),
+            tooltip = messages.getString("StudyPanel.studyTitleTooltip"))
+    val studyTitleTextField = JTextField(30)
 
-        val studyDescription = "Study description"
-        val studyDescriptionTooltip = "A brief assayDescription of the study aims."
+    val studyDescriptionLabel = createLabel(text = messages.getString("StudyPanel.studyDescriptionLabel"),
+            tooltip = messages.getString("StudyPanel.studyDescriptionTooltip"))
+    val studyDescriptionTextArea = JTextArea(5, 30)
 
-        val studyDesignType = "Study design type"
-        val studyDesignTypeTooltip = "The type of study design being employed"
-
-        val studyAssayMeasurementsType = "Study assay measurements Type"
-        val studyAssayMeasurementsTypeTooltip = "The measurement being observed in this assay"
-
-        val studyAssayTechnologyType = "Study Assay Technology Type"
-        val studyAssayTechnologyTypeTooltip = "The technology being employed to observe this measurement"
-
-        val studyAssayTechnologyPlatform = "Study Assay Technology Platform"
-        val studyAssayTechnologyPlatformTooltip = "The technology platform used"
-
-        val accreditationProcedure = "<html><p>Accreditation procedure for<p>the assay technology</html>"
-        val accreditationProcedureTooltip = "The type of study design being employed"
-
-        val studyProtocolName = "Study protocol name"
-        val studyProtocolNameTooltip = "The name of the protocol, e.g.Extraction Protocol"
-
-        val studyProtocolType = "Study protocol type"
-        val studyProtocolTypeTooltip = """
-            |<html>
-            |<p>The type of the protocol, preferably coming from an Ontology, e.g.
-            |<p>Extraction Protocol
-            |</html>
-            """.trimMargin()
-
-        val studyProtocolDescription = "Study protocol"
-        val studyProtocolDescriptionTooltip = "A description of the Protocol."
-
-        val studyProtocolURI = "Study protocol URI"
-        val studyProtocolURITooltip = "A URI to link out to a publication, web page, etc. describing the protocol."
-
-        val studyProtocolVersion = "Study protocol version"
-        val studyProtocolVersionTooltip = "The version of the protocol used, where applicable."
-
-        val studyProtocolParameters = "Study protocol parameters name"
-        val studyProtocolParametersTooltip = "The parameters used when executing this protocol."
-
-        val studyProtocolComponentsType = "Study protocol components"
-        val studyProtocolComponentsTypeTooltip = "The components used when carrying out this protocol."
-    }
-
-    val studyIdentifierLabel = createLabel(text = studyIdentifier, tooltip = studyIdentifierTooltip)
-    val studyIdentifierTextField = javax.swing.JTextField(30)
-
-    val studyTitleLabel = createLabel(text = studyTitle, tooltip = studyTitleTooltip)
-    val studyTitleTextField = javax.swing.JTextField(30)
-
-    val studyDescriptionLabel = createLabel(text = studyDescription, tooltip = studyDescriptionTooltip)
-    val studyDescriptionTextArea = javax.swing.JTextArea(5, 30)
-
-    val studyDesignTypeLabel = createLabel(text = studyDesignType, tooltip = studyDesignTypeTooltip)
+    val studyDesignTypeLabel = createLabel(text = messages.getString("StudyPanel.studyDesignTypeLabel"),
+            tooltip = messages.getString("StudyPanel.studyDesignTypeTooltip"))
     val studyDesignTypeField = AutoSuggestField(10)
 
-    val studyAssayMeasurementsTypeLabel = createLabel(text = studyAssayMeasurementsType, tooltip = studyAssayMeasurementsTypeTooltip)
+    val studyAssayMeasurementsTypeLabel = createLabel(text = messages.getString("StudyPanel.studyAssayMeasurementsTypeLabel"),
+            tooltip = messages.getString("StudyPanel.studyAssayMeasurementsTypeTooltip"))
     val studyAssayMeasurementsTypeField = AutoSuggestField(10)
 
-    val studyAssayTechnologyTypeLabel = createLabel(text = studyAssayTechnologyType, tooltip = studyAssayTechnologyTypeTooltip)
+    val studyAssayTechnologyTypeLabel = createLabel(text = messages.getString("StudyPanel.studyAssayTechnologyTypeLabel"),
+            tooltip = messages.getString("StudyPanel.studyAssayTechnologyTypeTooltip"))
     val studyAssayTechnologyTypeField = AutoSuggestField(10)
 
-    val studyAssayTechnologyPlatformLabel = createLabel(text = studyAssayTechnologyPlatform, tooltip = studyAssayTechnologyPlatformTooltip)
-    val studyAssayTechnologyPlatformTextField = javax.swing.JTextField(30)
+    val studyAssayTechnologyPlatformLabel = createLabel(text = messages.getString("StudyPanel.studyAssayTechnologyPlatformLabel"),
+            tooltip = messages.getString("StudyPanel.studyAssayTechnologyPlatformTooltip"))
+    val studyAssayTechnologyPlatformTextField = JTextField(30)
 
-    val accreditationProcedureLabel = createLabel(text = accreditationProcedure, tooltip = accreditationProcedureTooltip)
+    val accreditationProcedureLabel = createLabel(text = messages.getString("StudyPanel.accreditationProcedureLabel"),
+            tooltip = messages.getString("StudyPanel.accreditationProcedureTooltip"))
     val accreditationProcedureField = AutoSuggestField(10)
 
-    val studyProtocolNameLabel = createLabel(text = studyProtocolName, tooltip = studyProtocolNameTooltip)
-    val studyProtocolNameTextField = javax.swing.JTextField(30)
+    val studyProtocolNameLabel = createLabel(text = messages.getString("StudyPanel.protocolNameLabel"),
+            tooltip = messages.getString("StudyPanel.protocolNameTooltip"))
+    val studyProtocolNameTextField = JTextField(30)
 
-    val studyProtocolTypeLabel = createLabel(text = studyProtocolType, tooltip = studyProtocolTypeTooltip)
+    val studyProtocolTypeLabel = createLabel(text = messages.getString("StudyPanel.protocolTypeLabel"),
+            tooltip = messages.getString("StudyPanel.protocolTypeTooltip"))
     val studyProtocolTypeField = AutoSuggestField(10)
 
-    val studyProtocolDescriptionLabel = createLabel(text = studyProtocolDescription, tooltip = studyProtocolDescriptionTooltip)
-    val studyProtocolDescriptionTextField = javax.swing.JTextField(30)
+    val studyProtocolDescriptionLabel = createLabel(text = messages.getString("StudyPanel.protocolDescriptionLabel"),
+            tooltip = messages.getString("StudyPanel.protocolDescriptionTooltip"))
+    val studyProtocolDescriptionTextField = JTextField(30)
 
-    val studyProtocolURILabel = createLabel(text = studyProtocolURI, tooltip = studyProtocolURITooltip)
-    val studyProtocolURITextField = javax.swing.JTextField(30)
+    val studyProtocolURILabel = createLabel(text = messages.getString("StudyPanel.protocolURILabel"),
+            tooltip = messages.getString("StudyPanel.protocolURITooltip"))
+    val studyProtocolURITextField = JTextField(30)
 
-    val studyProtocolVersionLabel = createLabel(text = studyProtocolVersion, tooltip = studyProtocolVersionTooltip)
-    val studyProtocolVersionTextField = javax.swing.JTextField(30)
+    val studyProtocolVersionLabel = createLabel(text = messages.getString("StudyPanel.protocolVersionLabel"),
+            tooltip = messages.getString("StudyPanel.protocolVersionTooltip"))
+    val studyProtocolVersionTextField = JTextField(30)
 
-    val studyProtocolParametersLabel = createLabel(text = studyProtocolParameters, tooltip = studyProtocolParametersTooltip)
+    val studyProtocolParametersLabel = createLabel(text = messages.getString("StudyPanel.parametersLabel"),
+            tooltip = messages.getString("StudyPanel.parametersTooltip"))
     val studyProtocolParametersField = AutoSuggestField(10)
 
-    val studyProtocolComponentsTypeLabel = createLabel(text = studyProtocolComponentsType, tooltip = studyProtocolComponentsTypeTooltip)
+    val studyProtocolComponentsTypeLabel = createLabel(text = messages.getString("StudyPanel.componentsTypeLabel"),
+            tooltip = messages.getString("StudyPanel.componentsTypeTooltip"))
     val studyProtocolComponentsTypeField = AutoSuggestField(10)
 
-    val advancedComps = listOf<javax.swing.JComponent>(
+    val advancedComps = listOf<JComponent>(
             studyDescriptionLabel, studyDescriptionTextArea,
             studyDesignTypeLabel, studyDesignTypeField,
             studyAssayMeasurementsTypeLabel, studyAssayMeasurementsTypeField,
@@ -912,15 +842,15 @@ class StudyPanel(study: Study? = null) : javax.swing.JPanel(java.awt.GridBagLayo
         advancedComps.forEach { it.isVisible = false }
 
         // init combo boxes
-        studyDesignTypeField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Study Design Type"])
-        studyAssayMeasurementsTypeField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Study Assay Measurement Type"])
-        studyAssayTechnologyTypeField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Study Assay Technology Type"])
-        accreditationProcedureField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Accreditation procedure Ass.Tec"])
-        studyProtocolTypeField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Study Protocol Type"])
-        studyProtocolParametersField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Study Protocol Parameters Name"])
-        studyProtocolComponentsTypeField.setPossibleValues(de.bund.bfr.rakip.editor.vocabs["Study Protocol Components Type"])
+        studyDesignTypeField.setPossibleValues(vocabs["Study Design Type"])
+        studyAssayMeasurementsTypeField.setPossibleValues(vocabs["Study Assay Measurement Type"])
+        studyAssayTechnologyTypeField.setPossibleValues(vocabs["Study Assay Technology Type"])
+        accreditationProcedureField.setPossibleValues(vocabs["Accreditation procedure Ass.Tec"])
+        studyProtocolTypeField.setPossibleValues(vocabs["Study Protocol Type"])
+        studyProtocolParametersField.setPossibleValues(vocabs["Study Protocol Parameters Name"])
+        studyProtocolComponentsTypeField.setPossibleValues(vocabs["Study Protocol Components Type"])
 
-        val pairList = listOf<Pair<javax.swing.JLabel, javax.swing.JComponent>>(
+        val pairList = listOf<Pair<JLabel, JComponent>>(
                 Pair(first = studyIdentifierLabel, second = studyIdentifierTextField),
                 Pair(first = studyTitleLabel, second = studyTitleTextField),
                 Pair(first = studyDescriptionLabel, second = studyDescriptionTextArea),
@@ -942,7 +872,7 @@ class StudyPanel(study: Study? = null) : javax.swing.JPanel(java.awt.GridBagLayo
     }
 }
 
-class ModelMathPanel(modelMath: ModelMath? = null) : javax.swing.Box(javax.swing.BoxLayout.PAGE_AXIS) {
+class ModelMathPanel(modelMath: ModelMath? = null) : Box(BoxLayout.PAGE_AXIS) {
 
     companion object {
 
@@ -952,7 +882,7 @@ class ModelMathPanel(modelMath: ModelMath? = null) : javax.swing.Box(javax.swing
         val fittingProcedure = "Fitting procedure"
     }
 
-    val advancedCheckBox = javax.swing.JCheckBox("Advanced")
+    val advancedCheckBox = JCheckBox("Advanced")
 
     init {
 
@@ -965,26 +895,26 @@ class ModelMathPanel(modelMath: ModelMath? = null) : javax.swing.Box(javax.swing
 //        val fittingProcedure = JPanel()
 //        fittingProcedure.border = BorderFactory.createTitledBorder(fittingProcedure)
 
-        val propertiesPanel = javax.swing.JPanel(java.awt.GridBagLayout())
+        val propertiesPanel = JPanel(GridBagLayout())
         propertiesPanel.add(comp = parametersPanel, gridy = 0, gridx = 0)
         propertiesPanel.add(comp = qualityMeasuresPanel, gridy = 1, gridx = 0)
         propertiesPanel.add(comp = modelEquationPanel, gridy = 2, gridx = 0)
 
         add(createAdvancedPanel(checkbox = advancedCheckBox))
-        add(javax.swing.Box.createGlue())
+        add(Box.createGlue())
         add(propertiesPanel)
     }
 }
 
-class ParameterPanel(val parameters: MutableList<Parameter> = mutableListOf(), isAdvanced: Boolean) : javax.swing.JPanel(java.awt.BorderLayout()) {
+class ParameterPanel(val parameters: MutableList<Parameter> = mutableListOf(), isAdvanced: Boolean) : JPanel(BorderLayout()) {
 
     init {
-        border = javax.swing.BorderFactory.createTitledBorder(de.bund.bfr.rakip.editor.ModelMathPanel.Companion.parameters)
+        border = BorderFactory.createTitledBorder(de.bund.bfr.rakip.editor.ModelMathPanel.Companion.parameters)
 
         val dtm = NonEditableTableModel()
         parameters.forEach { dtm.addRow(arrayOf(it)) }
 
-        val renderer = object : javax.swing.table.DefaultTableCellRenderer() {
+        val renderer = object : DefaultTableCellRenderer() {
             override fun setValue(value: Any?) {
                 text = (value as Parameter?)?.id
             }
@@ -997,7 +927,7 @@ class ParameterPanel(val parameters: MutableList<Parameter> = mutableListOf(), i
             val editPanel = EditParameterPanel(isAdvanced = isAdvanced)
 
             val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Create parameter")
-            if (dlg.getValue() == javax.swing.JOptionPane.OK_OPTION) {
+            if (dlg.getValue() == JOptionPane.OK_OPTION) {
                 // FIXME: Uncomment once EditParameterPanel.toParameter is implemented
 //                dtm.addRow(arrayOf(editParameterPanel.toParameter()))
             }
@@ -1011,13 +941,13 @@ class ParameterPanel(val parameters: MutableList<Parameter> = mutableListOf(), i
             println("dummy listener")
         }
 
-        add(myTable, java.awt.BorderLayout.NORTH)
-        add(buttonsPanel, java.awt.BorderLayout.SOUTH)
+        add(myTable, BorderLayout.NORTH)
+        add(buttonsPanel, BorderLayout.SOUTH)
     }
 }
 
 class QualityMeasuresPanel(sse: Double? = null, mse: Double? = null, rmse: Double? = null,
-                           r2: Double? = null, aic: Double? = null, bic: Double? = null) : javax.swing.JPanel(java.awt.GridBagLayout()) {
+                           r2: Double? = null, aic: Double? = null, bic: Double? = null) : JPanel(GridBagLayout()) {
 
     val sseSpinnerModel = createSpinnerDoubleModel()
     val mseSpinnerModel = createSpinnerDoubleModel()
@@ -1027,18 +957,18 @@ class QualityMeasuresPanel(sse: Double? = null, mse: Double? = null, rmse: Doubl
     val bicSpinnerModel = createSpinnerDoubleModel()
 
     init {
-        val pairList = listOf<Pair<javax.swing.JLabel, javax.swing.JComponent>>(
-                Pair(first = javax.swing.JLabel("SSE"), second = createSpinner(sseSpinnerModel)),
-                Pair(first = javax.swing.JLabel("MSE"), second = createSpinner(mseSpinnerModel)),
-                Pair(first = javax.swing.JLabel("RMSE"), second = createSpinner(rmseSpinnerModel)),
-                Pair(first = javax.swing.JLabel("r-Squared"), second = createSpinner(r2SpinnerModel)),
-                Pair(first = javax.swing.JLabel("AIC"), second = createSpinner(aicSpinnerModel)),
-                Pair(first = javax.swing.JLabel("BIC"), second = createSpinner(bicSpinnerModel))
+        val pairList = listOf<Pair<JLabel, JComponent>>(
+                Pair(first = JLabel("SSE"), second = createSpinner(sseSpinnerModel)),
+                Pair(first = JLabel("MSE"), second = createSpinner(mseSpinnerModel)),
+                Pair(first = JLabel("RMSE"), second = createSpinner(rmseSpinnerModel)),
+                Pair(first = JLabel("r-Squared"), second = createSpinner(r2SpinnerModel)),
+                Pair(first = JLabel("AIC"), second = createSpinner(aicSpinnerModel)),
+                Pair(first = JLabel("BIC"), second = createSpinner(bicSpinnerModel))
         )
 
         addGridComponents(pairs = pairList)
 
-        border = javax.swing.BorderFactory.createTitledBorder(de.bund.bfr.rakip.editor.ModelMathPanel.Companion.qualityMeasures)
+        border = BorderFactory.createTitledBorder(de.bund.bfr.rakip.editor.ModelMathPanel.Companion.qualityMeasures)
     }
 
     // TODO: toQualityMeasures
@@ -1047,15 +977,15 @@ class QualityMeasuresPanel(sse: Double? = null, mse: Double? = null, rmse: Doubl
 class ModelEquationsPanel(
         val equations: MutableList<ModelEquation> = mutableListOf(),
         isAdvanced: Boolean
-) : javax.swing.JPanel(java.awt.BorderLayout()) {
+) : JPanel(BorderLayout()) {
 
     init {
-        border = javax.swing.BorderFactory.createTitledBorder(de.bund.bfr.rakip.editor.ModelMathPanel.Companion.modelEquation)
+        border = BorderFactory.createTitledBorder(de.bund.bfr.rakip.editor.ModelMathPanel.Companion.modelEquation)
 
         val dtm = NonEditableTableModel()
         equations.forEach { dtm.addRow(arrayOf(it)) }
 
-        val renderer = object : javax.swing.table.DefaultTableCellRenderer() {
+        val renderer = object : DefaultTableCellRenderer() {
             override fun setValue(value: Any?) {
                 text = (value as ModelEquation?)?.equationName
             }
@@ -1067,7 +997,7 @@ class ModelEquationsPanel(
             val editPanel = EditModelEquationPanel(isAdvanced = isAdvanced)
 
             val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Create equation")
-            if (dlg.getValue() == javax.swing.JOptionPane.OK_OPTION) {
+            if (dlg.getValue() == JOptionPane.OK_OPTION) {
                 // TODO: process result
             }
         }
@@ -1079,9 +1009,9 @@ class ModelEquationsPanel(
 
                 val editPanel = EditModelEquationPanel(equation = equation, isAdvanced = isAdvanced)
 
-                val dlg  = ValidatableDialog(panel = editPanel, dialogTitle = "Modify equation")
+                val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Modify equation")
 
-                if (dlg.getValue() == javax.swing.JOptionPane.OK_OPTION) {
+                if (dlg.getValue() == JOptionPane.OK_OPTION) {
                     // TODO: process result
                 }
             }
@@ -1092,7 +1022,7 @@ class ModelEquationsPanel(
             if (rowToDelete != -1) dtm.removeRow(rowToDelete)
         }
 
-        add(myTable, java.awt.BorderLayout.NORTH)
-        add(buttonsPanel, java.awt.BorderLayout.SOUTH)
+        add(myTable, BorderLayout.NORTH)
+        add(buttonsPanel, BorderLayout.SOUTH)
     }
 }

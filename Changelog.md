@@ -6,13 +6,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.1a0]
+### Added
+- Properties file with strings for JComponents `MessageBundle.properties`
+
+### Removed
+- Companion objects from customized JComponents with strings
+
 ## [0.0.0a0] - 2017-06-26
 ### Added
 - Changelog
 - `de.bund.bfr.rakip.editor.validatableDialogs.kt`
 
 ### Changed
-- Moved `ValidatableDialog` and `ValidatablePanel`(s) to a single file validataleDialogs.kt
+- Moved `ValidatableDialog` and `ValidatablePanel`(s) to a single file validatableDialogs.kt
 - Moved validation methods from `uiComponents.kt` to `validatableDialogs.kt`
 
 ### Removed

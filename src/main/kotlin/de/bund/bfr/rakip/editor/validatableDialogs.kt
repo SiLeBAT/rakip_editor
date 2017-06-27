@@ -4,46 +4,46 @@ import com.gmail.gcolaianni5.jris.bean.Record
 import com.gmail.gcolaianni5.jris.bean.Type
 import de.bund.bfr.knime.ui.AutoSuggestField
 import de.bund.bfr.rakip.generic.*
-import javax.swing.JOptionPane
-import javax.swing.JTextArea
-import javax.swing.JTextField
+import java.awt.Frame
+import java.awt.GridBagLayout
+import javax.swing.*
 
 /**
  * Validatable dialogs and panels.
  */
-class ValidatableDialog(panel: ValidatablePanel, dialogTitle: String) : javax.swing.JDialog(null as java.awt.Frame?, true) {
+class ValidatableDialog(panel: ValidatablePanel, dialogTitle: String) : JDialog(null as Frame?, true) {
 
-    private val optionPane = javax.swing.JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION)
+    private val optionPane = JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION)
 
     init {
 
         title = dialogTitle
 
         // Handle window closing correctly
-        defaultCloseOperation = javax.swing.WindowConstants.DISPOSE_ON_CLOSE
+        defaultCloseOperation = WindowConstants.DISPOSE_ON_CLOSE
 
         optionPane.addPropertyChangeListener { e ->
 
             if (isVisible && e.source == optionPane &&
-                    e.propertyName == javax.swing.JOptionPane.VALUE_PROPERTY &&
-                    optionPane.value != javax.swing.JOptionPane.UNINITIALIZED_VALUE) {
+                    e.propertyName == JOptionPane.VALUE_PROPERTY &&
+                    optionPane.value != JOptionPane.UNINITIALIZED_VALUE) {
 
                 val value = optionPane.value as? Int
 
-                if (value == javax.swing.JOptionPane.YES_OPTION) {
+                if (value == JOptionPane.YES_OPTION) {
                     val errors = panel.validatePanel()
                     if (errors.isEmpty()) {
                         dispose()
                     } else {
                         val msg = errors.joinToString(separator = "\n")
-                        javax.swing.JOptionPane.showMessageDialog(this, msg, "Missing fields",
-                                javax.swing.JOptionPane.ERROR_MESSAGE)
+                        JOptionPane.showMessageDialog(this, msg, "Missing fields",
+                                JOptionPane.ERROR_MESSAGE)
 
                         // Reset the JOptionPane's value. If you don't this, the if the user presses
                         // the same button next time, no property change will be fired.
-                        optionPane.value = javax.swing.JOptionPane.UNINITIALIZED_VALUE  // Reset value
+                        optionPane.value = JOptionPane.UNINITIALIZED_VALUE  // Reset value
                     }
-                } else if (value == javax.swing.JOptionPane.NO_OPTION) {
+                } else if (value == JOptionPane.NO_OPTION) {
                     dispose()
                 }
             }
@@ -57,23 +57,15 @@ class ValidatableDialog(panel: ValidatablePanel, dialogTitle: String) : javax.sw
     fun getValue(): Any = optionPane.value
 }
 
-abstract class ValidatablePanel : javax.swing.JPanel(java.awt.GridBagLayout()) {
+abstract class ValidatablePanel : JPanel(GridBagLayout()) {
 
     abstract fun validatePanel(): List<String>
 }
 
 class EditAssayPanel(assay: Assay? = null, isAdvanced: Boolean) : ValidatablePanel() {
 
-    companion object {
-        val assayName = "Name *"
-        val assayNameTooltip = "A name given to the assay"
-
-        val assayDescription = "Description"
-        val assayDescriptionTooltip = "General description of the assay. Corresponds to the Protocol REF in ISA"
-    }
-
-    val nameTextField = javax.swing.JTextField(30)
-    val descriptionTextArea = if (isAdvanced) javax.swing.JTextArea(5, 30) else null
+    val nameTextField = JTextField(30)
+    val descriptionTextArea = if (isAdvanced) JTextArea(5, 30) else null
 
     init {
 
@@ -87,10 +79,12 @@ class EditAssayPanel(assay: Assay? = null, isAdvanced: Boolean) : ValidatablePan
     }
 
     private fun initUI() {
-        val nameLabel = createLabel(text = assayName, tooltip = assayNameTooltip)
-        val descriptionLabel = createLabel(text = assayDescription, tooltip = assayDescriptionTooltip)
+        val nameLabel = createLabel(text = messages.getString("EditAssayPanel.nameLabel"),
+                tooltip = messages.getString("EditAssayPanel.nameTooltip"))
+        val descriptionLabel = createLabel(text = messages.getString("EditAssayPanel.descriptionLabel"),
+                tooltip = messages.getString("EditAssayPanel.descriptionTooltip"))
 
-        val pairList = mutableListOf<Pair<javax.swing.JLabel, javax.swing.JComponent>>()
+        val pairList = mutableListOf<Pair<JLabel, JComponent>>()
         pairList.add(Pair(first = nameLabel, second = nameTextField))
         descriptionTextArea?.let { Pair(first = descriptionLabel, second = it) }
 
@@ -101,7 +95,7 @@ class EditAssayPanel(assay: Assay? = null, isAdvanced: Boolean) : ValidatablePan
 
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
-        if (!nameTextField.hasValidValue()) errors.add("Missing $assayName")
+        if (!nameTextField.hasValidValue()) errors.add("Missing ${messages.getString("EditAssayPanel.nameLabel")}")
         return errors
     }
 }
@@ -109,42 +103,13 @@ class EditAssayPanel(assay: Assay? = null, isAdvanced: Boolean) : ValidatablePan
 class EditDietaryAssessmentMethodPanel(dietaryAssessmentMethod: DietaryAssessmentMethod? = null, isAdvanced: Boolean)
     : ValidatablePanel() {
 
-    companion object {
-        val dataCollectionTool = "Methodological tool to collect data"
-        val dataCollectionToolTooltip = """
-            |<html>
-            |<p>food diaries, interview, 24-hour recall interview, food propensy
-            |<p>questionnaire, portion size measurement aids, eating outside
-            |<p>questionnaire
-            """.trimMargin()
-
-        val nonConsecutiveOneDays = "Number of non-conseccutive one-day"
-        val nonConsecutiveOneDayTooltip = ""
-
-        val dietarySoftwareTool = "Dietary software tool"
-        val dietarySoftwareTooltip = ""
-        val foodItemNumber = "Number of food items"
-        val foodItemNumberTooltip = ""
-
-        val recordType = "Type of records"
-        val recordTypeTooltip = """
-            |<html>
-            |<p>consumption occasion, mean of consumption, quantified and described as
-            |<p>eaten, recipes for self-made
-            |</html>
-            """.trimMargin()
-
-        val foodDescription = "Food assayDescription"
-        val foodDescriptionTooltip = "use foodex2 facets"
-    }
-
     // fields. null if advanced
     val dataCollectionToolField = AutoSuggestField(10)
-    val nonConsecutiveOneDayTextField = javax.swing.JTextField(30)
-    val dietarySoftwareToolTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    val foodItemNumberTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    val recordTypeTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    val foodDescriptorComboBox = if (isAdvanced) javax.swing.JComboBox<String>() else null
+    val nonConsecutiveOneDayTextField = JTextField(30)
+    val dietarySoftwareToolTextField = if (isAdvanced) JTextField(30) else null
+    val foodItemNumberTextField = if (isAdvanced) JTextField(30) else null
+    val recordTypeTextField = if (isAdvanced) JTextField(30) else null
+    val foodDescriptorComboBox = if (isAdvanced) JComboBox<String>() else null
 
     init {
 
@@ -164,18 +129,30 @@ class EditDietaryAssessmentMethodPanel(dietaryAssessmentMethod: DietaryAssessmen
     private fun initUI() {
 
         // Create labels
-        val dataCollectionToolLabel = createLabel(text = dataCollectionTool, tooltip = dataCollectionToolTooltip)
-        val nonConsecutiveOneDayLabel = createLabel(text = nonConsecutiveOneDays, tooltip = nonConsecutiveOneDayTooltip)
-        val dietarySoftwareToolLabel = createLabel(text = dietarySoftwareTool, tooltip = dietarySoftwareTooltip)
-        val foodItemNumberLabel = createLabel(text = foodItemNumber, tooltip = foodItemNumberTooltip)
-        val recordTypeLabel = createLabel(text = recordType, tooltip = recordTypeTooltip)
-        val foodDescriptionLabel = createLabel(text = foodDescription, tooltip = foodDescriptionTooltip)
+        val dataCollectionToolLabel = createLabel(
+                text = messages.getString("EditDietaryAssessmentMethodPanel.dataCollectionToolLabel"),
+                tooltip = messages.getString("EditDietaryAssessmentMethodPanel.dataCollectionToolTooltip"))
+        val nonConsecutiveOneDayLabel = createLabel(
+                text = messages.getString("EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysLabel"),
+                tooltip = messages.getString("EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysTooltip"))
+        val dietarySoftwareToolLabel = createLabel(
+                text = messages.getString("EditDietaryAssessmentMethodPanel.dietarySoftwareToolLabel"),
+                tooltip = messages.getString("EditDietaryAssessmentMethodPanel.dietarySoftwareToolTooltip"))
+        val foodItemNumberLabel = createLabel(
+                text = messages.getString("EditDietaryAssessmentMethodPanel.foodItemNumberLabel"),
+                tooltip = messages.getString("EditDietaryAssessmentMethodPanel.foodItemNumberTooltip"))
+        val recordTypeLabel = createLabel(
+                text = messages.getString("EditDietaryAssessmentMethodPanel.recordTypeLabel"),
+                tooltip = messages.getString("EditDietaryAssessmentMethodPanel.recordTypeTooltip"))
+        val foodDescriptionLabel = createLabel(
+                text = messages.getString("EditDietaryAssessmentMethodPanel.foodDescriptionLabel"),
+                tooltip = messages.getString("EditDietaryAssessmentMethodPanel.foodDescriptionTooltip"))
 
         // init combo boxes
         dataCollectionToolField.setPossibleValues(vocabs["Method. tool to collect data"])
         foodDescriptorComboBox?.let { vocabs["Food descriptors"]?.forEach(it::addItem) }
 
-        val pairList = mutableListOf<Pair<javax.swing.JLabel, javax.swing.JComponent>>()
+        val pairList = mutableListOf<Pair<JLabel, JComponent>>()
         pairList.add(Pair(first = dataCollectionToolLabel, second = dataCollectionToolField))
         pairList.add(Pair(first = nonConsecutiveOneDayLabel, second = nonConsecutiveOneDayTextField))
         dietarySoftwareToolTextField?.let { pairList.add(Pair(first = dietarySoftwareToolLabel, second = it)) }
@@ -203,8 +180,10 @@ class EditDietaryAssessmentMethodPanel(dietaryAssessmentMethod: DietaryAssessmen
 
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
-        if (!dataCollectionToolField.hasValidValue()) errors.add("Missing $dataCollectionTool")
-        if (!nonConsecutiveOneDayTextField.hasValidValue()) errors.add("Missing $nonConsecutiveOneDays")
+        if (!dataCollectionToolField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditDietaryAssessmentMethodPanel.dataCollectionToolLabel") }")
+        if (!nonConsecutiveOneDayTextField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysLabel") }")
 
         return errors
     }
@@ -213,138 +192,27 @@ class EditDietaryAssessmentMethodPanel(dietaryAssessmentMethod: DietaryAssessmen
 
 class EditHazardPanel(hazard: Hazard? = null, isAdvanced: Boolean) : ValidatablePanel() {
 
-    companion object {
-        val hazardType = "Hazard type *"
-        val hazardTypeTooltip = "General classification of the hazard"
-
-        val hazardName = "Hazard name *"
-        val hazardNameTooltip = "Name of the hazard for which the model or data applies"
-
-        val hazardDescription = "Hazard description"
-        val hazardDescriptionTooltip = "Description of te hazard for which the model or data applies"
-
-        val hazardUnit = "Hazard unit *"
-        val hazardUnitTooltip = "Unit of the hazard for which the model or data applies"
-
-        val adverseEffect = "Adverse effect"
-        val adverseEffectTooltip = "morbity, mortality, effect"
-
-        val origin = "Origin"
-        val originTooltip = "source of contamination, source"
-
-        val bmd = "Benchmark dose, BMD"
-        val bmdTooltip = "A dose or concentration that produces a predetermined change in response rate of an adverse effect"
-
-        val maxResidueLimit = "Maximumm Residue Limit"
-        val maxResidueLimitTooltip = "International regulations and permissible maximum residue levels in food and drinking water"
-
-        val noObservedAdverse = "No observed adverse"
-        val noObservedAdverseTooltip = "Level of exposure of an organism, found by experiment or observation"
-
-        val lowestObserve = "Lowest observe"
-        val lowestObserveTooltip = """
-            |<html>
-            |<p>Lowest concentration or amount of a substance found by experiment or observation
-            |<p>that causes an adverse alteration of morphology, function, capacity, growth,
-            |<p>development, or lifespan of a target organism distinguished from normal organisms
-            |<p>of the same species under defined conditions of exposure.
-            |</html>
-            """.trimMargin()
-
-        val acceptableOperator = "Acceptable operator"
-        val acceptableOperatorTooltip = """
-            |<html>
-            |<p>Maximum amount of active substance to which the operator may be exposed without
-            |<p>any adverse health effects. The AOEL is expressed as milligrams of the chemical
-            |<p>per kilogram body weight of the operator.
-            |</html>
-            """.trimMargin()
-
-        val acuteReferenceDose = "Acute reference dose"
-        val acuteReferenceDoseTooltip = """
-            |<html>
-            |<p>An estimate (with uncertainty spanning perhaps an order of magnitude) of daily
-            |<p>oral exposure for an acute duration (24 hours or less) to the human population
-            |<p>including sensitive subgroups) that is likely to be without an appreciate risk
-            |<p>of deleterious effects during a lifetime.
-            |</html>
-            """.trimMargin()
-
-        val acceptableDailyIntake = "Acceptable daily intake"
-        val acceptableDailyIntakeTooltip = """
-            |<html>
-            |<p>measure of amount of a specific substance in food or in drinking water that can
-            |<p>be ingested (orally) on a daily basis over a lifetime without an appreciable
-            |<p>health risk.
-            |</html>
-            """.trimMargin()
-
-        val indSum = "Hazard ind/sum"
-        val indSumTooltip = """
-            |<html>
-            |<p>Define if the parameter reported is an individual residue/analyte, a summed
-            |<p>residue definition or part of a sum a summed residue definition.
-            |</html>
-            """.trimMargin()
-
-        val labName = "Laboratory name"
-        val labNameTooltip = """
-            |<html>
-            |<p>Laboratory code (National laboratory code if available) or Laboratory name
-            |</html>
-            """.trimMargin()
-
-        val labCountry = "Laboratory country"
-        val labCountryTooltip = "Country where the laboratory is placed. (ISO 3166-1-alpha-2)."
-
-        val detectionLimit = "Limit of detection"
-        val detectionLimitTooltip = """
-            |<html>
-            |<p>Limit of detection reported in the unit specified by the variable “Hazard unit”.
-            |</html>
-            """.trimMargin()
-
-        val quantificationLimit = "Limit of quantification"
-        val quantificationLimitTootlip = """
-            |<html>
-            |<p>Limit of quantification reported in the unit specified by the variable “Hazard
-            |<p>unit”
-            |</html>
-            """.trimMargin()
-
-        val leftCensoredData = "Left-censored data"
-        val leftCensoredDataTooltip = "percentage of measures equal to LOQ and/or LOD"
-
-        val contaminationRange = "Range of contamination"
-        val contaminationRangeTooltip = """
-            |<html>
-            |<p>Range of result of the analytical measure reported in the unit specified by the
-            |<p>variable “Hazard unit”
-            |</html>
-            """.trimMargin()
-    }
-
     // Fields. Null if simple mode.
     private val hazardTypeField = AutoSuggestField(10)
     private val hazardNameField = AutoSuggestField(10)
-    private val hazardDescriptionTextArea = if (isAdvanced) javax.swing.JTextArea(5, 30) else null
+    private val hazardDescriptionTextArea = if (isAdvanced) JTextArea(5, 30) else null
     private val hazardUnitField = AutoSuggestField(10)
-    private val adverseEffectTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val originTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val bmdTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val maxResidueLimitTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val noObservedAdverseTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val lowestObserveTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val acceptableOperatorTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val acuteReferenceDoseTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val acceptableDailyIntakeTextField = if (isAdvanced) javax.swing.JTextField(30) else null
+    private val adverseEffectTextField = if (isAdvanced) JTextField(30) else null
+    private val originTextField = if (isAdvanced) JTextField(30) else null
+    private val bmdTextField = if (isAdvanced) JTextField(30) else null
+    private val maxResidueLimitTextField = if (isAdvanced) JTextField(30) else null
+    private val noObservedAdverseTextField = if (isAdvanced) JTextField(30) else null
+    private val lowestObserveTextField = if (isAdvanced) JTextField(30) else null
+    private val acceptableOperatorTextField = if (isAdvanced) JTextField(30) else null
+    private val acuteReferenceDoseTextField = if (isAdvanced) JTextField(30) else null
+    private val acceptableDailyIntakeTextField = if (isAdvanced) JTextField(30) else null
     private val indSumField = if (isAdvanced) AutoSuggestField(10) else null
-    private val labNameTextField = if (isAdvanced) javax.swing.JTextField(30) else null
+    private val labNameTextField = if (isAdvanced) JTextField(30) else null
     private val labCountryField = if (isAdvanced) AutoSuggestField(10) else null
-    private val detectionLimitTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val quantificationLimitTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val leftCensoredDataTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val contaminationRangeTextField = if (isAdvanced) javax.swing.JTextField(30) else null
+    private val detectionLimitTextField = if (isAdvanced) JTextField(30) else null
+    private val quantificationLimitTextField = if (isAdvanced) JTextField(30) else null
+    private val leftCensoredDataTextField = if (isAdvanced) JTextField(30) else null
+    private val contaminationRangeTextField = if (isAdvanced) JTextField(30) else null
 
     init {
         // Populate interface if `hazard` is passed
@@ -376,26 +244,49 @@ class EditHazardPanel(hazard: Hazard? = null, isAdvanced: Boolean) : Validatable
     private fun initUI() {
 
         // Create labels
-        val hazardTypeLabel = createLabel(text = hazardType, tooltip = hazardTypeTooltip)
-        val hazardNameLabel = createLabel(text = hazardName, tooltip = hazardNameTooltip)
-        val hazardDescriptionLabel = createLabel(text = hazardDescription, tooltip = hazardDescriptionTooltip)
-        val hazardUnitLabel = createLabel(text = hazardUnit, tooltip = hazardUnitTooltip)
-        val adverseEffectLabel = createLabel(text = adverseEffect, tooltip = adverseEffectTooltip)
-        val originLabel = createLabel(text = origin, tooltip = originTooltip)
-        val bmdLabel = createLabel(text = bmd, tooltip = bmdTooltip)
-        val maxResidueLimitLabel = createLabel(text = maxResidueLimit, tooltip = maxResidueLimitTooltip)
-        val noObservedAdverseLabel = createLabel(text = noObservedAdverse, tooltip = noObservedAdverseTooltip)
-        val lowestObserveLabel = createLabel(text = lowestObserve, tooltip = lowestObserveTooltip)
-        val acceptableOperatorLabel = createLabel(text = acceptableOperator, tooltip = acceptableOperatorTooltip)
-        val acuteReferenceDoseLabel = createLabel(text = acuteReferenceDose, tooltip = acuteReferenceDoseTooltip)
-        val acceptableDailyIntakeLabel = createLabel(text = acceptableDailyIntake, tooltip = acceptableDailyIntakeTooltip)
-        val indSumLabel = createLabel(text = indSum, tooltip = indSumTooltip)
-        val labNameLabel = createLabel(text = labName, tooltip = labNameTooltip)
-        val labCountryLabel = createLabel(text = labCountry, tooltip = labCountryTooltip)
-        val detectionLimitLabel = createLabel(text = detectionLimit, tooltip = detectionLimitTooltip)
-        val quantificationLimitLabel = createLabel(text = quantificationLimit, tooltip = quantificationLimitTootlip)
-        val leftCensoredDataLabel = createLabel(text = leftCensoredData, tooltip = leftCensoredDataTooltip)
-        val contaminationRangeLabel = createLabel(text = contaminationRange, tooltip = contaminationRangeTooltip)
+        val hazardTypeLabel = createLabel(text = messages.getString("EditHazardPanel.hazardTypeLabel"),
+                tooltip = messages.getString("EditHazardPanel.hazardTypeTooltip"))
+        val hazardNameLabel = createLabel(text = messages.getString("EditHazardPanel.hazardNameLabel"),
+                tooltip = messages.getString("EditHazardPanel.hazardNameTooltip"))
+        val hazardDescriptionLabel = createLabel(
+                text = messages.getString("EditHazardPanel.hazardDescriptionLabel"),
+                tooltip = messages.getString("EditHazardPanel.hazardDescriptionTooltip"))
+        val hazardUnitLabel = createLabel(text = messages.getString("EditHazardPanel.hazardUnitLabel"),
+                tooltip = messages.getString("EditHazardPanel.hazardUnitTooltip"))
+        val adverseEffectLabel = createLabel(text = messages.getString("EditHazardPanel.adverseEffectLabel"),
+                tooltip = messages.getString("EditHazardPanel.adverseEffectTooltip"))
+        val originLabel = createLabel(text = messages.getString("EditHazardPanel.originLabel"),
+                tooltip = messages.getString("EditHazardPanel.originTooltip"))
+        val bmdLabel = createLabel(text = messages.getString("EditHazardPanel.bmdLabel"),
+                tooltip = messages.getString("EditHazardPanel.bmdTooltip"))
+        val maxResidueLimitLabel = createLabel(text = messages.getString("EditHazardPanel.maxResidueLimitLabel"),
+                tooltip = messages.getString("EditHazardPanel.maxResidueLimitTooltip"))
+        val noObservedAdverseLabel = createLabel(
+                text = messages.getString("EditHazardPanel.noObservedAdverseLabel"),
+                tooltip = messages.getString("EditHazardPanel.noObservedAdverseTooltip"))
+        val lowestObserveLabel = createLabel(text = messages.getString("EditHazardPanel.lowestObserveLabel"),
+                tooltip = messages.getString("EditHazardPanel.lowestObserveTooltip"))
+        val acceptableOperatorLabel = createLabel(text = messages.getString("EditHazardPanel.acceptableOperatorLabel"),
+                tooltip = messages.getString("EditHazardPanel.acceptableOperatorTooltip"))
+        val acuteReferenceDoseLabel = createLabel(text = messages.getString("EditHazardPanel.acuteReferenceDoseLabel"),
+                tooltip = messages.getString("EditHazardPanel.acuteReferenceDoseTooltip"))
+        val acceptableDailyIntakeLabel = createLabel(
+                text = messages.getString("EditHazardPanel.acceptableDailyIntakeLabel"),
+                tooltip = messages.getString("EditHazardPanel.acceptableDailyIntakeTooltip"))
+        val indSumLabel = createLabel(text = messages.getString("EditHazardPanel.indSumLabel"),
+                tooltip = messages.getString("EditHazardPanel.indSumTooltip"))
+        val labNameLabel = createLabel(text = messages.getString("EditHazardPanel.labNameLabel"),
+                tooltip = messages.getString("EditHazardPanel.labNameTooltip"))
+        val labCountryLabel = createLabel(text = messages.getString("EditHazardPanel.labCountryLabel"),
+                tooltip = messages.getString("EditHazardPanel.labCountryTooltip"))
+        val detectionLimitLabel = createLabel(text = messages.getString("EditHazardPanel.detectionLimitLabel"),
+                tooltip = messages.getString("EditHazardPanel.detectionLimitTooltip"))
+        val quantificationLimitLabel = createLabel(text = messages.getString("EditHazardPanel.quantificationLimitLabel"),
+                tooltip = messages.getString("EditHazardPanel.quantificationLimitTooltip"))
+        val leftCensoredDataLabel = createLabel(text = messages.getString("EditHazardPanel.leftCensoredDataLabel"),
+                tooltip = messages.getString("EditHazardPanel.leftCensoredDataTooltip"))
+        val contaminationRangeLabel = createLabel(text = messages.getString("EditHazardPanel.contaminationRangeLabel"),
+                tooltip = messages.getString("EditHazardPanel.contaminationRangeTooltip"))
 
         // Init combo boxes
         hazardTypeField.setPossibleValues(vocabs["Hazard type"])
@@ -404,7 +295,7 @@ class EditHazardPanel(hazard: Hazard? = null, isAdvanced: Boolean) : Validatable
         indSumField?.setPossibleValues(vocabs["Hazard ind sum"])
         labCountryField?.setPossibleValues(vocabs["Laboratory country"])
 
-        val pairList = mutableListOf<Pair<javax.swing.JLabel, javax.swing.JComponent>>()
+        val pairList = mutableListOf<Pair<JLabel, JComponent>>()
         pairList.add(Pair(first = hazardTypeLabel, second = hazardTypeField))
         pairList.add(Pair(first = hazardNameLabel, second = hazardNameField))
         hazardDescriptionTextArea?.let { pairList.add(Pair(first = hazardDescriptionLabel, second = it)) }
@@ -463,9 +354,12 @@ class EditHazardPanel(hazard: Hazard? = null, isAdvanced: Boolean) : Validatable
 
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
-        if (!hazardTypeField.hasValidValue()) errors.add("Missing $hazardType")
-        if (!hazardNameField.hasValidValue()) errors.add("Missing $hazardName")
-        if (!hazardUnitField.hasValidValue()) errors.add("Missing $hazardUnit")
+        if (!hazardNameField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditHazardPanel.hazardNameLabel") }")
+        if (!hazardTypeField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditHazardPanel.hazardTypeLabel") }")
+        if (!hazardUnitField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditHazardPanel.hazardUnitLabel") }")
 
         return errors
     }
@@ -474,25 +368,16 @@ class EditHazardPanel(hazard: Hazard? = null, isAdvanced: Boolean) : Validatable
 
 class EditModelEquationPanel(equation: ModelEquation? = null, isAdvanced: Boolean) : ValidatablePanel() {
 
-    companion object {
-
-        val equationName = "Model equation name *"
-        val equationNameTooltip = "A name given to the model equation"
-
-        val equationClass = "Model equation class"
-        val equationClassTooltip = "Information on that helps to categorize model equations"
-
-        val script = "Equation *"
-        val scriptToolTip = "The pointer to the file that holds the software code (e.g. R-script)"
-    }
-
-    val equationNameLabel = createLabel(text = equationName, tooltip = equationNameTooltip)
+    val equationNameLabel = createLabel(text = messages.getString("EditModelEquationPanel.nameLabel"),
+            tooltip = messages.getString("EditModelEquationPanel.nameTooltip"))
     val equationNameTextField = JTextField(30)
 
-    val equationClassLabel = createLabel(text = equationClass, tooltip = equationClassTooltip)
+    val equationClassLabel = createLabel(text = messages.getString("EditModelEquationPanel.classLabel"),
+            tooltip = messages.getString("EditModelEquationPanel.classTooltip"))
     val equationClassTextField = if (isAdvanced) JTextField(30) else null
 
-    val scriptLabel = createLabel(text = script, tooltip = scriptToolTip)
+    val scriptLabel = createLabel(text = messages.getString("EditModelEquationPanel.scriptLabel"),
+            tooltip = messages.getString("EditModelEquationPanel.scriptTooltip"))
     val scriptTextArea = JTextArea(5, 30)
 
     init {
@@ -515,8 +400,10 @@ class EditModelEquationPanel(equation: ModelEquation? = null, isAdvanced: Boolea
 
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
-        if (!equationNameTextField.hasValidValue()) errors.add("Missing $equationName")
-        if (!scriptTextArea.hasValidValue()) errors.add("Missing $script")
+        if (!equationNameTextField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditModelEquationPanel.nameLabel") }")
+        if (!scriptTextArea.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditModelEquationPanel.scriptLabel") }")
 
         return errors
     }
@@ -525,149 +412,69 @@ class EditModelEquationPanel(equation: ModelEquation? = null, isAdvanced: Boolea
 // TODO: idTextField <- Create UUID automatically
 class EditParameterPanel(parameter: Parameter? = null, isAdvanced: Boolean) : ValidatablePanel() {
 
-    companion object {
-
-        val id = "Parameter ID *"
-        val idTooltip = "An unambiguous and sequential ID given to the parameter"
-
-        val classification = "Parameter classification *"
-        val classificationTooltip = "General classification of the parameter (e.g. Input, Constant, Output...)"
-
-        val parameterName = "Parameter name *"
-        val parameterNameTooltip = "A name given to the parameter"
-
-        val description = "Parameter classification"
-        val descriptionTooltip = "General description of the parameter"
-
-        val type = "Parameter type"
-        val typeTooltip = "The type of the parameter"
-
-        val unit = "Parameter unit *"
-        val unitTooltip = "Unit of the parameter"
-
-        val unitCategory = "Parameter unit category *"
-        val unitCategoryTooltip = "General classification of the parameter unit"
-
-        val dataType = "Parameter data type *"
-        val dataTypeTooltip = """
-            |<html>
-            |<p>Information on the data format of the parameter, e.g. if it is a
-            |<p>categorical variable, int, double, array of size x,y,z
-            |</html>
-            """.trimMargin()
-
-        val source = "Parameter source"
-        val sourceTooltip = "Information on the type of knowledge used to define the parameter value"
-
-        val subject = "Parameter subject"
-        val subjectTooltip = """
-            |<html>
-            |<p>Scope of the parameter, e.g. if it refers to an animal, a batch of
-            |<p>animals, a batch of products, a carcass, a carcass skin etc
-            |</html>
-            """.trimMargin()
-
-        val distribution = "Parameter distribution"
-        val distributionTooltip = """
-            |<html>
-            |<p>Information on the expected distribution of parameter values in of
-            |<p>uncertainty and variability - if available. SUGGESTION: Information on
-            |<p>the distribution describing the parameter (e.g variability, uncertainty,
-            |<p>point estimate...)
-            |</html>
-            """.trimMargin()
-
-        val value = "Parameter value"
-        val valueTooltip = "Numerical value of the parameter"
-
-        val reference = "Parameter reference"
-        val referenceTooltip = """
-            |<html>
-            |<p>Information on the source, where the value of the parameter has been
-            |<p>extracted from - if available. The format should use that used in other
-            |<p>"Reference" metadata"
-            |</html>
-            """.trimMargin()
-
-        val variabilitySubject = """
-            |<html>
-            |<p>Parameter variability
-            |<p>subject
-            |</html>
-            """.trimMargin()
-        val variabilitySubjectTooltip = """
-            |<html>
-            |<p>Information "per what" the variability is described. It can be
-            |<p>variability between broiler in a flock,  variability between all meat
-            |<p>packages sold in Denmark, variability between days, etc.
-            |</html>
-            """.trimMargin()
-
-        val applicability = """
-            |<html>
-            |<p>Range of applicability
-            |<p>of the model
-            |</html>
-            """.trimMargin()
-
-        val applicabilityTooltip = """
-            |<html>
-            |<p>Numerical values of the maximum and minimum limits of the parameter that
-            |<p>determine the range of applicability for which the model applies
-            |</html>
-            """.trimMargin()
-
-        val error = "Parameter error"
-        val errorTooltip = "Error of the parameter value"
-    }
-
-    val idLabel = createLabel(text = id, tooltip = idTooltip)
-    val idTextField = javax.swing.JTextField(30)
+    val idLabel = createLabel(text = messages.getString("EditParameterPanel.idLabel"),
+            tooltip = messages.getString("EditParameterPanel.idTooltip"))
+    val idTextField = JTextField(30)
 
     // TODO: classificationComboBox is a ComboBox and in the GUI appears a Text entry instead
-    val classificationLabel = createLabel(text = classification, tooltip = classificationTooltip)
+    val classificationLabel = createLabel(text = messages.getString("EditParameterPanel.classificationLabel"),
+            tooltip = messages.getString("EditParameterPanel.classificationTooltip"))
     val classificationField = AutoSuggestField(10)
 
-    val nameLabel = createLabel(text = parameterName, tooltip = parameterNameTooltip)
-    val nameTextField = javax.swing.JTextField(30)
+    val nameLabel = createLabel(text = messages.getString("EditParameterPanel.parameterNameLabel"),
+            tooltip = messages.getString("EditParameterPanel.parameterNameTooltip"))
+    val nameTextField = JTextField(30)
 
-    val descriptionLabel = createLabel(text = description, tooltip = descriptionTooltip)
-    val descriptionTextArea = if (isAdvanced) javax.swing.JTextArea(5, 30) else null
+    val descriptionLabel = createLabel(text = messages.getString("EditParameterPanel.descriptionLabel"),
+            tooltip = messages.getString("EditParameterPanel.descriptionTooltip"))
+    val descriptionTextArea = if (isAdvanced) JTextArea(5, 30) else null
 
-    val typeLabel = createLabel(text = type, tooltip = typeTooltip)
+    val typeLabel = createLabel(text = messages.getString("EditParameterPanel.typeLabel"),
+            tooltip = messages.getString("EditParameterPanel.typeTooltip"))
     val typeField = if (isAdvanced) AutoSuggestField(10) else null
 
-    val unitLabel = createLabel(text = unit, tooltip = unitTooltip)
+    val unitLabel = createLabel(text = messages.getString("EditParameterPanel.unitLabel"),
+            tooltip = messages.getString("EditParameterPanel.unitTooltip"))
     val unitField = AutoSuggestField(10)
 
-    val unitCategoryLabel = createLabel(text = unitCategory, tooltip = unitCategoryTooltip)
+    val unitCategoryLabel = createLabel(text = messages.getString("EditParameterPanel.unitCategoryLabel"),
+            tooltip = messages.getString("EditParameterPanel.unitCategoryTooltip"))
     val unitCategoryField = AutoSuggestField(10)
 
-    val dataTypeLabel = createLabel(text = dataType, tooltip = dataTypeTooltip)
+    val dataTypeLabel = createLabel(text = messages.getString("EditParameterPanel.dataTypeLabel"),
+            tooltip = messages.getString("EditParameterPanel.dataTypeTooltip"))
     val dataTypeField = AutoSuggestField(10)
 
-    val sourceLabel = createLabel(text = source, tooltip = sourceTooltip)
+    val sourceLabel = createLabel(text = messages.getString("EditParameterPanel.sourceLabel"),
+            tooltip = messages.getString("EditParameterPanel.sourceTooltip"))
     val sourceField = if (isAdvanced) AutoSuggestField(10) else null
 
-    val subjectLabel = createLabel(text = subject, tooltip = subjectTooltip)
+    val subjectLabel = createLabel(text = messages.getString("EditParameterPanel.subjectLabel"),
+            tooltip = messages.getString("EditParameterPanel.subjectTooltip"))
     val subjectField = if (isAdvanced) AutoSuggestField(10) else null
 
-    val distributionLabel = createLabel(text = distribution, tooltip = distributionTooltip)
+    val distributionLabel = createLabel(text = messages.getString("EditParameterPanel.distributionLabel"),
+            tooltip = messages.getString("EditParameterPanel.distributionTooltip"))
     val distributionField = if (isAdvanced) AutoSuggestField(10) else null
 
-    val valueLabel = createLabel(text = value, tooltip = valueTooltip)
-    val valueTextField = if (isAdvanced) javax.swing.JTextField(30) else null
+    val valueLabel = createLabel(text = messages.getString("EditParameterPanel.valueLabel"),
+            tooltip = messages.getString("EditParameterPanel.valueTooltip"))
+    val valueTextField = if (isAdvanced) JTextField(30) else null
 
-    val referenceLabel = createLabel(text = reference, tooltip = referenceTooltip)
-    val referenceTextField = if (isAdvanced) javax.swing.JTextField(30) else null
+    val referenceLabel = createLabel(text = messages.getString("EditParameterPanel.referenceLabel"),
+            tooltip = messages.getString("EditParameterPanel.referenceTooltip"))
+    val referenceTextField = if (isAdvanced) JTextField(30) else null
 
-    val variabilitySubjectLabel = createLabel(text = variabilitySubject, tooltip = variabilitySubjectTooltip)
-    val variabilitySubjectTextArea = if (isAdvanced) javax.swing.JTextArea(5, 30) else null
+    val variabilitySubjectLabel = createLabel(text = messages.getString("EditParameterPanel.variabilitySubjectLabel"),
+            tooltip = messages.getString("EditParameterPanel.variabilitySubjectTooltip"))
+    val variabilitySubjectTextArea = if (isAdvanced) JTextArea(5, 30) else null
 
-    val applicabilityLabel = createLabel(text = applicability, tooltip = applicabilityTooltip)
-    val applicabilityTextArea = if (isAdvanced) javax.swing.JTextArea(5, 30) else null
+    val applicabilityLabel = createLabel(text = messages.getString("EditParameterPanel.applicabilityLabel"),
+            tooltip = messages.getString("EditParameterPanel.applicabilityTooltip"))
+    val applicabilityTextArea = if (isAdvanced) JTextArea(5, 30) else null
 
-    val errorLabel = createLabel(text = error, tooltip = errorTooltip)
+    val errorLabel = createLabel(text = messages.getString("EditParameterPanel.errorLabel"),
+            tooltip = messages.getString("EditParameterPanel.errorTooltip"))
     val errorSpinnerModel = if (isAdvanced) createSpinnerDoubleModel() else null
 
     init {
@@ -682,7 +489,7 @@ class EditParameterPanel(parameter: Parameter? = null, isAdvanced: Boolean) : Va
         subjectField?.setPossibleValues(vocabs["Parameter subject"])
         distributionField?.setPossibleValues(vocabs["Parameter distribution"])
 
-        val pairs = mutableListOf<Pair<javax.swing.JLabel, javax.swing.JComponent>>()
+        val pairs = mutableListOf<Pair<JLabel, JComponent>>()
         pairs.add(Pair(first = idLabel, second = idTextField))
         pairs.add(Pair(first = classificationLabel, second = classificationField))
         pairs.add(Pair(first = nameLabel, second = nameTextField))
@@ -707,12 +514,18 @@ class EditParameterPanel(parameter: Parameter? = null, isAdvanced: Boolean) : Va
 
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
-        if (!idTextField.hasValidValue()) errors.add("Missing $id")
-        if (!classificationField.hasValidValue()) errors.add("Missing $classification")
-        if (!nameTextField.hasValidValue()) errors.add("Missing $name")
-        if (!unitField.hasValidValue()) errors.add("MIssing $unit")
-        if (!unitCategoryField.hasValidValue()) errors.add("Missing $unitCategory")
-        if (!unitCategoryField.hasValidValue()) errors.add("Missing $dataType")
+        if (!idTextField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditParameterPanel.idLabel") }")
+        if (!classificationField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditParameterPanel.classificationLabel") }")
+        if (!nameTextField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditParameterPanel.parameterNameLabel") }")
+        if (!unitField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditParameterPanel.unitLabel") }")
+        if (!unitCategoryField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditParameterPanel.unitCategoryLabel") }")
+        if (!dataTypeField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditParameterPanel.dataTypeLabel") }")
 
         return errors
     }
@@ -721,94 +534,19 @@ class EditParameterPanel(parameter: Parameter? = null, isAdvanced: Boolean) : Va
 class EditPopulationGroupPanel(populationGroup: PopulationGroup? = null, isAdvanced: Boolean)
     : ValidatablePanel() {
 
-    companion object {
-        val populationName = "Population name *"
-        val populationNameTooltip = "Name of the population for which the model or data applies"
-
-        val targetPopulation = "Target population"
-        val targetPopulationTooltip = """
-            |<html>
-            |<p>population of individual that we are interested in describing and making
-            |<p>statistical inferences about
-            |</html>
-            """.trimMargin()
-
-        val populationSpan = "Population span"
-        val populationSpanTooltip = """
-            |<html>
-            |<p>Temporal information on the exposure pattern of the population to the
-            |<p>hazard SUGGESTION: Temporal information on the exposure of the
-            |<p>population to the hazard OR Temporal information on the exposure period
-            |<p>of the population to the hazard.
-            |</html>
-            """.trimMargin()
-
-        val populationDescription = "Population assayDescription"
-        val populationDescriptionTooltip = """
-            |<html>
-            |<p>Description of the population for which the model applies (demographic
-            |<p>and socio-economic characteristics for example). Background information
-            |<p>that are needed in the data analysis phase: size of household, education
-            |<p>level, employment status, professional category, ethnicity, etc.
-            |</html>
-            """.trimMargin()
-
-        val populationAge = "Population age"
-        val populationAgeTooltip = "describe the range of age or group of age"
-
-        val populationGender = "Population gender"
-        val populationGenderTooltip = "describe the percentage of gender"
-
-        val bmi = "BMI"
-        val bmiTooltip = "describe the range of BMI or class of BMI or BMI mean"
-
-        val specialDietGroups = "Special diet groups"
-        val specialDietGroupsTooltip = """
-            |<html>
-            |<p>sub-population with special diets (vegetarians, diabetics, group
-            |<p>following special ethnic diets)
-            |</html>
-            """
-
-        val patternConsumption = "Pattern consumption"
-        val patternConsumptionTooltip = """
-            |<html>
-            |<p>describe the consumption of different food items: frequency, portion
-            |<p>size
-            |</html>
-            """.trimMargin()
-
-        val region = "Region"
-        val regionTooltip = "Spatial information (area) on which the model or data applies"
-
-        val country = "Country"
-        val countryTooltip = "Country on which the model or data applies"
-
-        val riskAndPopulation = "Risk and population"
-        val riskAndPopulationTooltip = """
-            |<html>
-            |<p>population risk factor that may influence the outcomes of the
-            |<p>study, confounder should be included
-            |</html>
-            """.trimMargin()
-
-        val season = "Season"
-        val seasonTooltip = "distribution of surveyed people according to the season (influence consumption pattern)"
-    }
-
-    private val populationNameTextField = javax.swing.JTextField(30)
-    private val targetPopulationTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val populationSpanTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val populationDescriptionTextArea = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val populationAgeTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val populationGenderTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val bmiTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val specialDietGroupTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val patternConsumptionTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val regionComboBox = if (isAdvanced) javax.swing.JComboBox<String>() else null
-    private val countryComboBox = if (isAdvanced) javax.swing.JComboBox<String>() else null
-    private val riskAndPopulationTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val seasonTextField = if (isAdvanced) javax.swing.JTextField(30) else null
+    private val populationNameTextField = JTextField(30)
+    private val targetPopulationTextField = if (isAdvanced) JTextField(30) else null
+    private val populationSpanTextField = if (isAdvanced) JTextField(30) else null
+    private val populationDescriptionTextArea = if (isAdvanced) JTextField(30) else null
+    private val populationAgeTextField = if (isAdvanced) JTextField(30) else null
+    private val populationGenderTextField = if (isAdvanced) JTextField(30) else null
+    private val bmiTextField = if (isAdvanced) JTextField(30) else null
+    private val specialDietGroupTextField = if (isAdvanced) JTextField(30) else null
+    private val patternConsumptionTextField = if (isAdvanced) JTextField(30) else null
+    private val regionComboBox = if (isAdvanced) JComboBox<String>() else null
+    private val countryComboBox = if (isAdvanced) JComboBox<String>() else null
+    private val riskAndPopulationTextField = if (isAdvanced) JTextField(30) else null
+    private val seasonTextField = if (isAdvanced) JTextField(30) else null
 
     init {
         // Populate interface if `populationGroup` is passed
@@ -834,25 +572,51 @@ class EditPopulationGroupPanel(populationGroup: PopulationGroup? = null, isAdvan
     private fun initUI() {
 
         // Create labels
-        val populationNameLabel = createLabel(text = populationName, tooltip = populationNameTooltip)
-        val targetPopulationLabel = createLabel(text = targetPopulation, tooltip = targetPopulationTooltip)
-        val populationSpanLabel = createLabel(text = populationSpan, tooltip = populationSpanTooltip)
-        val populationDescriptionLabel = createLabel(text = populationDescription, tooltip = populationDescriptionTooltip)
-        val populationAgeLabel = createLabel(text = populationAge, tooltip = populationAgeTooltip)
-        val populationGenderLabel = createLabel(text = populationGender, tooltip = populationGenderTooltip)
-        val bmiLabel = createLabel(text = bmi, tooltip = bmiTooltip)
-        val specialDietGroupLabel = createLabel(text = specialDietGroups, tooltip = specialDietGroupsTooltip)
-        val patternConsumptionLabel = createLabel(text = patternConsumption, tooltip = patternConsumptionTooltip)
-        val regionLabel = createLabel(text = region, tooltip = regionTooltip)
-        val countryLabel = createLabel(text = country, tooltip = countryTooltip)
-        val riskAndPopulationLabel = createLabel(text = riskAndPopulation, tooltip = riskAndPopulationTooltip)
-        val seasonLabel = createLabel(text = season, tooltip = seasonTooltip)
+        val populationNameLabel = createLabel(
+                text = messages.getString("EditPopulationGroupPanel.populationNameLabel"),
+                tooltip = messages.getString("EditPopulationGroupPanel.populationNameTooltip"))
+        val targetPopulationLabel = createLabel(
+                text = messages.getString("EditPopulationGroupPanel.targetPopulationLabel"),
+                tooltip = messages.getString("EditPopulationGroupPanel.targetPopulationTooltip"))
+        val populationSpanLabel = createLabel(
+                text = messages.getString("EditPopulationGroupPanel.populationSpanLabel"),
+                tooltip = messages.getString("EditPopulationGroupPanel.populationSpanTooltip"))
+        val populationDescriptionLabel = createLabel(
+                text = messages.getString("EditPopulationGroupPanel.populationDescriptionLabel"),
+                tooltip = messages.getString("EditPopulationGroupPanel.populationDescriptionTooltip"))
+        val populationAgeLabel = createLabel(
+                text = messages.getString("EditPopulationGroupPanel.populationAgeLabel"),
+                tooltip = messages.getString("EditPopulationGroupPanel.populationAgeTooltip"))
+        val populationGenderLabel = createLabel(
+                text = messages.getString("EditPopulationGroupPanel.populationGenderLabel"),
+                tooltip = messages.getString("EditPopulationGroupPanel.populationGenderTooltip"))
+        val bmiLabel = createLabel(
+                text = messages.getString("EditPopulationGroupPanel.bmiLabel"),
+                tooltip = messages.getString("EditPopulationGroupPanel.bmiTooltip"))
+        val specialDietGroupLabel = createLabel(
+                text = messages.getString("EditPopulationGroupPanel.specialDietGroupsLabel"),
+                tooltip = messages.getString("EditPopulationGroupPanel.specialDietGroupsTooltip"))
+        val patternConsumptionLabel = createLabel(
+                text = messages.getString("EditPopulationGroupPanel.patternConsumptionLabel"),
+                tooltip = messages.getString("EditPopulationGroupPanel.patternConsumptionTooltip"))
+        val regionLabel = createLabel(
+                text = messages.getString("EditPopulationGroupPanel.regionLabel"),
+                tooltip = messages.getString("EditPopulationGroupPanel.regionTooltip"))
+        val countryLabel = createLabel(
+                text = messages.getString("EditPopulationGroupPanel.countryLabel"),
+                tooltip = messages.getString("EditPopulationGroupPanel.countryTooltip"))
+        val riskAndPopulationLabel = createLabel(
+                text = messages.getString("EditPopulationGroupPanel.riskAndPopulationLabel"),
+                tooltip = messages.getString("EditPopulationGroupPanel.riskAndPopulationTooltip"))
+        val seasonLabel = createLabel(
+                text = messages.getString("EditPopulationGroupPanel.seasonLabel"),
+                tooltip = messages.getString("EditPopulationGroupPanel.seasonTooltip"))
 
         // init combo boxes
         regionComboBox?.let { vocabs["Region"]?.forEach(it::addItem) }
         countryComboBox?.let { vocabs["Country"]?.forEach(it::addItem) }
 
-        val pairList = mutableListOf<Pair<javax.swing.JLabel, javax.swing.JComponent>>()
+        val pairList = mutableListOf<Pair<JLabel, JComponent>>()
         pairList.add(Pair(first = populationNameLabel, second = populationNameTextField))
         targetPopulationTextField?.let { pairList.add(Pair(first = targetPopulationLabel, second = it)) }
         populationSpanTextField?.let { pairList.add(Pair(first = populationSpanLabel, second = it)) }
@@ -891,86 +655,21 @@ class EditPopulationGroupPanel(populationGroup: PopulationGroup? = null, isAdvan
 
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
-        if (!populationNameTextField.hasValidValue()) errors.add("Missing $populationName")
+        if (!populationNameTextField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditPopulationGroupPanel.populationNameLabel") }")
         return errors
     }
 }
 
 class EditProductPanel(product: Product? = null, isAdvanced: Boolean) : ValidatablePanel() {
 
-    companion object {
-        val envName = "Environment name *"
-        val envNameTooltip = """
-            |<html>
-            |<p>The environment (animal, food product, matrix, etc.) for which the model
-            |<p>or data applies
-            |</html>
-            """.trimMargin()
-
-        val envDescription = "Environment description"
-        val envDescriptionTooltip = """
-            |<html>
-            |<p>Description of the environment (animal, food product, matrix, etc.) for
-            |<p>which the model or data applies
-            |</html>
-            """.trimMargin()
-
-        val productionMethod = "Method of production"
-        val productionMethodTooltip = "Type of production for the product/ matrix"
-
-        val envUnit = "Environment unit *"
-        val envUnitTooltip = "Units of the environment for which the model or data applies"
-
-        val packaging = "Packaging"
-        val packagingTooltip = """
-            |<html>
-            |<p>Describe container or wrapper that holds the product/matrix. Common type
-            |<p>of packaging: paper or plastic bags, boxes, tinplate or aluminium cans,
-            |<p>plastic trays, plastic bottles, glass bottles or jars.
-            |</html>
-            """.trimMargin()
-
-        val productTreatment = "Product treatment"
-        val productTreatmentTooltip = """
-            |<html>
-            |<p>Used to characterise a product/matrix based on the treatment or
-            |<p>processes applied to the product or any indexed ingredient.
-            |</html>
-            """.trimMargin()
-
-        val originCountry = "Country of origin"
-        val originCountryTooltip = "Country of origin of the food/product (ISO 3166 1-alpha-2 country code)"
-
-        val originArea = "Area of origin"
-        val originAreaTooltip = """
-            |<html>
-            |<p>Area of origin of the food/product (Nomenclature of territorial units
-            |<p>for statistics – NUTS – coding system valid only for EEA and Switzerland).
-            |</html>
-            """.trimMargin()
-
-        val fisheriesArea = "Fisheries area"
-        val fisheriesAreaTooltip = """
-            |<html>
-            |<p>Fisheries or aquaculture area specifying the origin of the
-            |<p>sample (FAO Fisheries areas).
-            |</html>
-            """.trimMargin()
-
-        val productionDate = "Production date"
-        val productionDateTooltip = "date of production of food/product"
-
-        val expirationDate = "Expiration date"
-        val expirationDateTooltip = "date of expiry of food/product"
-    }
-
     // Fields. null if simple mode
     private val envNameField = AutoSuggestField(10)
-    private val envDescriptionTextArea = if (isAdvanced) javax.swing.JTextArea(5, 30) else null
+    private val envDescriptionTextArea = if (isAdvanced) JTextArea(5, 30) else null
     private val envUnitField = AutoSuggestField(10)
-    private val productionMethodComboBox = if (isAdvanced) javax.swing.JComboBox<String>() else null
-    private val packagingComboBox = if (isAdvanced) javax.swing.JComboBox<String>() else null
-    private val productTreatmentComboBox = if (isAdvanced) javax.swing.JComboBox<String>() else null
+    private val productionMethodComboBox = if (isAdvanced) JComboBox<String>() else null
+    private val packagingComboBox = if (isAdvanced) JComboBox<String>() else null
+    private val productTreatmentComboBox = if (isAdvanced) JComboBox<String>() else null
     private val originCountryField = if (isAdvanced) AutoSuggestField(10) else null
     private val originAreaField = if (isAdvanced) AutoSuggestField(10) else null
     private val fisheriesAreaField = if (isAdvanced) AutoSuggestField(10) else null
@@ -1005,17 +704,28 @@ class EditProductPanel(product: Product? = null, isAdvanced: Boolean) : Validata
     private fun initUI() {
 
         // Create labels
-        val envNameLabel = createLabel(text = envName, tooltip = envNameTooltip)
-        val envDescriptionLabel = createLabel(text = envDescription, tooltip = envDescriptionTooltip)
-        val envUnitLabel = createLabel(text = envUnit, tooltip = envUnitTooltip)
-        val productionMethodLabel = createLabel(text = productionMethod, tooltip = productionMethodTooltip)
-        val packagingLabel = createLabel(text = packaging, tooltip = packagingTooltip)
-        val productTreatmentLabel = createLabel(text = productTreatment, tooltip = productTreatmentTooltip)
-        val originCountryLabel = createLabel(text = originCountry, tooltip = originCountryTooltip)
-        val originAreaLabel = createLabel(text = originArea, tooltip = originAreaTooltip)
-        val fisheriesAreaLabel = createLabel(text = fisheriesArea, tooltip = fisheriesAreaTooltip)
-        val productionDateLabel = createLabel(text = productionDate, tooltip = productionDateTooltip)
-        val expirationDateLabel = createLabel(text = expirationDate, tooltip = expirationDateTooltip)
+        val envNameLabel = createLabel(text = messages.getString("EditProductPanel.envNameLabel")
+                , tooltip = messages.getString("EditProductPanel.envNameTooltip"))
+        val envDescriptionLabel = createLabel(text = messages.getString("EditProductPanel.envDescriptionLabel"),
+                tooltip = messages.getString("EditProductPanel.envDescriptionTooltip"))
+        val envUnitLabel = createLabel(text = messages.getString("EditProductPanel.envUnitLabel"),
+                tooltip = messages.getString("EditProductPanel.envUnitTooltip"))
+        val productionMethodLabel = createLabel(text = messages.getString("EditProductPanel.productionMethodLabel"),
+                tooltip = messages.getString("EditProductPanel.productionMethodTooltip"))
+        val packagingLabel = createLabel(text = messages.getString("EditProductPanel.packagingLabel"),
+                tooltip = messages.getString("EditProductPanel.packagingTooltip"))
+        val productTreatmentLabel = createLabel(text = messages.getString("EditProductPanel.productTreatmentLabel"),
+                tooltip = messages.getString("EditProductPanel.productTreatmentTooltip"))
+        val originCountryLabel = createLabel(text = messages.getString("EditProductPanel.originCountryLabel"),
+                tooltip = messages.getString("EditProductPanel.originCountryTooltip"))
+        val originAreaLabel = createLabel(text = messages.getString("EditProductPanel.originAreaLabel"),
+                tooltip = messages.getString("EditProductPanel.originAreaTooltip"))
+        val fisheriesAreaLabel = createLabel(text = messages.getString("EditProductPanel.fisheriesAreaLabel"),
+                tooltip = messages.getString("EditProductPanel.fisheriesAreaTooltip"))
+        val productionDateLabel = createLabel(text = messages.getString("EditProductPanel.productionDateLabel"),
+                tooltip = messages.getString("EditProductPanel.productionDateTooltip"))
+        val expirationDateLabel = createLabel(text = messages.getString("EditProductPanel.expirationDateLabel"),
+                tooltip = messages.getString("EditProductPanel.expirationDateTooltip"))
 
         // Init combo boxes
         envNameField.setPossibleValues(vocabs.get("Product-matrix name"))
@@ -1027,7 +737,7 @@ class EditProductPanel(product: Product? = null, isAdvanced: Boolean) : Validata
         originAreaField?.setPossibleValues(vocabs["Area of origin"])
         fisheriesAreaField?.setPossibleValues(vocabs["Fisheries area"])
 
-        val pairList = mutableListOf<Pair<javax.swing.JLabel, javax.swing.JComponent>>()
+        val pairList = mutableListOf<Pair<JLabel, JComponent>>()
         pairList.add(Pair(first = envNameLabel, second = envNameField))
         envDescriptionTextArea?.let { pairList.add(Pair(first = envDescriptionLabel, second = it)) }
         pairList.add(Pair(first = envUnitLabel, second = envUnitField))
@@ -1064,8 +774,10 @@ class EditProductPanel(product: Product? = null, isAdvanced: Boolean) : Validata
 
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
-        if (!envNameField.hasValidValue()) errors.add("Missing $envName")
-        if (!envUnitField.hasValidValue()) errors.add("Missing $envUnit")
+        if (!envNameField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditProductPanel.envNameLabel") }")
+        if (!envUnitField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditProductPanel.envUnitLabel") }")
 
         return errors
     }
@@ -1077,38 +789,23 @@ class EditReferencePanel(ref: Record? = null, isAdvanced: Boolean) : Validatable
     private val dateFormat = java.text.SimpleDateFormat("yyyy-MM-dd")
 
     // fields. null if advanced
-    private val isReferenceDescriptionCheckBox = javax.swing.JCheckBox("Is reference description *")
-    private val typeComboBox = if (isAdvanced) javax.swing.JComboBox<Type>() else null
+    private val isReferenceDescriptionCheckBox = JCheckBox("Is reference description *")
+    private val typeComboBox = if (isAdvanced) JComboBox<Type>() else null
     private val dateChooser = if (isAdvanced) FixedJDateChooser() else null
-    private val pmidTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val doiTextField = javax.swing.JTextField(30)
-    private val authorListTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val titleTextField = javax.swing.JTextField(30)
-    private val abstractTextArea = if (isAdvanced) javax.swing.JTextArea(5, 30) else null
-    private val journalTextField = if (isAdvanced) javax.swing.JTextField(30) else null
+    private val pmidTextField = if (isAdvanced) JTextField(30) else null
+    private val doiTextField = JTextField(30)
+    private val authorListTextField = if (isAdvanced) JTextField(30) else null
+    private val titleTextField = JTextField(30)
+    private val abstractTextArea = if (isAdvanced) JTextArea(5, 30) else null
+    private val journalTextField = if (isAdvanced) JTextField(30) else null
     private val volumeSpinnerModel = if (isAdvanced) createSpinnerIntegerModel() else null
     private val issueSpinnerModel = if (isAdvanced) createSpinnerIntegerModel() else null
-    private val pageTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val statusTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val websiteTextField = if (isAdvanced) javax.swing.JTextField(30) else null
-    private val commentTextField = if (isAdvanced) javax.swing.JTextArea(5, 30) else null
+    private val pageTextField = if (isAdvanced) JTextField(30) else null
+    private val statusTextField = if (isAdvanced) JTextField(30) else null
+    private val websiteTextField = if (isAdvanced) JTextField(30) else null
+    private val commentTextField = if (isAdvanced) JTextArea(5, 30) else null
 
-    companion object {
-        val publicationType = "Publication type"
-        val publicationDate = "Publication date"
-        val pubMedId = "PubMed ID"
-        val publicationDoi = "Publication DOI *"
-        val publicationAuthorList = "Publication author list"
-        val publicationTitle = "Publication title *"
-        val publicationAbstract = "Publication abstract"
-        val publicationJournal = "Publication journal"
-        val publicationVolume = "Publication volume"
-        val publicationIssue = "Publication issue"
-        val publicationPage = "Publication page"
-        val publicationStatus = "Publication status"
-        val publicationWebsite = "Publication website"
-        val comment = "Comment"
-    }
+
 
     init {
         // Add types to typeComboBox and set the selected type
@@ -1135,27 +832,70 @@ class EditReferencePanel(ref: Record? = null, isAdvanced: Boolean) : Validatable
 
     private fun initUI() {
 
-        val pairList = mutableListOf<Pair<javax.swing.JLabel, javax.swing.JComponent>>()
-        typeComboBox?.let { pairList.add(Pair(first = javax.swing.JLabel(publicationType), second = it)) }
-        dateChooser?.let { pairList.add(Pair(first = javax.swing.JLabel(publicationDate), second = it)) }
-        pmidTextField?.let { pairList.add(Pair(first = javax.swing.JLabel(pubMedId), second = it)) }
-        pairList.add(Pair(first = javax.swing.JLabel(publicationDoi), second = doiTextField))
-        authorListTextField?.let { pairList.add(Pair(first = javax.swing.JLabel(publicationAuthorList), second = it)) }
-        pairList.add(Pair(first = javax.swing.JLabel(publicationTitle), second = titleTextField))
-        abstractTextArea?.let { pairList.add(Pair(first = javax.swing.JLabel(publicationAbstract), second = it)) }
-        journalTextField?.let { pairList.add(Pair(first = javax.swing.JLabel(publicationJournal), second = it)) }
+        val pairList = mutableListOf<Pair<JLabel, JComponent>>()
+        typeComboBox?.let {
+            val typeLabel = JLabel(messages.getString("EditReferencePanel.typeLabel"))
+            pairList.add(Pair(first = typeLabel, second = it))
+        }
+        dateChooser?.let {
+            val dateLabel = JLabel(messages.getString("EditReferencePanel.dateLabel"))
+            pairList.add(Pair(first = dateLabel, second = it))
+        }
+        pmidTextField?.let {
+            val pmidLabel = JLabel(messages.getString("EditReferencePanel.pmidLabel"))
+            pairList.add(Pair(first = pmidLabel, second = it))
+        }
+
+        pairList.add(Pair(first = JLabel(messages.getString("EditReferencePanel.doiLabel")), second = doiTextField))
+
+        authorListTextField?.let {
+            val authorListLabel = JLabel(messages.getString("EditReferencePanel.authorListLabel"))
+            pairList.add(Pair(first = authorListLabel, second = it))
+        }
+
+        pairList.add(Pair(first = JLabel(messages.getString("EditReferencePanel.titleLabel")), second = titleTextField))
+
+        abstractTextArea?.let {
+            val abstractLabel = JLabel(messages.getString("EditReferencePanel.abstractLabel"))
+            pairList.add(Pair(first = abstractLabel, second = it))
+        }
+
+        journalTextField?.let {
+            val journalLabel = JLabel(messages.getString("EditReferencePanel.journalLabel"))
+            pairList.add(Pair(first = journalLabel, second = it))
+        }
+
         volumeSpinnerModel?.let {
+            val volumeLabel = JLabel(messages.getString("EditReferencePanel.volumeLabel"))
             val spinner = createSpinner(it)
-            pairList.add(Pair(first = javax.swing.JLabel(publicationVolume), second = spinner))
+            pairList.add(Pair(first = volumeLabel, second = spinner))
         }
+
         issueSpinnerModel?.let {
+            val issueLabel = JLabel(messages.getString("EditReferencePanel.issueLabel"))
             val spinner = createSpinner(it)
-            pairList.add(Pair(first = javax.swing.JLabel(publicationIssue), second = spinner))
+            pairList.add(Pair(first = issueLabel, second = spinner))
         }
-        pageTextField?.let { pairList.add(Pair(first = javax.swing.JLabel(publicationPage), second = it)) }
-        statusTextField?.let { pairList.add(Pair(first = javax.swing.JLabel(publicationStatus), second = it)) }
-        websiteTextField?.let { pairList.add(Pair(first = javax.swing.JLabel(publicationWebsite), second = it)) }
-        commentTextField?.let { pairList.add(Pair(first = javax.swing.JLabel(comment), second = it)) }
+
+        pageTextField?.let {
+            val pageLabel = JLabel(messages.getString("EditReferencePanel.pageLabel"))
+            pairList.add(Pair(first = pageLabel, second = it))
+        }
+
+        statusTextField?.let {
+            val statusLabel = JLabel(messages.getString("EditReferencePanel.statusLabel"))
+            pairList.add(Pair(first = statusLabel, second = it))
+        }
+
+        websiteTextField?.let {
+            val websiteLabel = JLabel(messages.getString("EditReferencePanel.websiteLabel"))
+            pairList.add(Pair(first = websiteLabel, second = it))
+        }
+
+        commentTextField?.let {
+            val commentLabel = JLabel(messages.getString("EditReferencePanel.commentLabel"))
+            pairList.add(Pair(first = commentLabel, second = it))
+        }
 
         add(comp = isReferenceDescriptionCheckBox, gridy = 0, gridx = 0)
         for ((index, pair) in pairList.withIndex()) {
@@ -1191,8 +931,10 @@ class EditReferencePanel(ref: Record? = null, isAdvanced: Boolean) : Validatable
 
     override fun validatePanel(): List<String> {
         val errorList = mutableListOf<String>()
-        if (!doiTextField.hasValidValue()) errorList.add("Missing $publicationDoi")
-        if (!titleTextField.hasValidValue()) errorList.add("Missing $publicationTitle")
+        if (!doiTextField.hasValidValue())
+            errorList.add("Missing ${ messages.getString("EditReferencePanel.doiLabel") }")
+        if (!titleTextField.hasValidValue())
+            errorList.add("Missing ${ messages.getString("EditReferencePanel.titleLabel") }")
 
         return errorList
     }
@@ -1200,90 +942,17 @@ class EditReferencePanel(ref: Record? = null, isAdvanced: Boolean) : Validatable
 
 class EditStudySamplePanel(studySample: StudySample? = null, isAdvanced: Boolean) : ValidatablePanel() {
 
-    companion object {
-        val sampleName = "Sample name (ID) *"
-        val sampleNameTooltip = "An unambiguous ID given to the samples used in the assay"
-
-        val moisturePercentage = "Moisture percentage"
-        val moisturePercentageTooltip = "Percentage of moisture in the original sample"
-
-        val fatPercentage = "Fat percentage"
-        val fatPercentageTooltip = "Percentage of fat in the original sample"
-
-        val sampleProtocol = "Protocol of sample *"
-        val sampleProtocolTooltip = """
-            |<html>
-            |<p>Additional protocol for sample and sample collection. Corresponds to the
-            |<p>Protocol REF in ISA
-            |</html>
-            """.trimMargin()
-
-        val samplingStrategy = "Sampling strategy"
-        val samplingStrategyTooltip = """
-            |<html>
-            |<p>Sampling strategy (ref. EUROSTAT - Typology of sampling strategy,
-            |<p>version of July 2009)
-            |</html>
-            """.trimMargin()
-
-        val samplingType = "Type of sampling"
-        val samplingTypeTooltip = """
-            |<html>
-            |<p>Indicate the type programme for which the samples have been collected"
-            |</html>
-            """.trimMargin()
-
-        val samplingMethod = "Sampling method"
-        val samplingMethodTooltip = "Sampling method used to take the sample"
-
-        val samplingPlan = "Sampling plan *"
-        val samplingPlanTooltip = """
-            |<html>
-            |<p>assayDescription of data collection technique: stratified or complex sampling
-            |<p>(several stages)
-            |</html>
-            """.trimMargin()
-
-        val samplingWeight = "Sampling weight *"
-        val samplingWeightTooltip = """
-            |<html>
-            |<p>assayDescription of the method employed to compute sampling weight
-            |<p>(nonresponse-adjusted weight)
-            |</html>
-            """.trimMargin()
-
-        val samplingSize = "Sampling size *"
-        val samplingSizeTooltip = """
-            |<html>
-            |<p>number of units, full participants, partial participants, eligibles, not
-            |<p>eligible, unresolved (eligibility status not resolved)…
-            |</html>
-            """.trimMargin()
-
-        val lotSizeUnit = "Lot size unit"
-        val lotSizeUnitTooltip = "Unit in which the lot size is expressed."
-
-        val samplingPoint = "Sampling point"
-        val samplingPointTooltip = """
-            |<html>
-            |<p>Point in the food chain where the sample was taken.
-            |<p>(Doc. ESTAT/F5/ES/155 "Data dictionary of activities of the
-            |<p>establishments").
-            |</html>
-            """.trimMargin()
-    }
-
     // Fields. null if advanced mode
-    val sampleNameTextField = javax.swing.JTextField(30)
+    val sampleNameTextField = JTextField(30)
     val moisturePercentageSpinnerModel = if (isAdvanced) createSpinnerPercentageModel() else null
     val fatPercentageSpinnerModel = if (isAdvanced) createSpinnerPercentageModel() else null
-    val sampleProtocolTextField = javax.swing.JTextField(30)
+    val sampleProtocolTextField = JTextField(30)
     val samplingStrategyField = if (isAdvanced) AutoSuggestField(10) else null
     val samplingTypeField = if (isAdvanced) AutoSuggestField(10) else null
     val samplingMethodField = if (isAdvanced) AutoSuggestField(10) else null
-    val samplingPlanTextField = javax.swing.JTextField(30)
-    val samplingWeightTextField = javax.swing.JTextField(30)
-    val samplingSizeTextField = javax.swing.JTextField(30)
+    val samplingPlanTextField = JTextField(30)
+    val samplingWeightTextField = JTextField(30)
+    val samplingSizeTextField = JTextField(30)
     val lotSizeUnitField = if (isAdvanced) AutoSuggestField(10) else null
     val samplingPointField = if (isAdvanced) AutoSuggestField(10) else null
 
@@ -1311,18 +980,41 @@ class EditStudySamplePanel(studySample: StudySample? = null, isAdvanced: Boolean
     private fun initUI() {
 
         // Create labels
-        val sampleNameLabel = createLabel(text = sampleName, tooltip = sampleNameTooltip)
-        val moisturePercentageLabel = createLabel(text = moisturePercentage, tooltip = moisturePercentageTooltip)
-        val fatPercentageLabel = createLabel(text = fatPercentage, tooltip = fatPercentageTooltip)
-        val sampleProtocolLabel = createLabel(text = sampleProtocol, tooltip = sampleProtocolTooltip)
-        val samplingStrategyLabel = createLabel(text = samplingStrategy, tooltip = samplingStrategyTooltip)
-        val samplingTypeLabel = createLabel(text = samplingType, tooltip = samplingStrategyTooltip)
-        val samplingMethodLabel = createLabel(text = samplingMethod, tooltip = samplingMethodTooltip)
-        val samplingPlanLabel = createLabel(text = samplingPlan, tooltip = samplingPlanTooltip)
-        val samplingWeightLabel = createLabel(text = samplingWeight, tooltip = samplingWeightTooltip)
-        val samplingSizeLabel = createLabel(text = samplingSize, tooltip = samplingSizeTooltip)
-        val lotSizeUnitLabel = createLabel(text = lotSizeUnit, tooltip = lotSizeUnitTooltip)
-        val samplingPointLabel = createLabel(text = samplingPoint, tooltip = samplingPointTooltip)
+        val sampleNameLabel = createLabel(text = messages.getString("EditStudySamplePanel.sampleNameLabel"),
+                tooltip = messages.getString("EditStudySamplePanel.sampleNameTooltip"))
+        val moisturePercentageLabel = createLabel(
+                text = messages.getString("EditStudySamplePanel.moisturePercentageLabel"),
+                tooltip = messages.getString("EditStudySamplePanel.moisturePercentageTooltip"))
+        val fatPercentageLabel = createLabel(
+                text = messages.getString("EditStudySamplePanel.fatPercentageLabel"),
+                tooltip = messages.getString("EditStudySamplePanel.fatPercentageTooltip"))
+        val sampleProtocolLabel = createLabel(
+                text = messages.getString("EditStudySamplePanel.sampleProtocolLabel"),
+                tooltip = messages.getString("EditStudySamplePanel.sampleProtocolTooltip"))
+        val samplingStrategyLabel = createLabel(
+                text = messages.getString("EditStudySamplePanel.samplingStrategyLabel"),
+                tooltip = messages.getString("EditStudySamplePanel.samplingStrategyTooltip"))
+        val samplingTypeLabel = createLabel(
+                text = messages.getString("EditStudySamplePanel.samplingTypeLabel"),
+                tooltip = messages.getString("EditStudySamplePanel.samplingTypeTooltip"))
+        val samplingMethodLabel = createLabel(
+                text = messages.getString("EditStudySamplePanel.samplingMethodLabel"),
+                tooltip = messages.getString("EditStudySamplePanel.samplingMethodTooltip"))
+        val samplingPlanLabel = createLabel(
+                text = messages.getString("EditStudySamplePanel.samplingPlanLabel"),
+                tooltip = messages.getString("EditStudySamplePanel.samplingPlanTooltip"))
+        val samplingWeightLabel = createLabel(
+                text = messages.getString("EditStudySamplePanel.samplingWeightLabel"),
+                tooltip = messages.getString("EditStudySamplePanel.samplingWeightTooltip"))
+        val samplingSizeLabel = createLabel(
+                text = messages.getString("EditStudySamplePanel.samplingSizeLabel"),
+                tooltip = messages.getString("EditStudySamplePanel.samplingSizeTooltip"))
+        val lotSizeUnitLabel = createLabel(
+                text = messages.getString("EditStudySamplePanel.lotSizeUnitLabel"),
+                tooltip = messages.getString("EditStudySamplePanel.lotSizeUnitTooltip"))
+        val samplingPointLabel = createLabel(
+                text = messages.getString("EditStudySamplePanel.samplingPointLabel"),
+                tooltip = messages.getString("EditStudySamplePanel.samplingPointTooltip"))
 
         // init combo boxes
         samplingStrategyField?.setPossibleValues(vocabs["Sampling strategy"])
@@ -1331,7 +1023,7 @@ class EditStudySamplePanel(studySample: StudySample? = null, isAdvanced: Boolean
         lotSizeUnitField?.setPossibleValues(vocabs["Lot size unit"])
         samplingPointField?.setPossibleValues(vocabs["Sampling point"])
 
-        val pairList = mutableListOf<Pair<javax.swing.JLabel, javax.swing.JComponent>>()
+        val pairList = mutableListOf<Pair<JLabel, JComponent>>()
         pairList.add(Pair(first = sampleNameLabel, second = sampleNameTextField))
         moisturePercentageSpinnerModel?.let { pairList.add(Pair(first = moisturePercentageLabel, second = createSpinner(it))) }
         fatPercentageSpinnerModel?.let { pairList.add(Pair(first = fatPercentageLabel, second = createSpinner(it))) }
@@ -1377,22 +1069,27 @@ class EditStudySamplePanel(studySample: StudySample? = null, isAdvanced: Boolean
     override fun validatePanel(): List<String> {
 
         val errors = mutableListOf<String>()
-        if (!sampleNameTextField.hasValidValue()) errors.add("Missing $sampleName")
-        if (!sampleProtocolTextField.hasValidValue()) errors.add("Missing $sampleProtocol")
-        if (!samplingPlanTextField.hasValidValue()) errors.add("Missing $samplingPlan")
-        if (!samplingWeightTextField.hasValidValue()) errors.add("Missing $samplingWeight")
-        if (!samplingSizeTextField.hasValidValue()) errors.add("Missing $samplingSize")
+        if (!sampleNameTextField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditStudySamplePanel.sampleNameLabel") }")
+        if (!sampleProtocolTextField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditStudySamplePanel.sampleProtocolLabel") }")
+        if (!samplingPlanTextField.hasValidValue())
+            errors.add("Missing ${ messages.getString( "EditStudySamplePanel.samplingPlanLabel") }")
+        if (!samplingWeightTextField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditStudySamplePanel.samplingWeightLabel") }")
+        if (!samplingSizeTextField.hasValidValue())
+            errors.add("Missing ${ messages.getString("EditStudySamplePanel.samplingSizeLabel") }")
 
         return errors
     }
 }
 
 // Validation methods
-internal fun javax.swing.JTextField.hasValidValue() = text.isNotBlank()
+internal fun JTextField.hasValidValue() = text.isNotBlank()
 
-internal fun javax.swing.JTextArea.hasValidValue() = text.isNotBlank()
+internal fun JTextArea.hasValidValue() = text.isNotBlank()
 
 internal fun AutoSuggestField.hasValidValue() : Boolean {
-    val field = editor.editorComponent as javax.swing.JTextField
+    val field = editor.editorComponent as JTextField
     return field.text.isNotBlank()
 }
