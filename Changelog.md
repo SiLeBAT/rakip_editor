@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.3a1] - 2017-06-27
+### Changed
+- Rename properties from the *Generic model* with a prefix `GM.` Other RAKIP models will have similar prefixes.
+
 ## [0.0.3a0] - 2017-06-27
 ### Changed
 - Fix layout in `ValidatableDialog`. Temporal solution before using FCL UI utils.

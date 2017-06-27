@@ -79,10 +79,10 @@ class EditAssayPanel(assay: Assay? = null, isAdvanced: Boolean) : ValidatablePan
     }
 
     private fun initUI() {
-        val nameLabel = createLabel(text = messages.getString("EditAssayPanel.nameLabel"),
-                tooltip = messages.getString("EditAssayPanel.nameTooltip"))
-        val descriptionLabel = createLabel(text = messages.getString("EditAssayPanel.descriptionLabel"),
-                tooltip = messages.getString("EditAssayPanel.descriptionTooltip"))
+        val nameLabel = createLabel(text = messages.getString("GM.EditAssayPanel.nameLabel"),
+                tooltip = messages.getString("GM.EditAssayPanel.nameTooltip"))
+        val descriptionLabel = createLabel(text = messages.getString("GM.EditAssayPanel.descriptionLabel"),
+                tooltip = messages.getString("GM.EditAssayPanel.descriptionTooltip"))
 
         val pairList = mutableListOf<Pair<JLabel, JComponent>>()
         pairList.add(Pair(first = nameLabel, second = nameTextField))
@@ -95,7 +95,7 @@ class EditAssayPanel(assay: Assay? = null, isAdvanced: Boolean) : ValidatablePan
 
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
-        if (!nameTextField.hasValidValue()) errors.add("Missing ${messages.getString("EditAssayPanel.nameLabel")}")
+        if (!nameTextField.hasValidValue()) errors.add("Missing ${messages.getString("GM.EditAssayPanel.nameLabel")}")
         return errors
     }
 }
@@ -130,23 +130,23 @@ class EditDietaryAssessmentMethodPanel(dietaryAssessmentMethod: DietaryAssessmen
 
         // Create labels
         val dataCollectionToolLabel = createLabel(
-                text = messages.getString("EditDietaryAssessmentMethodPanel.dataCollectionToolLabel"),
-                tooltip = messages.getString("EditDietaryAssessmentMethodPanel.dataCollectionToolTooltip"))
+                text = messages.getString("GM.EditDietaryAssessmentMethodPanel.dataCollectionToolLabel"),
+                tooltip = messages.getString("GM.EditDietaryAssessmentMethodPanel.dataCollectionToolTooltip"))
         val nonConsecutiveOneDayLabel = createLabel(
-                text = messages.getString("EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysLabel"),
-                tooltip = messages.getString("EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysTooltip"))
+                text = messages.getString("GM.EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysLabel"),
+                tooltip = messages.getString("GM.EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysTooltip"))
         val dietarySoftwareToolLabel = createLabel(
-                text = messages.getString("EditDietaryAssessmentMethodPanel.dietarySoftwareToolLabel"),
-                tooltip = messages.getString("EditDietaryAssessmentMethodPanel.dietarySoftwareToolTooltip"))
+                text = messages.getString("GM.EditDietaryAssessmentMethodPanel.dietarySoftwareToolLabel"),
+                tooltip = messages.getString("GM.EditDietaryAssessmentMethodPanel.dietarySoftwareToolTooltip"))
         val foodItemNumberLabel = createLabel(
-                text = messages.getString("EditDietaryAssessmentMethodPanel.foodItemNumberLabel"),
-                tooltip = messages.getString("EditDietaryAssessmentMethodPanel.foodItemNumberTooltip"))
+                text = messages.getString("GM.EditDietaryAssessmentMethodPanel.foodItemNumberLabel"),
+                tooltip = messages.getString("GM.EditDietaryAssessmentMethodPanel.foodItemNumberTooltip"))
         val recordTypeLabel = createLabel(
-                text = messages.getString("EditDietaryAssessmentMethodPanel.recordTypeLabel"),
-                tooltip = messages.getString("EditDietaryAssessmentMethodPanel.recordTypeTooltip"))
+                text = messages.getString("GM.EditDietaryAssessmentMethodPanel.recordTypeLabel"),
+                tooltip = messages.getString("GM.EditDietaryAssessmentMethodPanel.recordTypeTooltip"))
         val foodDescriptionLabel = createLabel(
-                text = messages.getString("EditDietaryAssessmentMethodPanel.foodDescriptionLabel"),
-                tooltip = messages.getString("EditDietaryAssessmentMethodPanel.foodDescriptionTooltip"))
+                text = messages.getString("GM.EditDietaryAssessmentMethodPanel.foodDescriptionLabel"),
+                tooltip = messages.getString("GM.EditDietaryAssessmentMethodPanel.foodDescriptionTooltip"))
 
         // init combo boxes
         dataCollectionToolField.setPossibleValues(vocabs["Method. tool to collect data"])
@@ -181,9 +181,9 @@ class EditDietaryAssessmentMethodPanel(dietaryAssessmentMethod: DietaryAssessmen
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
         if (!dataCollectionToolField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditDietaryAssessmentMethodPanel.dataCollectionToolLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditDietaryAssessmentMethodPanel.dataCollectionToolLabel")}")
         if (!nonConsecutiveOneDayTextField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysLabel")}")
 
         return errors
     }
@@ -244,49 +244,49 @@ class EditHazardPanel(hazard: Hazard? = null, isAdvanced: Boolean) : Validatable
     private fun initUI() {
 
         // Create labels
-        val hazardTypeLabel = createLabel(text = messages.getString("EditHazardPanel.hazardTypeLabel"),
-                tooltip = messages.getString("EditHazardPanel.hazardTypeTooltip"))
-        val hazardNameLabel = createLabel(text = messages.getString("EditHazardPanel.hazardNameLabel"),
-                tooltip = messages.getString("EditHazardPanel.hazardNameTooltip"))
+        val hazardTypeLabel = createLabel(text = messages.getString("GM.EditHazardPanel.hazardTypeLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.hazardTypeTooltip"))
+        val hazardNameLabel = createLabel(text = messages.getString("GM.EditHazardPanel.hazardNameLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.hazardNameTooltip"))
         val hazardDescriptionLabel = createLabel(
-                text = messages.getString("EditHazardPanel.hazardDescriptionLabel"),
-                tooltip = messages.getString("EditHazardPanel.hazardDescriptionTooltip"))
-        val hazardUnitLabel = createLabel(text = messages.getString("EditHazardPanel.hazardUnitLabel"),
-                tooltip = messages.getString("EditHazardPanel.hazardUnitTooltip"))
-        val adverseEffectLabel = createLabel(text = messages.getString("EditHazardPanel.adverseEffectLabel"),
-                tooltip = messages.getString("EditHazardPanel.adverseEffectTooltip"))
-        val originLabel = createLabel(text = messages.getString("EditHazardPanel.originLabel"),
-                tooltip = messages.getString("EditHazardPanel.originTooltip"))
-        val bmdLabel = createLabel(text = messages.getString("EditHazardPanel.bmdLabel"),
-                tooltip = messages.getString("EditHazardPanel.bmdTooltip"))
-        val maxResidueLimitLabel = createLabel(text = messages.getString("EditHazardPanel.maxResidueLimitLabel"),
-                tooltip = messages.getString("EditHazardPanel.maxResidueLimitTooltip"))
+                text = messages.getString("GM.EditHazardPanel.hazardDescriptionLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.hazardDescriptionTooltip"))
+        val hazardUnitLabel = createLabel(text = messages.getString("GM.EditHazardPanel.hazardUnitLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.hazardUnitTooltip"))
+        val adverseEffectLabel = createLabel(text = messages.getString("GM.EditHazardPanel.adverseEffectLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.adverseEffectTooltip"))
+        val originLabel = createLabel(text = messages.getString("GM.EditHazardPanel.originLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.originTooltip"))
+        val bmdLabel = createLabel(text = messages.getString("GM.EditHazardPanel.bmdLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.bmdTooltip"))
+        val maxResidueLimitLabel = createLabel(text = messages.getString("GM.EditHazardPanel.maxResidueLimitLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.maxResidueLimitTooltip"))
         val noObservedAdverseLabel = createLabel(
-                text = messages.getString("EditHazardPanel.noObservedAdverseLabel"),
-                tooltip = messages.getString("EditHazardPanel.noObservedAdverseTooltip"))
-        val lowestObserveLabel = createLabel(text = messages.getString("EditHazardPanel.lowestObserveLabel"),
-                tooltip = messages.getString("EditHazardPanel.lowestObserveTooltip"))
-        val acceptableOperatorLabel = createLabel(text = messages.getString("EditHazardPanel.acceptableOperatorLabel"),
-                tooltip = messages.getString("EditHazardPanel.acceptableOperatorTooltip"))
-        val acuteReferenceDoseLabel = createLabel(text = messages.getString("EditHazardPanel.acuteReferenceDoseLabel"),
-                tooltip = messages.getString("EditHazardPanel.acuteReferenceDoseTooltip"))
+                text = messages.getString("GM.EditHazardPanel.noObservedAdverseLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.noObservedAdverseTooltip"))
+        val lowestObserveLabel = createLabel(text = messages.getString("GM.EditHazardPanel.lowestObserveLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.lowestObserveTooltip"))
+        val acceptableOperatorLabel = createLabel(text = messages.getString("GM.EditHazardPanel.acceptableOperatorLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.acceptableOperatorTooltip"))
+        val acuteReferenceDoseLabel = createLabel(text = messages.getString("GM.EditHazardPanel.acuteReferenceDoseLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.acuteReferenceDoseTooltip"))
         val acceptableDailyIntakeLabel = createLabel(
-                text = messages.getString("EditHazardPanel.acceptableDailyIntakeLabel"),
-                tooltip = messages.getString("EditHazardPanel.acceptableDailyIntakeTooltip"))
-        val indSumLabel = createLabel(text = messages.getString("EditHazardPanel.indSumLabel"),
-                tooltip = messages.getString("EditHazardPanel.indSumTooltip"))
-        val labNameLabel = createLabel(text = messages.getString("EditHazardPanel.labNameLabel"),
-                tooltip = messages.getString("EditHazardPanel.labNameTooltip"))
-        val labCountryLabel = createLabel(text = messages.getString("EditHazardPanel.labCountryLabel"),
-                tooltip = messages.getString("EditHazardPanel.labCountryTooltip"))
-        val detectionLimitLabel = createLabel(text = messages.getString("EditHazardPanel.detectionLimitLabel"),
-                tooltip = messages.getString("EditHazardPanel.detectionLimitTooltip"))
-        val quantificationLimitLabel = createLabel(text = messages.getString("EditHazardPanel.quantificationLimitLabel"),
-                tooltip = messages.getString("EditHazardPanel.quantificationLimitTooltip"))
-        val leftCensoredDataLabel = createLabel(text = messages.getString("EditHazardPanel.leftCensoredDataLabel"),
-                tooltip = messages.getString("EditHazardPanel.leftCensoredDataTooltip"))
-        val contaminationRangeLabel = createLabel(text = messages.getString("EditHazardPanel.contaminationRangeLabel"),
-                tooltip = messages.getString("EditHazardPanel.contaminationRangeTooltip"))
+                text = messages.getString("GM.EditHazardPanel.acceptableDailyIntakeLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.acceptableDailyIntakeTooltip"))
+        val indSumLabel = createLabel(text = messages.getString("GM.EditHazardPanel.indSumLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.indSumTooltip"))
+        val labNameLabel = createLabel(text = messages.getString("GM.EditHazardPanel.labNameLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.labNameTooltip"))
+        val labCountryLabel = createLabel(text = messages.getString("GM.EditHazardPanel.labCountryLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.labCountryTooltip"))
+        val detectionLimitLabel = createLabel(text = messages.getString("GM.EditHazardPanel.detectionLimitLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.detectionLimitTooltip"))
+        val quantificationLimitLabel = createLabel(text = messages.getString("GM.EditHazardPanel.quantificationLimitLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.quantificationLimitTooltip"))
+        val leftCensoredDataLabel = createLabel(text = messages.getString("GM.EditHazardPanel.leftCensoredDataLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.leftCensoredDataTooltip"))
+        val contaminationRangeLabel = createLabel(text = messages.getString("GM.EditHazardPanel.contaminationRangeLabel"),
+                tooltip = messages.getString("GM.EditHazardPanel.contaminationRangeTooltip"))
 
         // Init combo boxes
         hazardTypeField.setPossibleValues(vocabs["Hazard type"])
@@ -355,11 +355,11 @@ class EditHazardPanel(hazard: Hazard? = null, isAdvanced: Boolean) : Validatable
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
         if (!hazardNameField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditHazardPanel.hazardNameLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditHazardPanel.hazardNameLabel")}")
         if (!hazardTypeField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditHazardPanel.hazardTypeLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditHazardPanel.hazardTypeLabel")}")
         if (!hazardUnitField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditHazardPanel.hazardUnitLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditHazardPanel.hazardUnitLabel")}")
 
         return errors
     }
@@ -368,16 +368,16 @@ class EditHazardPanel(hazard: Hazard? = null, isAdvanced: Boolean) : Validatable
 
 class EditModelEquationPanel(equation: ModelEquation? = null, isAdvanced: Boolean) : ValidatablePanel() {
 
-    val equationNameLabel = createLabel(text = messages.getString("EditModelEquationPanel.nameLabel"),
-            tooltip = messages.getString("EditModelEquationPanel.nameTooltip"))
+    val equationNameLabel = createLabel(text = messages.getString("GM.EditModelEquationPanel.nameLabel"),
+            tooltip = messages.getString("GM.EditModelEquationPanel.nameTooltip"))
     val equationNameTextField = JTextField(30)
 
-    val equationClassLabel = createLabel(text = messages.getString("EditModelEquationPanel.classLabel"),
-            tooltip = messages.getString("EditModelEquationPanel.classTooltip"))
+    val equationClassLabel = createLabel(text = messages.getString("GM.EditModelEquationPanel.classLabel"),
+            tooltip = messages.getString("GM.EditModelEquationPanel.classTooltip"))
     val equationClassTextField = if (isAdvanced) JTextField(30) else null
 
-    val scriptLabel = createLabel(text = messages.getString("EditModelEquationPanel.scriptLabel"),
-            tooltip = messages.getString("EditModelEquationPanel.scriptTooltip"))
+    val scriptLabel = createLabel(text = messages.getString("GM.EditModelEquationPanel.scriptLabel"),
+            tooltip = messages.getString("GM.EditModelEquationPanel.scriptTooltip"))
     val scriptTextArea = JTextArea(5, 30)
 
     init {
@@ -401,9 +401,9 @@ class EditModelEquationPanel(equation: ModelEquation? = null, isAdvanced: Boolea
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
         if (!equationNameTextField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditModelEquationPanel.nameLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditModelEquationPanel.nameLabel")}")
         if (!scriptTextArea.hasValidValue())
-            errors.add("Missing ${messages.getString("EditModelEquationPanel.scriptLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditModelEquationPanel.scriptLabel")}")
 
         return errors
     }
@@ -412,69 +412,69 @@ class EditModelEquationPanel(equation: ModelEquation? = null, isAdvanced: Boolea
 // TODO: idTextField <- Create UUID automatically
 class EditParameterPanel(parameter: Parameter? = null, isAdvanced: Boolean) : ValidatablePanel() {
 
-    val idLabel = createLabel(text = messages.getString("EditParameterPanel.idLabel"),
-            tooltip = messages.getString("EditParameterPanel.idTooltip"))
+    val idLabel = createLabel(text = messages.getString("GM.EditParameterPanel.idLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.idTooltip"))
     val idTextField = JTextField(30)
 
     // TODO: classificationComboBox is a ComboBox and in the GUI appears a Text entry instead
-    val classificationLabel = createLabel(text = messages.getString("EditParameterPanel.classificationLabel"),
-            tooltip = messages.getString("EditParameterPanel.classificationTooltip"))
+    val classificationLabel = createLabel(text = messages.getString("GM.EditParameterPanel.classificationLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.classificationTooltip"))
     val classificationField = AutoSuggestField(10)
 
-    val nameLabel = createLabel(text = messages.getString("EditParameterPanel.parameterNameLabel"),
-            tooltip = messages.getString("EditParameterPanel.parameterNameTooltip"))
+    val nameLabel = createLabel(text = messages.getString("GM.EditParameterPanel.parameterNameLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.parameterNameTooltip"))
     val nameTextField = JTextField(30)
 
-    val descriptionLabel = createLabel(text = messages.getString("EditParameterPanel.descriptionLabel"),
-            tooltip = messages.getString("EditParameterPanel.descriptionTooltip"))
+    val descriptionLabel = createLabel(text = messages.getString("GM.EditParameterPanel.descriptionLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.descriptionTooltip"))
     val descriptionTextArea = if (isAdvanced) JTextArea(5, 30) else null
 
-    val typeLabel = createLabel(text = messages.getString("EditParameterPanel.typeLabel"),
-            tooltip = messages.getString("EditParameterPanel.typeTooltip"))
+    val typeLabel = createLabel(text = messages.getString("GM.EditParameterPanel.typeLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.typeTooltip"))
     val typeField = if (isAdvanced) AutoSuggestField(10) else null
 
-    val unitLabel = createLabel(text = messages.getString("EditParameterPanel.unitLabel"),
-            tooltip = messages.getString("EditParameterPanel.unitTooltip"))
+    val unitLabel = createLabel(text = messages.getString("GM.EditParameterPanel.unitLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.unitTooltip"))
     val unitField = AutoSuggestField(10)
 
-    val unitCategoryLabel = createLabel(text = messages.getString("EditParameterPanel.unitCategoryLabel"),
-            tooltip = messages.getString("EditParameterPanel.unitCategoryTooltip"))
+    val unitCategoryLabel = createLabel(text = messages.getString("GM.EditParameterPanel.unitCategoryLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.unitCategoryTooltip"))
     val unitCategoryField = AutoSuggestField(10)
 
-    val dataTypeLabel = createLabel(text = messages.getString("EditParameterPanel.dataTypeLabel"),
-            tooltip = messages.getString("EditParameterPanel.dataTypeTooltip"))
+    val dataTypeLabel = createLabel(text = messages.getString("GM.EditParameterPanel.dataTypeLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.dataTypeTooltip"))
     val dataTypeField = AutoSuggestField(10)
 
-    val sourceLabel = createLabel(text = messages.getString("EditParameterPanel.sourceLabel"),
-            tooltip = messages.getString("EditParameterPanel.sourceTooltip"))
+    val sourceLabel = createLabel(text = messages.getString("GM.EditParameterPanel.sourceLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.sourceTooltip"))
     val sourceField = if (isAdvanced) AutoSuggestField(10) else null
 
-    val subjectLabel = createLabel(text = messages.getString("EditParameterPanel.subjectLabel"),
-            tooltip = messages.getString("EditParameterPanel.subjectTooltip"))
+    val subjectLabel = createLabel(text = messages.getString("GM.EditParameterPanel.subjectLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.subjectTooltip"))
     val subjectField = if (isAdvanced) AutoSuggestField(10) else null
 
-    val distributionLabel = createLabel(text = messages.getString("EditParameterPanel.distributionLabel"),
-            tooltip = messages.getString("EditParameterPanel.distributionTooltip"))
+    val distributionLabel = createLabel(text = messages.getString("GM.EditParameterPanel.distributionLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.distributionTooltip"))
     val distributionField = if (isAdvanced) AutoSuggestField(10) else null
 
-    val valueLabel = createLabel(text = messages.getString("EditParameterPanel.valueLabel"),
-            tooltip = messages.getString("EditParameterPanel.valueTooltip"))
+    val valueLabel = createLabel(text = messages.getString("GM.EditParameterPanel.valueLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.valueTooltip"))
     val valueTextField = if (isAdvanced) JTextField(30) else null
 
-    val referenceLabel = createLabel(text = messages.getString("EditParameterPanel.referenceLabel"),
-            tooltip = messages.getString("EditParameterPanel.referenceTooltip"))
+    val referenceLabel = createLabel(text = messages.getString("GM.EditParameterPanel.referenceLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.referenceTooltip"))
     val referenceTextField = if (isAdvanced) JTextField(30) else null
 
-    val variabilitySubjectLabel = createLabel(text = messages.getString("EditParameterPanel.variabilitySubjectLabel"),
-            tooltip = messages.getString("EditParameterPanel.variabilitySubjectTooltip"))
+    val variabilitySubjectLabel = createLabel(text = messages.getString("GM.EditParameterPanel.variabilitySubjectLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.variabilitySubjectTooltip"))
     val variabilitySubjectTextArea = if (isAdvanced) JTextArea(5, 30) else null
 
-    val applicabilityLabel = createLabel(text = messages.getString("EditParameterPanel.applicabilityLabel"),
-            tooltip = messages.getString("EditParameterPanel.applicabilityTooltip"))
+    val applicabilityLabel = createLabel(text = messages.getString("GM.EditParameterPanel.applicabilityLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.applicabilityTooltip"))
     val applicabilityTextArea = if (isAdvanced) JTextArea(5, 30) else null
 
-    val errorLabel = createLabel(text = messages.getString("EditParameterPanel.errorLabel"),
-            tooltip = messages.getString("EditParameterPanel.errorTooltip"))
+    val errorLabel = createLabel(text = messages.getString("GM.EditParameterPanel.errorLabel"),
+            tooltip = messages.getString("GM.EditParameterPanel.errorTooltip"))
     val errorSpinnerModel = if (isAdvanced) createSpinnerDoubleModel() else null
 
     init {
@@ -515,17 +515,17 @@ class EditParameterPanel(parameter: Parameter? = null, isAdvanced: Boolean) : Va
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
         if (!idTextField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditParameterPanel.idLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditParameterPanel.idLabel")}")
         if (!classificationField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditParameterPanel.classificationLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditParameterPanel.classificationLabel")}")
         if (!nameTextField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditParameterPanel.parameterNameLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditParameterPanel.parameterNameLabel")}")
         if (!unitField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditParameterPanel.unitLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditParameterPanel.unitLabel")}")
         if (!unitCategoryField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditParameterPanel.unitCategoryLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditParameterPanel.unitCategoryLabel")}")
         if (!dataTypeField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditParameterPanel.dataTypeLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditParameterPanel.dataTypeLabel")}")
 
         return errors
     }
@@ -573,44 +573,44 @@ class EditPopulationGroupPanel(populationGroup: PopulationGroup? = null, isAdvan
 
         // Create labels
         val populationNameLabel = createLabel(
-                text = messages.getString("EditPopulationGroupPanel.populationNameLabel"),
-                tooltip = messages.getString("EditPopulationGroupPanel.populationNameTooltip"))
+                text = messages.getString("GM.EditPopulationGroupPanel.populationNameLabel"),
+                tooltip = messages.getString("GM.EditPopulationGroupPanel.populationNameTooltip"))
         val targetPopulationLabel = createLabel(
-                text = messages.getString("EditPopulationGroupPanel.targetPopulationLabel"),
-                tooltip = messages.getString("EditPopulationGroupPanel.targetPopulationTooltip"))
+                text = messages.getString("GM.EditPopulationGroupPanel.targetPopulationLabel"),
+                tooltip = messages.getString("GM.EditPopulationGroupPanel.targetPopulationTooltip"))
         val populationSpanLabel = createLabel(
-                text = messages.getString("EditPopulationGroupPanel.populationSpanLabel"),
-                tooltip = messages.getString("EditPopulationGroupPanel.populationSpanTooltip"))
+                text = messages.getString("GM.EditPopulationGroupPanel.populationSpanLabel"),
+                tooltip = messages.getString("GM.EditPopulationGroupPanel.populationSpanTooltip"))
         val populationDescriptionLabel = createLabel(
-                text = messages.getString("EditPopulationGroupPanel.populationDescriptionLabel"),
-                tooltip = messages.getString("EditPopulationGroupPanel.populationDescriptionTooltip"))
+                text = messages.getString("GM.EditPopulationGroupPanel.populationDescriptionLabel"),
+                tooltip = messages.getString("GM.EditPopulationGroupPanel.populationDescriptionTooltip"))
         val populationAgeLabel = createLabel(
-                text = messages.getString("EditPopulationGroupPanel.populationAgeLabel"),
-                tooltip = messages.getString("EditPopulationGroupPanel.populationAgeTooltip"))
+                text = messages.getString("GM.EditPopulationGroupPanel.populationAgeLabel"),
+                tooltip = messages.getString("GM.EditPopulationGroupPanel.populationAgeTooltip"))
         val populationGenderLabel = createLabel(
-                text = messages.getString("EditPopulationGroupPanel.populationGenderLabel"),
-                tooltip = messages.getString("EditPopulationGroupPanel.populationGenderTooltip"))
+                text = messages.getString("GM.EditPopulationGroupPanel.populationGenderLabel"),
+                tooltip = messages.getString("GM.EditPopulationGroupPanel.populationGenderTooltip"))
         val bmiLabel = createLabel(
-                text = messages.getString("EditPopulationGroupPanel.bmiLabel"),
-                tooltip = messages.getString("EditPopulationGroupPanel.bmiTooltip"))
+                text = messages.getString("GM.EditPopulationGroupPanel.bmiLabel"),
+                tooltip = messages.getString("GM.EditPopulationGroupPanel.bmiTooltip"))
         val specialDietGroupLabel = createLabel(
-                text = messages.getString("EditPopulationGroupPanel.specialDietGroupsLabel"),
-                tooltip = messages.getString("EditPopulationGroupPanel.specialDietGroupsTooltip"))
+                text = messages.getString("GM.EditPopulationGroupPanel.specialDietGroupsLabel"),
+                tooltip = messages.getString("GM.EditPopulationGroupPanel.specialDietGroupsTooltip"))
         val patternConsumptionLabel = createLabel(
-                text = messages.getString("EditPopulationGroupPanel.patternConsumptionLabel"),
-                tooltip = messages.getString("EditPopulationGroupPanel.patternConsumptionTooltip"))
+                text = messages.getString("GM.EditPopulationGroupPanel.patternConsumptionLabel"),
+                tooltip = messages.getString("GM.EditPopulationGroupPanel.patternConsumptionTooltip"))
         val regionLabel = createLabel(
-                text = messages.getString("EditPopulationGroupPanel.regionLabel"),
-                tooltip = messages.getString("EditPopulationGroupPanel.regionTooltip"))
+                text = messages.getString("GM.EditPopulationGroupPanel.regionLabel"),
+                tooltip = messages.getString("GM.EditPopulationGroupPanel.regionTooltip"))
         val countryLabel = createLabel(
-                text = messages.getString("EditPopulationGroupPanel.countryLabel"),
-                tooltip = messages.getString("EditPopulationGroupPanel.countryTooltip"))
+                text = messages.getString("GM.EditPopulationGroupPanel.countryLabel"),
+                tooltip = messages.getString("GM.EditPopulationGroupPanel.countryTooltip"))
         val riskAndPopulationLabel = createLabel(
-                text = messages.getString("EditPopulationGroupPanel.riskAndPopulationLabel"),
-                tooltip = messages.getString("EditPopulationGroupPanel.riskAndPopulationTooltip"))
+                text = messages.getString("GM.EditPopulationGroupPanel.riskAndPopulationLabel"),
+                tooltip = messages.getString("GM.EditPopulationGroupPanel.riskAndPopulationTooltip"))
         val seasonLabel = createLabel(
-                text = messages.getString("EditPopulationGroupPanel.seasonLabel"),
-                tooltip = messages.getString("EditPopulationGroupPanel.seasonTooltip"))
+                text = messages.getString("GM.EditPopulationGroupPanel.seasonLabel"),
+                tooltip = messages.getString("GM.EditPopulationGroupPanel.seasonTooltip"))
 
         // init combo boxes
         regionComboBox?.let { vocabs["Region"]?.forEach(it::addItem) }
@@ -656,7 +656,7 @@ class EditPopulationGroupPanel(populationGroup: PopulationGroup? = null, isAdvan
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
         if (!populationNameTextField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditPopulationGroupPanel.populationNameLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditPopulationGroupPanel.populationNameLabel")}")
         return errors
     }
 }
@@ -704,28 +704,28 @@ class EditProductPanel(product: Product? = null, isAdvanced: Boolean) : Validata
     private fun initUI() {
 
         // Create labels
-        val envNameLabel = createLabel(text = messages.getString("EditProductPanel.envNameLabel")
-                , tooltip = messages.getString("EditProductPanel.envNameTooltip"))
-        val envDescriptionLabel = createLabel(text = messages.getString("EditProductPanel.envDescriptionLabel"),
-                tooltip = messages.getString("EditProductPanel.envDescriptionTooltip"))
-        val envUnitLabel = createLabel(text = messages.getString("EditProductPanel.envUnitLabel"),
-                tooltip = messages.getString("EditProductPanel.envUnitTooltip"))
-        val productionMethodLabel = createLabel(text = messages.getString("EditProductPanel.productionMethodLabel"),
-                tooltip = messages.getString("EditProductPanel.productionMethodTooltip"))
-        val packagingLabel = createLabel(text = messages.getString("EditProductPanel.packagingLabel"),
-                tooltip = messages.getString("EditProductPanel.packagingTooltip"))
-        val productTreatmentLabel = createLabel(text = messages.getString("EditProductPanel.productTreatmentLabel"),
-                tooltip = messages.getString("EditProductPanel.productTreatmentTooltip"))
-        val originCountryLabel = createLabel(text = messages.getString("EditProductPanel.originCountryLabel"),
-                tooltip = messages.getString("EditProductPanel.originCountryTooltip"))
-        val originAreaLabel = createLabel(text = messages.getString("EditProductPanel.originAreaLabel"),
-                tooltip = messages.getString("EditProductPanel.originAreaTooltip"))
-        val fisheriesAreaLabel = createLabel(text = messages.getString("EditProductPanel.fisheriesAreaLabel"),
-                tooltip = messages.getString("EditProductPanel.fisheriesAreaTooltip"))
-        val productionDateLabel = createLabel(text = messages.getString("EditProductPanel.productionDateLabel"),
-                tooltip = messages.getString("EditProductPanel.productionDateTooltip"))
-        val expirationDateLabel = createLabel(text = messages.getString("EditProductPanel.expirationDateLabel"),
-                tooltip = messages.getString("EditProductPanel.expirationDateTooltip"))
+        val envNameLabel = createLabel(text = messages.getString("GM.EditProductPanel.envNameLabel")
+                , tooltip = messages.getString("GM.EditProductPanel.envNameTooltip"))
+        val envDescriptionLabel = createLabel(text = messages.getString("GM.EditProductPanel.envDescriptionLabel"),
+                tooltip = messages.getString("GM.EditProductPanel.envDescriptionTooltip"))
+        val envUnitLabel = createLabel(text = messages.getString("GM.EditProductPanel.envUnitLabel"),
+                tooltip = messages.getString("GM.EditProductPanel.envUnitTooltip"))
+        val productionMethodLabel = createLabel(text = messages.getString("GM.EditProductPanel.productionMethodLabel"),
+                tooltip = messages.getString("GM.EditProductPanel.productionMethodTooltip"))
+        val packagingLabel = createLabel(text = messages.getString("GM.EditProductPanel.packagingLabel"),
+                tooltip = messages.getString("GM.EditProductPanel.packagingTooltip"))
+        val productTreatmentLabel = createLabel(text = messages.getString("GM.EditProductPanel.productTreatmentLabel"),
+                tooltip = messages.getString("GM.EditProductPanel.productTreatmentTooltip"))
+        val originCountryLabel = createLabel(text = messages.getString("GM.EditProductPanel.originCountryLabel"),
+                tooltip = messages.getString("GM.EditProductPanel.originCountryTooltip"))
+        val originAreaLabel = createLabel(text = messages.getString("GM.EditProductPanel.originAreaLabel"),
+                tooltip = messages.getString("GM.EditProductPanel.originAreaTooltip"))
+        val fisheriesAreaLabel = createLabel(text = messages.getString("GM.EditProductPanel.fisheriesAreaLabel"),
+                tooltip = messages.getString("GM.EditProductPanel.fisheriesAreaTooltip"))
+        val productionDateLabel = createLabel(text = messages.getString("GM.EditProductPanel.productionDateLabel"),
+                tooltip = messages.getString("GM.EditProductPanel.productionDateTooltip"))
+        val expirationDateLabel = createLabel(text = messages.getString("GM.EditProductPanel.expirationDateLabel"),
+                tooltip = messages.getString("GM.EditProductPanel.expirationDateTooltip"))
 
         // Init combo boxes
         envNameField.setPossibleValues(vocabs.get("Product-matrix name"))
@@ -775,9 +775,9 @@ class EditProductPanel(product: Product? = null, isAdvanced: Boolean) : Validata
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
         if (!envNameField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditProductPanel.envNameLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditProductPanel.envNameLabel")}")
         if (!envUnitField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditProductPanel.envUnitLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditProductPanel.envUnitLabel")}")
 
         return errors
     }
@@ -833,66 +833,66 @@ class EditReferencePanel(ref: Record? = null, isAdvanced: Boolean) : Validatable
 
         val pairList = mutableListOf<Pair<JLabel, JComponent>>()
         typeComboBox?.let {
-            val typeLabel = JLabel(messages.getString("EditReferencePanel.typeLabel"))
+            val typeLabel = JLabel(messages.getString("GM.EditReferencePanel.typeLabel"))
             pairList.add(Pair(first = typeLabel, second = it))
         }
         dateChooser?.let {
-            val dateLabel = JLabel(messages.getString("EditReferencePanel.dateLabel"))
+            val dateLabel = JLabel(messages.getString("GM.EditReferencePanel.dateLabel"))
             pairList.add(Pair(first = dateLabel, second = it))
         }
         pmidTextField?.let {
-            val pmidLabel = JLabel(messages.getString("EditReferencePanel.pmidLabel"))
+            val pmidLabel = JLabel(messages.getString("GM.EditReferencePanel.pmidLabel"))
             pairList.add(Pair(first = pmidLabel, second = it))
         }
 
-        pairList.add(Pair(first = JLabel(messages.getString("EditReferencePanel.doiLabel")), second = doiTextField))
+        pairList.add(Pair(first = JLabel(messages.getString("GM.EditReferencePanel.doiLabel")), second = doiTextField))
 
         authorListTextField?.let {
-            val authorListLabel = JLabel(messages.getString("EditReferencePanel.authorListLabel"))
+            val authorListLabel = JLabel(messages.getString("GM.EditReferencePanel.authorListLabel"))
             pairList.add(Pair(first = authorListLabel, second = it))
         }
 
-        pairList.add(Pair(first = JLabel(messages.getString("EditReferencePanel.titleLabel")), second = titleTextField))
+        pairList.add(Pair(first = JLabel(messages.getString("GM.EditReferencePanel.titleLabel")), second = titleTextField))
 
         abstractTextArea?.let {
-            val abstractLabel = JLabel(messages.getString("EditReferencePanel.abstractLabel"))
+            val abstractLabel = JLabel(messages.getString("GM.EditReferencePanel.abstractLabel"))
             pairList.add(Pair(first = abstractLabel, second = it))
         }
 
         journalTextField?.let {
-            val journalLabel = JLabel(messages.getString("EditReferencePanel.journalLabel"))
+            val journalLabel = JLabel(messages.getString("GM.EditReferencePanel.journalLabel"))
             pairList.add(Pair(first = journalLabel, second = it))
         }
 
         volumeSpinnerModel?.let {
-            val volumeLabel = JLabel(messages.getString("EditReferencePanel.volumeLabel"))
+            val volumeLabel = JLabel(messages.getString("GM.EditReferencePanel.volumeLabel"))
             val spinner = createSpinner(it)
             pairList.add(Pair(first = volumeLabel, second = spinner))
         }
 
         issueSpinnerModel?.let {
-            val issueLabel = JLabel(messages.getString("EditReferencePanel.issueLabel"))
+            val issueLabel = JLabel(messages.getString("GM.EditReferencePanel.issueLabel"))
             val spinner = createSpinner(it)
             pairList.add(Pair(first = issueLabel, second = spinner))
         }
 
         pageTextField?.let {
-            val pageLabel = JLabel(messages.getString("EditReferencePanel.pageLabel"))
+            val pageLabel = JLabel(messages.getString("GM.EditReferencePanel.pageLabel"))
             pairList.add(Pair(first = pageLabel, second = it))
         }
 
         statusTextField?.let {
-            val statusLabel = JLabel(messages.getString("EditReferencePanel.statusLabel"))
+            val statusLabel = JLabel(messages.getString("GM.EditReferencePanel.statusLabel"))
             pairList.add(Pair(first = statusLabel, second = it))
         }
 
         websiteTextField?.let {
-            val websiteLabel = JLabel(messages.getString("EditReferencePanel.websiteLabel"))
+            val websiteLabel = JLabel(messages.getString("GM.EditReferencePanel.websiteLabel"))
             pairList.add(Pair(first = websiteLabel, second = it))
         }
 
         commentTextField?.let {
-            val commentLabel = JLabel(messages.getString("EditReferencePanel.commentLabel"))
+            val commentLabel = JLabel(messages.getString("GM.EditReferencePanel.commentLabel"))
             pairList.add(Pair(first = commentLabel, second = it))
         }
 
@@ -931,9 +931,9 @@ class EditReferencePanel(ref: Record? = null, isAdvanced: Boolean) : Validatable
     override fun validatePanel(): List<String> {
         val errorList = mutableListOf<String>()
         if (!doiTextField.hasValidValue())
-            errorList.add("Missing ${messages.getString("EditReferencePanel.doiLabel")}")
+            errorList.add("Missing ${messages.getString("GM.EditReferencePanel.doiLabel")}")
         if (!titleTextField.hasValidValue())
-            errorList.add("Missing ${messages.getString("EditReferencePanel.titleLabel")}")
+            errorList.add("Missing ${messages.getString("GM.EditReferencePanel.titleLabel")}")
 
         return errorList
     }
@@ -979,41 +979,41 @@ class EditStudySamplePanel(studySample: StudySample? = null, isAdvanced: Boolean
     private fun initUI() {
 
         // Create labels
-        val sampleNameLabel = createLabel(text = messages.getString("EditStudySamplePanel.sampleNameLabel"),
-                tooltip = messages.getString("EditStudySamplePanel.sampleNameTooltip"))
+        val sampleNameLabel = createLabel(text = messages.getString("GM.EditStudySamplePanel.sampleNameLabel"),
+                tooltip = messages.getString("GM.EditStudySamplePanel.sampleNameTooltip"))
         val moisturePercentageLabel = createLabel(
-                text = messages.getString("EditStudySamplePanel.moisturePercentageLabel"),
-                tooltip = messages.getString("EditStudySamplePanel.moisturePercentageTooltip"))
+                text = messages.getString("GM.EditStudySamplePanel.moisturePercentageLabel"),
+                tooltip = messages.getString("GM.EditStudySamplePanel.moisturePercentageTooltip"))
         val fatPercentageLabel = createLabel(
-                text = messages.getString("EditStudySamplePanel.fatPercentageLabel"),
-                tooltip = messages.getString("EditStudySamplePanel.fatPercentageTooltip"))
+                text = messages.getString("GM.EditStudySamplePanel.fatPercentageLabel"),
+                tooltip = messages.getString("GM.EditStudySamplePanel.fatPercentageTooltip"))
         val sampleProtocolLabel = createLabel(
-                text = messages.getString("EditStudySamplePanel.sampleProtocolLabel"),
-                tooltip = messages.getString("EditStudySamplePanel.sampleProtocolTooltip"))
+                text = messages.getString("GM.EditStudySamplePanel.sampleProtocolLabel"),
+                tooltip = messages.getString("GM.EditStudySamplePanel.sampleProtocolTooltip"))
         val samplingStrategyLabel = createLabel(
-                text = messages.getString("EditStudySamplePanel.samplingStrategyLabel"),
-                tooltip = messages.getString("EditStudySamplePanel.samplingStrategyTooltip"))
+                text = messages.getString("GM.EditStudySamplePanel.samplingStrategyLabel"),
+                tooltip = messages.getString("GM.EditStudySamplePanel.samplingStrategyTooltip"))
         val samplingTypeLabel = createLabel(
-                text = messages.getString("EditStudySamplePanel.samplingTypeLabel"),
-                tooltip = messages.getString("EditStudySamplePanel.samplingTypeTooltip"))
+                text = messages.getString("GM.EditStudySamplePanel.samplingTypeLabel"),
+                tooltip = messages.getString("GM.EditStudySamplePanel.samplingTypeTooltip"))
         val samplingMethodLabel = createLabel(
-                text = messages.getString("EditStudySamplePanel.samplingMethodLabel"),
-                tooltip = messages.getString("EditStudySamplePanel.samplingMethodTooltip"))
+                text = messages.getString("GM.EditStudySamplePanel.samplingMethodLabel"),
+                tooltip = messages.getString("GM.EditStudySamplePanel.samplingMethodTooltip"))
         val samplingPlanLabel = createLabel(
-                text = messages.getString("EditStudySamplePanel.samplingPlanLabel"),
-                tooltip = messages.getString("EditStudySamplePanel.samplingPlanTooltip"))
+                text = messages.getString("GM.EditStudySamplePanel.samplingPlanLabel"),
+                tooltip = messages.getString("GM.EditStudySamplePanel.samplingPlanTooltip"))
         val samplingWeightLabel = createLabel(
-                text = messages.getString("EditStudySamplePanel.samplingWeightLabel"),
-                tooltip = messages.getString("EditStudySamplePanel.samplingWeightTooltip"))
+                text = messages.getString("GM.EditStudySamplePanel.samplingWeightLabel"),
+                tooltip = messages.getString("GM.EditStudySamplePanel.samplingWeightTooltip"))
         val samplingSizeLabel = createLabel(
-                text = messages.getString("EditStudySamplePanel.samplingSizeLabel"),
-                tooltip = messages.getString("EditStudySamplePanel.samplingSizeTooltip"))
+                text = messages.getString("GM.EditStudySamplePanel.samplingSizeLabel"),
+                tooltip = messages.getString("GM.EditStudySamplePanel.samplingSizeTooltip"))
         val lotSizeUnitLabel = createLabel(
-                text = messages.getString("EditStudySamplePanel.lotSizeUnitLabel"),
-                tooltip = messages.getString("EditStudySamplePanel.lotSizeUnitTooltip"))
+                text = messages.getString("GM.EditStudySamplePanel.lotSizeUnitLabel"),
+                tooltip = messages.getString("GM.EditStudySamplePanel.lotSizeUnitTooltip"))
         val samplingPointLabel = createLabel(
-                text = messages.getString("EditStudySamplePanel.samplingPointLabel"),
-                tooltip = messages.getString("EditStudySamplePanel.samplingPointTooltip"))
+                text = messages.getString("GM.EditStudySamplePanel.samplingPointLabel"),
+                tooltip = messages.getString("GM.EditStudySamplePanel.samplingPointTooltip"))
 
         // init combo boxes
         samplingStrategyField?.setPossibleValues(vocabs["Sampling strategy"])
@@ -1069,15 +1069,15 @@ class EditStudySamplePanel(studySample: StudySample? = null, isAdvanced: Boolean
 
         val errors = mutableListOf<String>()
         if (!sampleNameTextField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditStudySamplePanel.sampleNameLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditStudySamplePanel.sampleNameLabel")}")
         if (!sampleProtocolTextField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditStudySamplePanel.sampleProtocolLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditStudySamplePanel.sampleProtocolLabel")}")
         if (!samplingPlanTextField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditStudySamplePanel.samplingPlanLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditStudySamplePanel.samplingPlanLabel")}")
         if (!samplingWeightTextField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditStudySamplePanel.samplingWeightLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditStudySamplePanel.samplingWeightLabel")}")
         if (!samplingSizeTextField.hasValidValue())
-            errors.add("Missing ${messages.getString("EditStudySamplePanel.samplingSizeLabel")}")
+            errors.add("Missing ${messages.getString("GM.EditStudySamplePanel.samplingSizeLabel")}")
 
         return errors
     }

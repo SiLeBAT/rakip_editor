@@ -281,31 +281,31 @@ class GeneralInformationPanel(generalInformation: GeneralInformation) : Box(BoxL
 
     private fun initUI() {
 
-        val studyNameLabel = createLabel(text = messages.getString("GeneralInformationPanel.studyNameLabel"),
-                tooltip = messages.getString("GeneralInformationPanel.studyNameTooltip"))
-        val identifierLabel = createLabel(text = messages.getString("GeneralInformationPanel.identifierLabel"),
-                tooltip = messages.getString("GeneralInformationPanel.identifierTooltip"))
-        val creationDateLabel = createLabel(text = messages.getString("GeneralInformationPanel.creationDateLabel"),
-                tooltip = messages.getString("GeneralInformationPanel.creationDateTooltip"))
-        val rightsLabel = createLabel(text = messages.getString("GeneralInformationPanel.rightsLabel"),
-                tooltip = messages.getString("GeneralInformationPanel.rightsTooltip"))
-        val urlLabel = createLabel(text = messages.getString("GeneralInformationPanel.urlLabel"),
-                tooltip = messages.getString("GeneralInformationPanel.urlTooltip"))
-        val formatLabel = createLabel(text = messages.getString("GeneralInformationPanel.formatLabel"),
-                tooltip = messages.getString("GeneralInformationPanel.formatTooltip"))
-        val languageLabel = createLabel(text = messages.getString("GeneralInformationPanel.languageLabel"),
-                tooltip = messages.getString("GeneralInformationPanel.languageTooltip"))
-        val softwareLabel = createLabel(text = messages.getString("GeneralInformationPanel.softwareLabel"),
-                tooltip = messages.getString("GeneralInformationPanel.softwareTooltip"))
+        val studyNameLabel = createLabel(text = messages.getString("GM.GeneralInformationPanel.studyNameLabel"),
+                tooltip = messages.getString("GM.GeneralInformationPanel.studyNameTooltip"))
+        val identifierLabel = createLabel(text = messages.getString("GM.GeneralInformationPanel.identifierLabel"),
+                tooltip = messages.getString("GM.GeneralInformationPanel.identifierTooltip"))
+        val creationDateLabel = createLabel(text = messages.getString("GM.GeneralInformationPanel.creationDateLabel"),
+                tooltip = messages.getString("GM.GeneralInformationPanel.creationDateTooltip"))
+        val rightsLabel = createLabel(text = messages.getString("GM.GeneralInformationPanel.rightsLabel"),
+                tooltip = messages.getString("GM.GeneralInformationPanel.rightsTooltip"))
+        val urlLabel = createLabel(text = messages.getString("GM.GeneralInformationPanel.urlLabel"),
+                tooltip = messages.getString("GM.GeneralInformationPanel.urlTooltip"))
+        val formatLabel = createLabel(text = messages.getString("GM.GeneralInformationPanel.formatLabel"),
+                tooltip = messages.getString("GM.GeneralInformationPanel.formatTooltip"))
+        val languageLabel = createLabel(text = messages.getString("GM.GeneralInformationPanel.languageLabel"),
+                tooltip = messages.getString("GM.GeneralInformationPanel.languageTooltip"))
+        val softwareLabel = createLabel(text = messages.getString("GM.GeneralInformationPanel.softwareLabel"),
+                tooltip = messages.getString("GM.GeneralInformationPanel.softwareTooltip"))
         val languageWrittenInLabel = createLabel(
-                text = messages.getString("GeneralInformationPanel.languageWrittenInLabel"),
-                tooltip = messages.getString("GeneralInformationPanel.languageWrittenInTooltip"))
-        val statusLabel = createLabel(text = messages.getString("GeneralInformationPanel.statusLabel"),
-                tooltip = messages.getString("GeneralInformationPanel.statusTooltip"))
-        val objectiveLabel = createLabel(text = messages.getString("GeneralInformationPanel.objectiveLabel"),
-                tooltip = messages.getString("GeneralInformationPanel.objectiveTooltip"))
-        val descriptionLabel = createLabel(text = messages.getString("GeneralInformationPanel.descriptionLabel"),
-                tooltip = messages.getString("GeneralInformationPanel.descriptionTooltip"))
+                text = messages.getString("GM.GeneralInformationPanel.languageWrittenInLabel"),
+                tooltip = messages.getString("GM.GeneralInformationPanel.languageWrittenInTooltip"))
+        val statusLabel = createLabel(text = messages.getString("GM.GeneralInformationPanel.statusLabel"),
+                tooltip = messages.getString("GM.GeneralInformationPanel.statusTooltip"))
+        val objectiveLabel = createLabel(text = messages.getString("GM.GeneralInformationPanel.objectiveLabel"),
+                tooltip = messages.getString("GM.GeneralInformationPanel.objectiveTooltip"))
+        val descriptionLabel = createLabel(text = messages.getString("GM.GeneralInformationPanel.descriptionLabel"),
+                tooltip = messages.getString("GM.GeneralInformationPanel.descriptionTooltip"))
 
         // hide initially advanced comps
         val advancedComps = listOf<JComponent>(
@@ -335,8 +335,8 @@ class GeneralInformationPanel(generalInformation: GeneralInformation) : Box(BoxL
         propertiesPanel.add(comp = rightsLabel, gridy = 5, gridx = 0)
         propertiesPanel.add(comp = rightsField, gridy = 5, gridx = 1, gridwidth = 2)
 
-        availabilityCheckBox.text = messages.getString("GeneralInformationPanel.availabilityLabel")
-        availabilityCheckBox.toolTipText = messages.getString("GeneralInformationPanel.availabilityTooltip")
+        availabilityCheckBox.text = messages.getString("GM.GeneralInformationPanel.availabilityLabel")
+        availabilityCheckBox.toolTipText = messages.getString("GM.GeneralInformationPanel.availabilityTooltip")
         propertiesPanel.add(comp = availabilityCheckBox, gridy = 6, gridx = 0)
 
         propertiesPanel.add(comp = urlLabel, gridy = 7, gridx = 0)
@@ -549,9 +549,9 @@ class EditCreatorPanel(creator: VCard? = null) : JPanel(GridBagLayout()) {
 
     private fun initUI() {
         val pairList = listOf<Pair<JLabel, JComponent>>(
-                Pair(first = JLabel(messages.getString("EditCreatorPanel.givenNameLabel")), second = givenNameField),
-                Pair(first = JLabel(messages.getString("EditCreatorPanel.familyNameLabel")), second = familyNameField),
-                Pair(first = JLabel(messages.getString("EditCreatorPanel.contactLabel")), second = contactField)
+                Pair(first = JLabel(messages.getString("GM.EditCreatorPanel.givenNameLabel")), second = givenNameField),
+                Pair(first = JLabel(messages.getString("GM.EditCreatorPanel.familyNameLabel")), second = familyNameField),
+                Pair(first = JLabel(messages.getString("GM.EditCreatorPanel.contactLabel")), second = contactField)
         )
 
         addGridComponents(pairs = pairList)
@@ -633,17 +633,17 @@ class ScopePanel(val scope: Scope) : Box(BoxLayout.PAGE_AXIS) {
             }
         }
 
-        val productLabel = JLabel(messages.getString("ScopePanel.productLabel"))
-        val hazardLabel = JLabel(messages.getString("ScopePanel.hazardLabel"))
-        val populationLabel = JLabel(messages.getString("ScopePanel.populationGroupLabel"))
-        val commentLabel = createLabel(text = messages.getString("ScopePanel.commentLabel"),
-                tooltip = messages.getString("ScopePanel.commentTooltip"))
-        val temporalInformationLabel = createLabel(text = messages.getString("ScopePanel.temporalInformationLabel"),
-                tooltip = messages.getString("ScopePanel.temporalInformationTooltip"))
-        val regionLabel = createLabel(text = messages.getString("ScopePanel.regionLabel"),
-                tooltip = messages.getString("ScopePanel.regionTooltip"))
-        val countryLabel = createLabel(text = messages.getString("ScopePanel.countryLabel"),
-                tooltip = messages.getString("ScopePanel.countryTooltip"))
+        val productLabel = JLabel(messages.getString("GM.ScopePanel.productLabel"))
+        val hazardLabel = JLabel(messages.getString("GM.ScopePanel.hazardLabel"))
+        val populationLabel = JLabel(messages.getString("GM.ScopePanel.populationGroupLabel"))
+        val commentLabel = createLabel(text = messages.getString("GM.ScopePanel.commentLabel"),
+                tooltip = messages.getString("GM.ScopePanel.commentTooltip"))
+        val temporalInformationLabel = createLabel(text = messages.getString("GM.ScopePanel.temporalInformationLabel"),
+                tooltip = messages.getString("GM.ScopePanel.temporalInformationTooltip"))
+        val regionLabel = createLabel(text = messages.getString("GM.ScopePanel.regionLabel"),
+                tooltip = messages.getString("GM.ScopePanel.regionTooltip"))
+        val countryLabel = createLabel(text = messages.getString("GM.ScopePanel.countryLabel"),
+                tooltip = messages.getString("GM.ScopePanel.countryTooltip"))
 
         val pairList = listOf<Pair<JLabel, JComponent>>(
                 Pair(first = productLabel, second = productButton),
@@ -727,10 +727,10 @@ class DataBackgroundPanel(var dataBackground: DataBackground? = null) : Box(BoxL
             }
         }
 
-        val studySampleLabel = JLabel(messages.getString("DataBackgroundPanel.studySampleLabel"))
-        val dietaryAssessmentMethodLabel = JLabel(messages.getString("DataBackgroundPanel.dietaryAssessmentMethodLabel"))
-        val laboratoryAccreditationLabel = JLabel(messages.getString("DataBackgroundPanel.laboratoryAccreditationLabel"))
-        val assayLabel = JLabel(messages.getString("DataBackgroundPanel.assayLabel"))
+        val studySampleLabel = JLabel(messages.getString("GM.DataBackgroundPanel.studySampleLabel"))
+        val dietaryAssessmentMethodLabel = JLabel(messages.getString("GM.DataBackgroundPanel.dietaryAssessmentMethodLabel"))
+        val laboratoryAccreditationLabel = JLabel(messages.getString("GM.DataBackgroundPanel.laboratoryAccreditationLabel"))
+        val assayLabel = JLabel(messages.getString("GM.DataBackgroundPanel.assayLabel"))
 
         val propertiesPanel = JPanel(GridBagLayout())
 
@@ -761,64 +761,64 @@ class DataBackgroundPanel(var dataBackground: DataBackground? = null) : Box(BoxL
 
 class StudyPanel(study: Study? = null) : JPanel(GridBagLayout()) {
 
-    val studyIdentifierLabel = createLabel(text = messages.getString("StudyPanel.studyIdentifierLabel"),
-            tooltip = messages.getString("StudyPanel.studyIdentifierTooltip"))
+    val studyIdentifierLabel = createLabel(text = messages.getString("GM.StudyPanel.studyIdentifierLabel"),
+            tooltip = messages.getString("GM.StudyPanel.studyIdentifierTooltip"))
     val studyIdentifierTextField = JTextField(30)
 
-    val studyTitleLabel = createLabel(text = messages.getString("StudyPanel.studyTitleLabel"),
-            tooltip = messages.getString("StudyPanel.studyTitleTooltip"))
+    val studyTitleLabel = createLabel(text = messages.getString("GM.StudyPanel.studyTitleLabel"),
+            tooltip = messages.getString("GM.StudyPanel.studyTitleTooltip"))
     val studyTitleTextField = JTextField(30)
 
-    val studyDescriptionLabel = createLabel(text = messages.getString("StudyPanel.studyDescriptionLabel"),
-            tooltip = messages.getString("StudyPanel.studyDescriptionTooltip"))
+    val studyDescriptionLabel = createLabel(text = messages.getString("GM.StudyPanel.studyDescriptionLabel"),
+            tooltip = messages.getString("GM.StudyPanel.studyDescriptionTooltip"))
     val studyDescriptionTextArea = JTextArea(5, 30)
 
-    val studyDesignTypeLabel = createLabel(text = messages.getString("StudyPanel.studyDesignTypeLabel"),
-            tooltip = messages.getString("StudyPanel.studyDesignTypeTooltip"))
+    val studyDesignTypeLabel = createLabel(text = messages.getString("GM.StudyPanel.studyDesignTypeLabel"),
+            tooltip = messages.getString("GM.StudyPanel.studyDesignTypeTooltip"))
     val studyDesignTypeField = AutoSuggestField(10)
 
-    val studyAssayMeasurementsTypeLabel = createLabel(text = messages.getString("StudyPanel.studyAssayMeasurementsTypeLabel"),
-            tooltip = messages.getString("StudyPanel.studyAssayMeasurementsTypeTooltip"))
+    val studyAssayMeasurementsTypeLabel = createLabel(text = messages.getString("GM.StudyPanel.studyAssayMeasurementsTypeLabel"),
+            tooltip = messages.getString("GM.StudyPanel.studyAssayMeasurementsTypeTooltip"))
     val studyAssayMeasurementsTypeField = AutoSuggestField(10)
 
-    val studyAssayTechnologyTypeLabel = createLabel(text = messages.getString("StudyPanel.studyAssayTechnologyTypeLabel"),
-            tooltip = messages.getString("StudyPanel.studyAssayTechnologyTypeTooltip"))
+    val studyAssayTechnologyTypeLabel = createLabel(text = messages.getString("GM.StudyPanel.studyAssayTechnologyTypeLabel"),
+            tooltip = messages.getString("GM.StudyPanel.studyAssayTechnologyTypeTooltip"))
     val studyAssayTechnologyTypeField = AutoSuggestField(10)
 
-    val studyAssayTechnologyPlatformLabel = createLabel(text = messages.getString("StudyPanel.studyAssayTechnologyPlatformLabel"),
-            tooltip = messages.getString("StudyPanel.studyAssayTechnologyPlatformTooltip"))
+    val studyAssayTechnologyPlatformLabel = createLabel(text = messages.getString("GM.StudyPanel.studyAssayTechnologyPlatformLabel"),
+            tooltip = messages.getString("GM.StudyPanel.studyAssayTechnologyPlatformTooltip"))
     val studyAssayTechnologyPlatformTextField = JTextField(30)
 
-    val accreditationProcedureLabel = createLabel(text = messages.getString("StudyPanel.accreditationProcedureLabel"),
-            tooltip = messages.getString("StudyPanel.accreditationProcedureTooltip"))
+    val accreditationProcedureLabel = createLabel(text = messages.getString("GM.StudyPanel.accreditationProcedureLabel"),
+            tooltip = messages.getString("GM.StudyPanel.accreditationProcedureTooltip"))
     val accreditationProcedureField = AutoSuggestField(10)
 
-    val studyProtocolNameLabel = createLabel(text = messages.getString("StudyPanel.protocolNameLabel"),
-            tooltip = messages.getString("StudyPanel.protocolNameTooltip"))
+    val studyProtocolNameLabel = createLabel(text = messages.getString("GM.StudyPanel.protocolNameLabel"),
+            tooltip = messages.getString("GM.StudyPanel.protocolNameTooltip"))
     val studyProtocolNameTextField = JTextField(30)
 
-    val studyProtocolTypeLabel = createLabel(text = messages.getString("StudyPanel.protocolTypeLabel"),
-            tooltip = messages.getString("StudyPanel.protocolTypeTooltip"))
+    val studyProtocolTypeLabel = createLabel(text = messages.getString("GM.StudyPanel.protocolTypeLabel"),
+            tooltip = messages.getString("GM.StudyPanel.protocolTypeTooltip"))
     val studyProtocolTypeField = AutoSuggestField(10)
 
-    val studyProtocolDescriptionLabel = createLabel(text = messages.getString("StudyPanel.protocolDescriptionLabel"),
-            tooltip = messages.getString("StudyPanel.protocolDescriptionTooltip"))
+    val studyProtocolDescriptionLabel = createLabel(text = messages.getString("GM.StudyPanel.protocolDescriptionLabel"),
+            tooltip = messages.getString("GM.StudyPanel.protocolDescriptionTooltip"))
     val studyProtocolDescriptionTextField = JTextField(30)
 
-    val studyProtocolURILabel = createLabel(text = messages.getString("StudyPanel.protocolURILabel"),
-            tooltip = messages.getString("StudyPanel.protocolURITooltip"))
+    val studyProtocolURILabel = createLabel(text = messages.getString("GM.StudyPanel.protocolURILabel"),
+            tooltip = messages.getString("GM.StudyPanel.protocolURITooltip"))
     val studyProtocolURITextField = JTextField(30)
 
-    val studyProtocolVersionLabel = createLabel(text = messages.getString("StudyPanel.protocolVersionLabel"),
-            tooltip = messages.getString("StudyPanel.protocolVersionTooltip"))
+    val studyProtocolVersionLabel = createLabel(text = messages.getString("GM.StudyPanel.protocolVersionLabel"),
+            tooltip = messages.getString("GM.StudyPanel.protocolVersionTooltip"))
     val studyProtocolVersionTextField = JTextField(30)
 
-    val studyProtocolParametersLabel = createLabel(text = messages.getString("StudyPanel.parametersLabel"),
-            tooltip = messages.getString("StudyPanel.parametersTooltip"))
+    val studyProtocolParametersLabel = createLabel(text = messages.getString("GM.StudyPanel.parametersLabel"),
+            tooltip = messages.getString("GM.StudyPanel.parametersTooltip"))
     val studyProtocolParametersField = AutoSuggestField(10)
 
-    val studyProtocolComponentsTypeLabel = createLabel(text = messages.getString("StudyPanel.componentsTypeLabel"),
-            tooltip = messages.getString("StudyPanel.componentsTypeTooltip"))
+    val studyProtocolComponentsTypeLabel = createLabel(text = messages.getString("GM.StudyPanel.componentsTypeLabel"),
+            tooltip = messages.getString("GM.StudyPanel.componentsTypeTooltip"))
     val studyProtocolComponentsTypeField = AutoSuggestField(10)
 
     val advancedComps = listOf<JComponent>(
