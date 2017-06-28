@@ -25,6 +25,7 @@ fun loadVocabularies(): Map<String, Set<String>> {
     val inputStream = "".javaClass.getResourceAsStream("/FSKLab_Config_Controlled Vocabularies.xlsx")
 
     val workbook = XSSFWorkbook(inputStream)
+
     val vocabs = listOf(
 
             // GeneralInformation controlled vocabularies
@@ -57,14 +58,61 @@ fun loadVocabularies(): Map<String, Set<String>> {
             // Parameter controlled vocabularies
             "Parameter classification", "Parameter unit", "Parameter type", "Parameter unit category",
             "Parameter data type", "Parameter source", "Parameter subject", "Parameter distribution"
-    ).associateBy({ it }, { de.bund.bfr.rakip.editor.readVocabFromSheet(workbook = workbook, sheetname = it) })
+    ).associateBy({ it }, { readVocabFromSheet(workbook = workbook, sheetname = it) })
 
     workbook.close()
 
     return vocabs
 }
 
-val vocabs = de.bund.bfr.rakip.editor.loadVocabularies()
+val vocabs = VocabulariesLoader().vocabs
+
+class VocabulariesLoader() {
+
+    val vocabs : Map<String, Set<String>>
+
+    init {
+        val inputStream = this.javaClass.getResourceAsStream("/FSKLab_Config_Controlled Vocabularies.xlsx")
+
+        val workbook = XSSFWorkbook(inputStream)
+
+        vocabs = listOf(
+
+                // GeneralInformation controlled vocabularies
+                "Rights", "Format", "Software", "Language written in", "Status",
+
+                // Product controlled vocabularies
+                "Product-matrix name", "Product-matrix unit", "Method of production", "Packaging", "Product treatment",
+                "Country of origin", "Area of origin", "Fisheries area",
+
+                // Hazard controlled vocabularies
+                "Hazard type", "Hazard name", "Hazard unit", "Hazard ind sum", "Laboratory country",
+
+                // PopulationGroup controlled vocabularies
+                "Region", "Country",
+
+                // DataBackground controlled vocabularies
+                "Laboratory accreditation",
+
+                // Study controlled vocabularies
+                "Study Design Type", "Study Assay Measurement Type", "Study Assay Technology Type",
+                "Accreditation procedure Ass.Tec", "Study Protocol Type", "Study Protocol Parameters Name",
+                "Study Protocol Components Type",
+
+                // StudySample controlled vocabularies
+                "Sampling strategy", "Type of sampling program", "Sampling method", "Lot size unit", "Sampling point",
+
+                // DietaryAssessmentMethod controlled vocabularies
+                "Method. tool to collect data", "Food descriptors",
+
+                // Parameter controlled vocabularies
+                "Parameter classification", "Parameter unit", "Parameter type", "Parameter unit category",
+                "Parameter data type", "Parameter source", "Parameter subject", "Parameter distribution"
+        ).associateBy({ it }, { readVocabFromSheet(workbook = workbook, sheetname = it) })
+
+        workbook.close()
+    }
+}
 
 /**
  * Read controlled vocabulary from spreadsheet.
@@ -75,7 +123,7 @@ fun readVocabFromSheet(workbook: Workbook, sheetname: String): Set<String> {
 
     val sheet = workbook.getSheet(sheetname)
     if (sheet == null) {
-        de.bund.bfr.rakip.editor.logger.warning("Spreadsheet not found: $sheetname")
+        logger.warning("Spreadsheet not found: $sheetname")
         return emptySet<String>()
     }
 
@@ -87,7 +135,7 @@ fun readVocabFromSheet(workbook: Workbook, sheetname: String): Set<String> {
                 try {
                     it.stringCellValue
                 } catch (e: Exception) {
-                    de.bund.bfr.rakip.editor.logger.warning("Controlled vocabulary ${sheet.sheetName}: wrong value $it")
+                    logger.warning("Controlled vocabulary ${sheet.sheetName}: wrong value $it")
                     ""
                 }
             }
@@ -146,7 +194,7 @@ fun main(args: Array<String>) {
     var gi = createExampleGeneralInformation()
 
     val frame = JFrame()
-    val generalInformationPanel = de.bund.bfr.rakip.editor.GeneralInformationPanel(gi)
+    val generalInformationPanel = GeneralInformationPanel(gi)
     generalInformationPanel.studyNameTextField.text = gi.name
     generalInformationPanel.identifierTextField.text = gi.identifier
     generalInformationPanel.creationDateChooser.date = gi.creationDate
@@ -166,9 +214,9 @@ fun main(args: Array<String>) {
     generalInformationPanel.objectiveTextField.text = gi.objective
     generalInformationPanel.descriptionTextField.text = gi.description
 
-    val scopePanel = de.bund.bfr.rakip.editor.ScopePanel(Scope())
-    val dataBackgroundPanel = de.bund.bfr.rakip.editor.DataBackgroundPanel()
-    val modelMathPanel = de.bund.bfr.rakip.editor.ModelMathPanel()
+    val scopePanel = ScopePanel(Scope())
+    val dataBackgroundPanel = DataBackgroundPanel()
+    val modelMathPanel = ModelMathPanel()
 
     // Tabbed pane
     val tabbedPane = JTabbedPane()
@@ -232,19 +280,19 @@ fun JPanel.addGridComponents(pairs: List<Pair<JLabel, JComponent>>) {
     }
 }
 
-class GeneralInformationPanel(generalInformation: GeneralInformation) : Box(BoxLayout.PAGE_AXIS) {
+class GeneralInformationPanel(generalInformation: GeneralInformation? = null) : Box(BoxLayout.PAGE_AXIS) {
 
     val advancedCheckBox = JCheckBox("Advanced")
 
     val studyNameTextField = JTextField(30)
     val identifierTextField = JTextField(30)
-    val creatorPanel = de.bund.bfr.rakip.editor.CreatorPanel(generalInformation.creators)
-    val creationDateChooser = de.bund.bfr.rakip.editor.FixedJDateChooser()
+    val creatorPanel = CreatorPanel(creators = generalInformation?.creators ?: mutableListOf())
+    val creationDateChooser = FixedJDateChooser()
     val rightsField = AutoSuggestField(10)
     val availabilityCheckBox = JCheckBox()
     val urlTextField = JTextField(30)
     val formatField = AutoSuggestField(10)
-    val referencePanel = de.bund.bfr.rakip.editor.ReferencePanel(refs = generalInformation.reference, isAdvanced = advancedCheckBox.isSelected)
+    val referencePanel = ReferencePanel(refs = generalInformation?.reference, isAdvanced = advancedCheckBox.isSelected)
     val languageTextField = JTextField(30)
     val softwareField = AutoSuggestField(10)
     val languageWrittenInField = AutoSuggestField(10)
@@ -262,19 +310,21 @@ class GeneralInformationPanel(generalInformation: GeneralInformation) : Box(BoxL
         statusField.setPossibleValues(vocabs["Status"])
 
         // initialize interface with `generalInformation`
-        studyNameTextField.text = generalInformation.name
-        identifierTextField.text = generalInformation.identifier
-        creationDateChooser.date = generalInformation.creationDate
-        rightsField.selectedItem = generalInformation.rights
-        availabilityCheckBox.isSelected = generalInformation.isAvailable
-        urlTextField.text = generalInformation.url.toString()
-        formatField.selectedItem = generalInformation.format
-        languageTextField.text = generalInformation.language
-        softwareField.selectedItem = generalInformation.software
-        languageWrittenInField.selectedItem = generalInformation.languageWrittenIn
-        statusField.selectedItem = generalInformation.status
-        objectiveTextField.text = generalInformation.objective
-        descriptionTextField.text = generalInformation.description
+        generalInformation?.let {
+            studyNameTextField.text = it.name
+            identifierTextField.text = it.identifier
+            creationDateChooser.date = it.creationDate
+            rightsField.selectedItem = it.rights
+            availabilityCheckBox.isSelected = it.isAvailable
+            urlTextField.text = it.url.toString()
+            formatField.selectedItem = it.format
+            languageTextField.text = it.language
+            softwareField.selectedItem = it.software
+            languageWrittenInField.selectedItem = it.languageWrittenIn
+            statusField.selectedItem = it.status
+            objectiveTextField.text = it.objective
+            descriptionTextField.text = it.description
+        }
 
         initUI()
     }
@@ -389,9 +439,9 @@ class GeneralInformationPanel(generalInformation: GeneralInformation) : Box(BoxL
         val gi = GeneralInformation(name = studyName, identifier = identifier, creationDate = creationDateChooser,
                 rights = rights, isAvailable = isAvailable, url = url)
 
-        gi.creators.addAll(elements = creatorPanel.creators)
+        creatorPanel.creators?.let { gi.creators.addAll(elements = it) }
         gi.format = formatField.selectedItem as? String ?: ""
-        gi.reference.addAll(referencePanel.refs)
+        referencePanel.refs?.let { gi.reference.addAll(elements = it) }
         gi.language = languageTextField.text
         gi.software = softwareField.selectedItem as? String ?: ""
         gi.languageWrittenIn = languageWrittenInField.selectedItem as? String ?: ""
@@ -403,13 +453,13 @@ class GeneralInformationPanel(generalInformation: GeneralInformation) : Box(BoxL
     }
 }
 
-class ReferencePanel(val refs: MutableList<Record>, var isAdvanced: Boolean) : JPanel(BorderLayout()) {
+class ReferencePanel(val refs: MutableList<Record>? = null, var isAdvanced: Boolean) : JPanel(BorderLayout()) {
 
     init {
         border = BorderFactory.createTitledBorder("References")
 
         val dtm = NonEditableTableModel()
-        refs.forEach { dtm.addRow(arrayOf(it)) }
+        refs?.forEach { dtm.addRow(arrayOf(it)) }
 
         val renderer = object : DefaultTableCellRenderer() {
             override fun setValue(value: Any?) {
@@ -474,13 +524,13 @@ class FixedJDateChooser : JDateChooser() {
     }
 }
 
-class CreatorPanel(val creators: MutableList<VCard>) : JPanel(BorderLayout()) {
+class CreatorPanel(val creators: MutableList<VCard>? = null) : JPanel(BorderLayout()) {
 
     init {
         border = BorderFactory.createTitledBorder("Creators")
 
         val dtm = NonEditableTableModel()
-        creators.forEach { dtm.addRow(arrayOf(it)) }
+        creators?.forEach { dtm.addRow(arrayOf(it)) }
 
         val renderer = object : DefaultTableCellRenderer() {
             override fun setValue(value: Any?) {
@@ -500,7 +550,7 @@ class CreatorPanel(val creators: MutableList<VCard>) : JPanel(BorderLayout()) {
         // buttons
         val buttonsPanel = ButtonsPanel()
         buttonsPanel.addButton.addActionListener { _ ->
-            val editPanel = de.bund.bfr.rakip.editor.EditCreatorPanel()
+            val editPanel = EditCreatorPanel()
             val result = showConfirmDialog(panel = editPanel, title = "Create creator")
             if (result == JOptionPane.OK_OPTION) {
                 dtm.addRow(arrayOf(editPanel.toVCard()))
@@ -512,7 +562,7 @@ class CreatorPanel(val creators: MutableList<VCard>) : JPanel(BorderLayout()) {
             if (rowToEdit != -1) {
                 val creator = dtm.getValueAt(rowToEdit, 0) as VCard
 
-                val editPanel = de.bund.bfr.rakip.editor.EditCreatorPanel(creator)
+                val editPanel = EditCreatorPanel(creator)
                 val result = showConfirmDialog(panel = editPanel, title = "Modify creator")
                 if (result == JOptionPane.OK_OPTION) {
                     dtm.setValueAt(editPanel.toVCard(), rowToEdit, 0)
@@ -567,17 +617,19 @@ class EditCreatorPanel(creator: VCard? = null) : JPanel(GridBagLayout()) {
     }
 }
 
-class ScopePanel(val scope: Scope) : Box(BoxLayout.PAGE_AXIS) {
+class ScopePanel(scope: Scope? = null) : Box(BoxLayout.PAGE_AXIS) {
 
     val productButton = JButton()
     val hazardButton = JButton()
     val populationButton = JButton()
     val commentField = JTextArea(5, 30)
-    val dateChooser = de.bund.bfr.rakip.editor.FixedJDateChooser()
+    val dateChooser = FixedJDateChooser()
     val regionField = AutoSuggestField(10)
     val countryField = AutoSuggestField(10)
 
     val advancedCheckBox = JCheckBox("Advanced")
+
+    val scope = scope ?: Scope()
 
     init {
 
@@ -585,8 +637,8 @@ class ScopePanel(val scope: Scope) : Box(BoxLayout.PAGE_AXIS) {
         regionField.setPossibleValues(vocabs["Region"])
         countryField.setPossibleValues(vocabs["Country"])
 
-        regionField.selectedItem = scope.region.firstOrNull()
-        countryField.selectedItem = scope.country.firstOrNull()
+        regionField.selectedItem = this.scope.region.firstOrNull()
+        countryField.selectedItem = this.scope.country.firstOrNull()
 
         initUI()
     }
@@ -609,8 +661,7 @@ class ScopePanel(val scope: Scope) : Box(BoxLayout.PAGE_AXIS) {
 
         hazardButton.toolTipText = "Click me to add a hazard"
         hazardButton.addActionListener { _ ->
-            val editPanel = EditHazardPanel(hazard = scope.hazard,
-                    isAdvanced = advancedCheckBox.isSelected)
+            val editPanel = EditHazardPanel(hazard = scope.hazard, isAdvanced = advancedCheckBox.isSelected)
             val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Create a hazard")
 
             if (dlg.getValue() == JOptionPane.OK_OPTION) {
@@ -678,7 +729,7 @@ class DataBackgroundPanel(var dataBackground: DataBackground? = null) : Box(BoxL
 
     private fun initUI() {
 
-        val studyPanel = de.bund.bfr.rakip.editor.StudyPanel()
+        val studyPanel = StudyPanel()
         studyPanel.border = BorderFactory.createTitledBorder("Study")
 
         val studySampleButton = JButton()
@@ -886,11 +937,11 @@ class ModelMathPanel(modelMath: ModelMath? = null) : Box(BoxLayout.PAGE_AXIS) {
 
     init {
 
-        val parametersPanel = de.bund.bfr.rakip.editor.ParameterPanel(isAdvanced = advancedCheckBox.isSelected)
+        val parametersPanel = ParameterPanel(isAdvanced = advancedCheckBox.isSelected)
 
-        val qualityMeasuresPanel = de.bund.bfr.rakip.editor.QualityMeasuresPanel()
+        val qualityMeasuresPanel = QualityMeasuresPanel()
 
-        val modelEquationPanel = de.bund.bfr.rakip.editor.ModelEquationsPanel(isAdvanced = advancedCheckBox.isSelected)
+        val modelEquationPanel = ModelEquationsPanel(isAdvanced = advancedCheckBox.isSelected)
 
 //        val fittingProcedure = JPanel()
 //        fittingProcedure.border = BorderFactory.createTitledBorder(fittingProcedure)
@@ -915,7 +966,7 @@ class ParameterPanel(val parameters: MutableList<Parameter> = mutableListOf(), v
     : JPanel(BorderLayout()) {
 
     init {
-        border = BorderFactory.createTitledBorder(de.bund.bfr.rakip.editor.ModelMathPanel.Companion.parameters)
+        border = BorderFactory.createTitledBorder(ModelMathPanel.Companion.parameters)
 
         val dtm = NonEditableTableModel()
         parameters.forEach { dtm.addRow(arrayOf(it)) }
@@ -974,7 +1025,7 @@ class QualityMeasuresPanel(sse: Double? = null, mse: Double? = null, rmse: Doubl
 
         addGridComponents(pairs = pairList)
 
-        border = BorderFactory.createTitledBorder(de.bund.bfr.rakip.editor.ModelMathPanel.Companion.qualityMeasures)
+        border = BorderFactory.createTitledBorder(ModelMathPanel.Companion.qualityMeasures)
     }
 
     // TODO: toQualityMeasures
@@ -986,7 +1037,7 @@ class ModelEquationsPanel(
 ) : JPanel(BorderLayout()) {
 
     init {
-        border = BorderFactory.createTitledBorder(de.bund.bfr.rakip.editor.ModelMathPanel.Companion.modelEquation)
+        border = BorderFactory.createTitledBorder(ModelMathPanel.Companion.modelEquation)
 
         val dtm = NonEditableTableModel()
         equations.forEach { dtm.addRow(arrayOf(it)) }

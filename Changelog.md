@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 - Properties strings for *Predictive Model*
 
-## [0.0.3a1] - 2017-06-27
+
+## [0.0.1a1]
+### Changed
+- Fix loading Excel spreadsheet with controlled vocabularies.
+- Argument `generalInformation` in `GeneralInformationPanel` is optional.
+- Argument `creators` in `CreatorPanel` is optional.
+- Argument `scope` in `ScopePanel` is optional.
+
+## [0.0.0a1] - 2017-06-27
 ### Changed
 - Rename properties from the *Generic model* with a prefix `GM.` Other RAKIP models will have similar prefixes.
 
