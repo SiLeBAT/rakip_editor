@@ -20,51 +20,6 @@ import javax.swing.table.DefaultTableCellRenderer
 val logger: java.util.logging.Logger = java.util.logging.Logger.getAnonymousLogger()
 val messages = ResourceBundle.getBundle("MessagesBundle", Locale.getDefault())!!
 
-fun loadVocabularies(): Map<String, Set<String>> {
-
-    val inputStream = "".javaClass.getResourceAsStream("/FSKLab_Config_Controlled Vocabularies.xlsx")
-
-    val workbook = XSSFWorkbook(inputStream)
-
-    val vocabs = listOf(
-
-            // GeneralInformation controlled vocabularies
-            "Rights", "Format", "Software", "Language written in", "Status",
-
-            // Product controlled vocabularies
-            "Product-matrix name", "Product-matrix unit", "Method of production", "Packaging", "Product treatment",
-            "Country of origin", "Area of origin", "Fisheries area",
-
-            // Hazard controlled vocabularies
-            "Hazard type", "Hazard name", "Hazard unit", "Hazard ind sum", "Laboratory country",
-
-            // PopulationGroup controlled vocabularies
-            "Region", "Country",
-
-            // DataBackground controlled vocabularies
-            "Laboratory accreditation",
-
-            // Study controlled vocabularies
-            "Study Design Type", "Study Assay Measurement Type", "Study Assay Technology Type",
-            "Accreditation procedure Ass.Tec", "Study Protocol Type", "Study Protocol Parameters Name",
-            "Study Protocol Components Type",
-
-            // StudySample controlled vocabularies
-            "Sampling strategy", "Type of sampling program", "Sampling method", "Lot size unit", "Sampling point",
-
-            // DietaryAssessmentMethod controlled vocabularies
-            "Method. tool to collect data", "Food descriptors",
-
-            // Parameter controlled vocabularies
-            "Parameter classification", "Parameter unit", "Parameter type", "Parameter unit category",
-            "Parameter data type", "Parameter source", "Parameter subject", "Parameter distribution"
-    ).associateBy({ it }, { readVocabFromSheet(workbook = workbook, sheetname = it) })
-
-    workbook.close()
-
-    return vocabs
-}
-
 val vocabs = VocabulariesLoader().vocabs
 
 class VocabulariesLoader() {

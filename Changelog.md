@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Properties strings for *Predictive Model*
 
 
+## [0.0.2a1]
+### Removed
+- Unused `loadVocabularies` in `editorUI.kt`.
+
 ## [0.0.1a1]
 ### Changed
 - Fix loading Excel spreadsheet with controlled vocabularies.
