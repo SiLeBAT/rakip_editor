@@ -44,5 +44,5 @@ dependencies {
     compile name: 'jris-1.0.0'
     compile name: 'jcalendar-1.4'
     compile name: 'de.bund.bfr'
-    compile name: 'rakip_models-0.0.1a1'
+    compile name: 'rakip_models-0.0.0a3'
 }
