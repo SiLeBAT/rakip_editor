@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Properties strings for *Predictive Model*
 - Properties strings for *Other Empirical Model*
 
+## [0.0.3a1]
+### Changed
+- Local jars with maven repositories
+
 ## [0.0.2a1]
 ### Removed
 - Unused `loadVocabularies` in `editorUI.kt`.
