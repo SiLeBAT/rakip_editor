@@ -13,6 +13,7 @@ import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
+import java.net.URL
 import java.util.*
 import javax.swing.*
 import javax.swing.table.DefaultTableCellRenderer
@@ -22,7 +23,7 @@ val messages = ResourceBundle.getBundle("MessagesBundle", Locale.getDefault())!!
 
 val vocabs = VocabulariesLoader().vocabs
 
-class VocabulariesLoader() {
+class VocabulariesLoader {
 
     val vocabs : Map<String, Set<String>>
 
@@ -67,37 +68,37 @@ class VocabulariesLoader() {
 
         workbook.close()
     }
-}
 
-/**
- * Read controlled vocabulary from spreadsheet.
- *
- * @return Set with controlled vocabulary. If the sheet is not found returns empty set.
- */
-fun readVocabFromSheet(workbook: Workbook, sheetname: String): Set<String> {
+    /**
+     * Read controlled vocabulary from spreadsheet.
+     *
+     * @return Set with controlled vocabulary. If the sheet is not found returns empty set.
+     */
+    private fun readVocabFromSheet(workbook: Workbook, sheetname: String): Set<String> {
 
-    val sheet = workbook.getSheet(sheetname)
-    if (sheet == null) {
-        logger.warning("Spreadsheet not found: $sheetname")
-        return emptySet<String>()
-    }
+        val sheet = workbook.getSheet(sheetname)
+        if (sheet == null) {
+            logger.warning("Spreadsheet not found: $sheetname")
+            return emptySet<String>()
+        }
 
-    val vocab = sheet
-            .filter { it.rowNum != 0 } // Skip header
-            .mapNotNull { it.getCell(0) }
-            // Replace faulty cells with "" that are later discarded
-            .map {
-                try {
-                    it.stringCellValue
-                } catch (e: Exception) {
-                    logger.warning("Controlled vocabulary ${sheet.sheetName}: wrong value $it")
-                    ""
+        val vocab = sheet
+                .filter { it.rowNum != 0 } // Skip header
+                .mapNotNull { it.getCell(0) }
+                // Replace faulty cells with "" that are later discarded
+                .map {
+                    try {
+                        it.stringCellValue
+                    } catch (e: Exception) {
+                        logger.warning("Controlled vocabulary ${sheet.sheetName}: wrong value $it")
+                        ""
+                    }
                 }
-            }
-            .filter { it.isNotBlank() }  // Skip empty cells
-            .toSet()
+                .filter { it.isNotBlank() }  // Skip empty cells
+                .toSet()
 
-    return vocab
+        return vocab
+    }
 }
 
 fun main(args: Array<String>) {
@@ -110,7 +111,7 @@ fun main(args: Array<String>) {
                 creationDate = java.util.Date(),
                 rights = "to remain silent",
                 isAvailable = true,
-                url = java.net.URL("https://google.de"),
+                url = URL("https://google.de"),
                 format = "fskx",
                 language = "spanish",
                 software = "KNIME",
@@ -314,7 +315,6 @@ class GeneralInformationPanel(generalInformation: GeneralInformation? = null) : 
 
         // hide initially advanced comps
         val advancedComps = listOf<JComponent>(
-                urlLabel, urlTextField,
                 formatLabel, formatField,
                 languageLabel, languageTextField,
                 softwareLabel, softwareField,
@@ -389,7 +389,7 @@ class GeneralInformationPanel(generalInformation: GeneralInformation? = null) : 
         val creationDateChooser = creationDateChooser.date ?: java.util.Date()
         val rights = rightsField.selectedItem as? String ?: ""
         val isAvailable = availabilityCheckBox.isSelected
-        val url = java.net.URL(urlTextField.text ?: "")
+        val url = URL(urlTextField.text ?: "")
 
         val gi = GeneralInformation(name = studyName, identifier = identifier, creationDate = creationDateChooser,
                 rights = rights, isAvailable = isAvailable, url = url)
