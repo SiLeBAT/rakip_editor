@@ -683,6 +683,7 @@ class DataBackgroundPanel(var dataBackground: DataBackground? = null) : Box(BoxL
                 val studySample = editPanel.toStudySample()
 
                 if (dataBackground == null) dataBackground = DataBackground()
+                studySampleButton.text = studySample.sample
                 dataBackground?.studySample = studySample
             }
         }
@@ -699,6 +700,7 @@ class DataBackgroundPanel(var dataBackground: DataBackground? = null) : Box(BoxL
 
                 if (dataBackground == null) dataBackground = DataBackground(dietaryAssessmentMethod = dietaryAssessmentMethod)
                 else dataBackground?.dietaryAssessmentMethod = dietaryAssessmentMethod
+                dietaryAssessmentMethodButton.text = dietaryAssessmentMethod.collectionTool
             }
         }
 
@@ -715,6 +717,7 @@ class DataBackgroundPanel(var dataBackground: DataBackground? = null) : Box(BoxL
 
                 if (dataBackground == null) dataBackground = DataBackground(assay = assay)
                 else dataBackground?.assay = assay
+                assayButton.text = assay.name
             }
         }
 

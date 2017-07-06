@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Properties strings for *Other Empirical Model*
 - Bugfix with `GeneralInformationPanel` initialized twice
 - Language field in `GeneralInformationPanel` is now a `AutoSuggestField`
+- Buttons in `DataBackgroundPanel` change their text when filled
 
 ## [0.0.5a1]
 ### Changed
