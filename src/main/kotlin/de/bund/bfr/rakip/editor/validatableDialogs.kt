@@ -130,10 +130,10 @@ class EditDietaryAssessmentMethodPanel(dietaryAssessmentMethod: DietaryAssessmen
 
         // Create labels
         val dataCollectionToolLabel = createLabel(
-                text = messages.getString("GM.EditDietaryAssessmentMethodPanel.dataCollectionToolLabel"),
+                text = messages.getString("GM.EditDietaryAssessmentMethodPanel.dataCollectionToolLabel") + " *",
                 tooltip = messages.getString("GM.EditDietaryAssessmentMethodPanel.dataCollectionToolTooltip"))
         val nonConsecutiveOneDayLabel = createLabel(
-                text = messages.getString("GM.EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysLabel"),
+                text = messages.getString("GM.EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysLabel") + " *",
                 tooltip = messages.getString("GM.EditDietaryAssessmentMethodPanel.nonConsecutiveOneDaysTooltip"))
         val dietarySoftwareToolLabel = createLabel(
                 text = messages.getString("GM.EditDietaryAssessmentMethodPanel.dietarySoftwareToolLabel"),
