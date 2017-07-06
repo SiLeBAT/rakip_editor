@@ -8,23 +8,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Properties strings for *Process Model*
 - Properties strings for *Predictive Model*
 - Properties strings for *Other Empirical Model*
+
+## [0.0.6a1]
+### Added
+- Functionality to add/modify/remove parameters in `ParameterPanel`
+- Functionality to add/modify/remove equations in `ModelEquationPanel` 
+
+### Changed
 - Bugfix with `GeneralInformationPanel` initialized twice
-- Language field in `GeneralInformationPanel` is now a `AutoSuggestField`
+- Language field in `GeneralInformationPanel` is now an `AutoSuggestField`
 - Buttons in `DataBackgroundPanel` change their text when filled
-- Mark mandatory fields with an asterisk in `DietaryAssessmentMethodPanel`
-- Mark mandatory fields with an asterisk in `StudyPanel`
-- Move asterisks out of properties file:
-  - `GM.EditAssayPanel.*`
-  - `GM.EditHazardPanel.*`
-  - `GM.EditModelEquationPanel.*`
-  - `GM.EditParameterPanel.*`
-  - `GM.EditProductPanel.*`
-  - `GM.EditReferencePanel.*`
-  - `GM.EditStudySamplePanel.*`
-  - `GM.EditPopulationGroupPanel.*`
-- Add functionality to add/modify/remove parameters in `ParameterPanel`
-- Add functionality to add/modify/remove equations in `ModelEquationPanel`
+- Mandatory fields in `DietaryAssessmentMethodPanel` marked with an asterisk
+- Mandatory fields in `StudyPanel` marked with an asterisk
 - Center validatable dialogs
+
+### Removed
+- Move asterisks out of properties file:
 - Removes unused local jar for *rakip_models*
 
 ## [0.0.5a1]
