@@ -79,7 +79,7 @@ class EditAssayPanel(assay: Assay? = null, isAdvanced: Boolean) : ValidatablePan
     }
 
     private fun initUI() {
-        val nameLabel = createLabel(text = messages.getString("GM.EditAssayPanel.nameLabel"),
+        val nameLabel = createLabel(text = messages.getString("GM.EditAssayPanel.nameLabel") + " *",
                 tooltip = messages.getString("GM.EditAssayPanel.nameTooltip"))
         val descriptionLabel = createLabel(text = messages.getString("GM.EditAssayPanel.descriptionLabel"),
                 tooltip = messages.getString("GM.EditAssayPanel.descriptionTooltip"))
