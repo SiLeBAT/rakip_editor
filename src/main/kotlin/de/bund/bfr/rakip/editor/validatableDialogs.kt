@@ -51,6 +51,7 @@ class ValidatableDialog(panel: ValidatablePanel, dialogTitle: String) : JDialog(
 
         contentPane = optionPane
         pack()
+        setLocationRelativeTo(null)  // center dialog
         isVisible = true
     }
 

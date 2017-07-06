@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - `GM.EditPopulationGroupPanel.*`
 - Add functionality to add/modify/remove parameters in `ParameterPanel`
 - Add functionality to add/modify/remove equations in `ModelEquationPanel`
+- Center validatable dialogs
 
 ## [0.0.5a1]
 ### Changed
