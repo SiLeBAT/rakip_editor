@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Properties strings for *Predictive Model*
 - Properties strings for *Other Empirical Model*
 
+## [0.0.5a1]
+### Changed
+- Bugfix within fun main in editorUI.kt. Panels from GeneralInformationPanel were given again controlled vocabularies.
+
+## [0.0.4a1]
+### Changed
+- NonEditableTableModel is made public
+- Table model, `dtm`, for `CreatorPanel` and `ReferencePanel` is a property of the class
+
 ## [0.0.3a1]
 ### Changed
 - Local jars with maven repositories

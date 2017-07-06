@@ -154,18 +154,13 @@ fun main(args: Array<String>) {
     generalInformationPanel.studyNameTextField.text = gi.name
     generalInformationPanel.identifierTextField.text = gi.identifier
     generalInformationPanel.creationDateChooser.date = gi.creationDate
-    generalInformationPanel.rightsField.setPossibleValues(vocabs["Rights"])
     generalInformationPanel.rightsField.selectedItem = gi.rights
     generalInformationPanel.availabilityCheckBox.isSelected = gi.isAvailable
     generalInformationPanel.urlTextField.text = gi.url.toString()
-    generalInformationPanel.formatField.setPossibleValues(vocabs["Format"])
     generalInformationPanel.formatField.selectedItem = gi.format
     generalInformationPanel.languageTextField.text = gi.language
-    generalInformationPanel.softwareField.setPossibleValues(vocabs["Software"])
     generalInformationPanel.softwareField.selectedItem = gi.software
-    generalInformationPanel.languageWrittenInField.setPossibleValues(vocabs["Language writte in"])
     generalInformationPanel.languageWrittenInField.selectedItem = gi.languageWrittenIn
-    generalInformationPanel.statusField.setPossibleValues(vocabs["Status"])
     generalInformationPanel.statusField.selectedItem = gi.status
     generalInformationPanel.objectiveTextField.text = gi.objective
     generalInformationPanel.descriptionTextField.text = gi.description
