@@ -13,8 +13,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Buttons in `DataBackgroundPanel` change their text when filled
 - Mark mandatory fields with an asterisk in `DietaryAssessmentMethodPanel`
 - Mark mandatory fields with an asterisk in `StudyPanel`
-- Move asterisks out of properties file: GM.EditAssayPanel.*
-- Move asterisks out of properties file: GM.EditHazardPanel.*
+- Move asterisks out of properties file:
+  - `GM.EditAssayPanel.*`
+  - `GM.EditHazardPanel.*`
+  - `GM.EditModelEquationPanel.*`
+  - `GM.EditParameterPanel.*`
+  - `GM.EditProductPanel.*`
+  - `GM.EditReferencePanel.*`
+  - `GM.EditStudySamplePanel.*`
+  - `GM.EditPopulationGroupPanel.*`
 
 ## [0.0.5a1]
 ### Changed
