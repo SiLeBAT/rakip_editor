@@ -41,7 +41,7 @@ internal fun createSpinnerDoubleModel() = javax.swing.SpinnerNumberModel(0.0, nu
  * */
 internal fun createSpinnerPercentageModel() = javax.swing.SpinnerNumberModel(0.0, 0.0, 1.0, .01)
 
-internal class NonEditableTableModel : javax.swing.table.DefaultTableModel(arrayOf(), arrayOf("header")) {
+public class NonEditableTableModel : javax.swing.table.DefaultTableModel(arrayOf(), arrayOf("header")) {
     override fun isCellEditable(row: Int, column: Int) = false
 }
 

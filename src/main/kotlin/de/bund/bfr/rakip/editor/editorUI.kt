@@ -410,10 +410,11 @@ class GeneralInformationPanel(generalInformation: GeneralInformation? = null) : 
 
 class ReferencePanel(val refs: MutableList<Record>? = null, var isAdvanced: Boolean) : JPanel(BorderLayout()) {
 
+    val dtm = NonEditableTableModel()
+
     init {
         border = BorderFactory.createTitledBorder("References")
 
-        val dtm = NonEditableTableModel()
         refs?.forEach { dtm.addRow(arrayOf(it)) }
 
         val renderer = object : DefaultTableCellRenderer() {
@@ -481,10 +482,11 @@ class FixedJDateChooser : JDateChooser() {
 
 class CreatorPanel(val creators: MutableList<VCard>? = null) : JPanel(BorderLayout()) {
 
+    val dtm = NonEditableTableModel()
+
     init {
         border = BorderFactory.createTitledBorder("Creators")
 
-        val dtm = NonEditableTableModel()
         creators?.forEach { dtm.addRow(arrayOf(it)) }
 
         val renderer = object : DefaultTableCellRenderer() {
