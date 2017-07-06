@@ -244,14 +244,14 @@ class EditHazardPanel(hazard: Hazard? = null, isAdvanced: Boolean) : Validatable
     private fun initUI() {
 
         // Create labels
-        val hazardTypeLabel = createLabel(text = messages.getString("GM.EditHazardPanel.hazardTypeLabel"),
+        val hazardTypeLabel = createLabel(text = messages.getString("GM.EditHazardPanel.hazardTypeLabel") + " *",
                 tooltip = messages.getString("GM.EditHazardPanel.hazardTypeTooltip"))
-        val hazardNameLabel = createLabel(text = messages.getString("GM.EditHazardPanel.hazardNameLabel"),
+        val hazardNameLabel = createLabel(text = messages.getString("GM.EditHazardPanel.hazardNameLabel") + " *",
                 tooltip = messages.getString("GM.EditHazardPanel.hazardNameTooltip"))
         val hazardDescriptionLabel = createLabel(
                 text = messages.getString("GM.EditHazardPanel.hazardDescriptionLabel"),
                 tooltip = messages.getString("GM.EditHazardPanel.hazardDescriptionTooltip"))
-        val hazardUnitLabel = createLabel(text = messages.getString("GM.EditHazardPanel.hazardUnitLabel"),
+        val hazardUnitLabel = createLabel(text = messages.getString("GM.EditHazardPanel.hazardUnitLabel") + " *",
                 tooltip = messages.getString("GM.EditHazardPanel.hazardUnitTooltip"))
         val adverseEffectLabel = createLabel(text = messages.getString("GM.EditHazardPanel.adverseEffectLabel"),
                 tooltip = messages.getString("GM.EditHazardPanel.adverseEffectTooltip"))

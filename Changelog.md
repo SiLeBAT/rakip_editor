@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Mark mandatory fields with an asterisk in `DietaryAssessmentMethodPanel`
 - Mark mandatory fields with an asterisk in `StudyPanel`
 - Move asterisks out of properties file: GM.EditAssayPanel.*
+- Move asterisks out of properties file: GM.EditHazardPanel.*
 
 ## [0.0.5a1]
 ### Changed
