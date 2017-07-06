@@ -35,7 +35,7 @@ class VocabulariesLoader {
         vocabs = listOf(
 
                 // GeneralInformation controlled vocabularies
-                "Rights", "Format", "Software", "Language written in", "Status",
+                "Rights", "Format", "Software", "Language", "Language written in", "Status",
 
                 // Product controlled vocabularies
                 "Product-matrix name", "Product-matrix unit", "Method of production", "Packaging", "Product treatment",
@@ -231,7 +231,7 @@ class GeneralInformationPanel(generalInformation: GeneralInformation? = null) : 
     val urlTextField = JTextField(30)
     val formatField = AutoSuggestField(10)
     val referencePanel = ReferencePanel(refs = generalInformation?.reference, isAdvanced = advancedCheckBox.isSelected)
-    val languageTextField = JTextField(30)
+    val languageField = AutoSuggestField(10)
     val softwareField = AutoSuggestField(10)
     val languageWrittenInField = AutoSuggestField(10)
     val statusField = AutoSuggestField(10)
@@ -243,6 +243,7 @@ class GeneralInformationPanel(generalInformation: GeneralInformation? = null) : 
         // init combo boxes
         rightsField.setPossibleValues(vocabs["Rights"])
         formatField.setPossibleValues(vocabs["Format"])
+        languageField.setPossibleValues(vocabs["Language"])
         softwareField.setPossibleValues(vocabs["Software"])
         languageWrittenInField.setPossibleValues(vocabs["Language written in"])
         statusField.setPossibleValues(vocabs["Status"])
@@ -256,7 +257,7 @@ class GeneralInformationPanel(generalInformation: GeneralInformation? = null) : 
             availabilityCheckBox.isSelected = it.isAvailable
             urlTextField.text = it.url.toString()
             formatField.selectedItem = it.format
-            languageTextField.text = it.language
+            languageField.selectedItem = it.language
             softwareField.selectedItem = it.software
             languageWrittenInField.selectedItem = it.languageWrittenIn
             statusField.selectedItem = it.status
@@ -298,7 +299,7 @@ class GeneralInformationPanel(generalInformation: GeneralInformation? = null) : 
         // hide initially advanced comps
         val advancedComps = listOf<JComponent>(
                 formatLabel, formatField,
-                languageLabel, languageTextField,
+                languageLabel, languageField,
                 softwareLabel, softwareField,
                 languageWrittenInLabel, languageWrittenInField,
                 statusLabel, statusField,
@@ -335,7 +336,7 @@ class GeneralInformationPanel(generalInformation: GeneralInformation? = null) : 
         propertiesPanel.add(comp = referencePanel, gridy = 9, gridx = 0, gridwidth = 3)
 
         propertiesPanel.add(comp = languageLabel, gridy = 10, gridx = 0)
-        propertiesPanel.add(comp = languageTextField, gridy = 10, gridx = 1, gridwidth = 2)
+        propertiesPanel.add(comp = languageField, gridy = 10, gridx = 1, gridwidth = 2)
 
         propertiesPanel.add(comp = softwareLabel, gridy = 11, gridx = 0)
         propertiesPanel.add(comp = softwareField, gridy = 11, gridx = 1)
@@ -379,7 +380,7 @@ class GeneralInformationPanel(generalInformation: GeneralInformation? = null) : 
         creatorPanel.creators?.let { gi.creators.addAll(elements = it) }
         gi.format = formatField.selectedItem as? String ?: ""
         referencePanel.refs?.let { gi.reference.addAll(elements = it) }
-        gi.language = languageTextField.text
+        gi.language = languageField.selectedItem as? String ?: ""
         gi.software = softwareField.selectedItem as? String ?: ""
         gi.languageWrittenIn = languageWrittenInField.selectedItem as? String ?: ""
         gi.status = statusField.selectedItem as? String ?: ""
