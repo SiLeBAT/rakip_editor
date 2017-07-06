@@ -416,10 +416,9 @@ class EditParameterPanel(parameter: Parameter? = null, isAdvanced: Boolean) : Va
             tooltip = messages.getString("GM.EditParameterPanel.idTooltip"))
     val idTextField = JTextField(30)
 
-    // TODO: classificationComboBox is a ComboBox and in the GUI appears a Text entry instead
     val classificationLabel = createLabel(text = messages.getString("GM.EditParameterPanel.classificationLabel") + " *",
             tooltip = messages.getString("GM.EditParameterPanel.classificationTooltip"))
-    val classificationField = AutoSuggestField(10)
+    val classificationComboBox = JComboBox<ParameterClassification>(ParameterClassification.values())
 
     val nameLabel = createLabel(text = messages.getString("GM.EditParameterPanel.parameterNameLabel") + " *",
             tooltip = messages.getString("GM.EditParameterPanel.parameterNameTooltip"))
@@ -480,7 +479,6 @@ class EditParameterPanel(parameter: Parameter? = null, isAdvanced: Boolean) : Va
     init {
 
         // init combo boxes
-        classificationField.setPossibleValues(vocabs["Parameter classification"])
         typeField?.setPossibleValues(vocabs["Parameter type"])
         unitField.setPossibleValues(vocabs["Parameter unit"])
         unitCategoryField.setPossibleValues(vocabs["Parameter unit category"])
@@ -491,7 +489,7 @@ class EditParameterPanel(parameter: Parameter? = null, isAdvanced: Boolean) : Va
 
         val pairs = mutableListOf<Pair<JLabel, JComponent>>()
         pairs.add(Pair(first = idLabel, second = idTextField))
-        pairs.add(Pair(first = classificationLabel, second = classificationField))
+        pairs.add(Pair(first = classificationLabel, second = classificationComboBox))
         pairs.add(Pair(first = nameLabel, second = nameTextField))
         descriptionTextArea?.let { pairs.add(Pair(first = descriptionLabel, second = it)) }
         typeField?.let { pairs.add(Pair(first = typeLabel, second = it)) }
@@ -508,15 +506,62 @@ class EditParameterPanel(parameter: Parameter? = null, isAdvanced: Boolean) : Va
         errorSpinnerModel?.let { pairs.add(Pair(first = errorLabel, second = createSpinner(spinnerModel = it))) }
 
         addGridComponents(pairs = pairs)
+
+        // Populate interface if ref is provided
+        parameter?.let {
+            idTextField.text = it.id
+            classificationComboBox.selectedItem = it.classification
+            nameTextField.text = it.name
+            descriptionTextArea?.text = it.description
+//            typeField?.selectedItem = it.  // TODO: typeField???
+            unitField.selectedItem = it.unit
+            unitCategoryField.selectedItem = it.unitCategory
+            dataTypeField.selectedItem = it.dataType
+            sourceField?.selectedItem = it.source
+            subjectField?.selectedItem = it.subject
+            distributionField?.selectedItem = it.distribution
+            valueTextField?.text = it.value
+            referenceTextField?.text = it.reference
+            variabilitySubjectTextArea?.text = it.variabilitySubject
+            // applicabilityTextArea?.text = it.modelApplicability  // TODO: fix model applicability
+            errorSpinnerModel?.value = it.error
+        }
     }
 
-    // TODO: toParameter
+    fun toParameter() : Parameter {
+
+        val id = idTextField.text
+        val classification = classificationComboBox.selectedItem as ParameterClassification
+        val name = nameTextField.text
+        val unit = unitField.selectedItem as String
+        val unitCategory = unitCategoryField.selectedItem as String
+        val dataType = dataTypeField.selectedItem as String
+        // TODO get modelApplicability from GUI
+        val modelApplicability = mutableListOf<String>()
+
+        val parameter = Parameter(id = id, classification = classification,
+                name = name, unit = unit, unitCategory = unitCategory,
+                dataType = dataType, modelApplicability = modelApplicability)
+
+        // Optional properties
+        parameter.description = descriptionTextArea?.text
+        parameter.source = sourceField?.selectedItem as? String
+        parameter.subject = subjectField?.selectedItem as? String
+        parameter.distribution = distributionField?.selectedItem as? String
+        parameter.value = valueTextField?.text
+        parameter.reference = referenceTextField?.text
+        parameter.variabilitySubject = variabilitySubjectTextArea?.text
+        parameter.error = errorSpinnerModel?.number?.toDouble()
+
+        return parameter
+    }
+
 
     override fun validatePanel(): List<String> {
         val errors = mutableListOf<String>()
         if (!idTextField.hasValidValue())
             errors.add("Missing ${messages.getString("GM.EditParameterPanel.idLabel")}")
-        if (!classificationField.hasValidValue())
+        if (classificationComboBox.selectedItem == -1)
             errors.add("Missing ${messages.getString("GM.EditParameterPanel.classificationLabel")}")
         if (!nameTextField.hasValidValue())
             errors.add("Missing ${messages.getString("GM.EditParameterPanel.parameterNameLabel")}")

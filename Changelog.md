@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - `GM.EditReferencePanel.*`
   - `GM.EditStudySamplePanel.*`
   - `GM.EditPopulationGroupPanel.*`
+- Add functionality to add/modify/remove parameters in `ParameterPanel`
 
 ## [0.0.5a1]
 ### Changed

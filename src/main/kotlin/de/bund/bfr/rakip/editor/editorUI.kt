@@ -928,17 +928,28 @@ class ParameterPanel(val parameters: MutableList<Parameter> = mutableListOf(), v
 
             val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Create parameter")
             if (dlg.getValue() == JOptionPane.OK_OPTION) {
-                // FIXME: Uncomment once EditParameterPanel.toParameter is implemented
-//                dtm.addRow(arrayOf(editParameterPanel.toParameter()))
+                dtm.addRow(arrayOf(editPanel.toParameter()))
             }
         }
 
         buttonsPanel.modifyButton.addActionListener { _ ->
-            println("dummy listener")
+            val rowToEdit = myTable.selectedRow
+            if (rowToEdit != -1) {
+
+                val param = dtm.getValueAt(rowToEdit, 0) as Parameter
+
+                val editPanel = EditParameterPanel(parameter = param, isAdvanced = isAdvanced)
+
+                val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Modify parameter")
+                if (dlg.getValue() == JOptionPane.OK_OPTION) {
+                    dtm.setValueAt(editPanel.toParameter(), rowToEdit, 0)
+                }
+            }
         }
 
         buttonsPanel.removeButton.addActionListener { _ ->
-            println("dummy listener")
+            val rowToDelete = myTable.selectedRow
+            if (rowToDelete != -1) dtm.removeRow(rowToDelete)
         }
 
         add(myTable, BorderLayout.NORTH)
