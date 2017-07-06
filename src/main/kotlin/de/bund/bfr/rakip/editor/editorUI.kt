@@ -151,19 +151,6 @@ fun main(args: Array<String>) {
 
     val frame = JFrame()
     val generalInformationPanel = GeneralInformationPanel(gi)
-    generalInformationPanel.studyNameTextField.text = gi.name
-    generalInformationPanel.identifierTextField.text = gi.identifier
-    generalInformationPanel.creationDateChooser.date = gi.creationDate
-    generalInformationPanel.rightsField.selectedItem = gi.rights
-    generalInformationPanel.availabilityCheckBox.isSelected = gi.isAvailable
-    generalInformationPanel.urlTextField.text = gi.url.toString()
-    generalInformationPanel.formatField.selectedItem = gi.format
-    generalInformationPanel.languageTextField.text = gi.language
-    generalInformationPanel.softwareField.selectedItem = gi.software
-    generalInformationPanel.languageWrittenInField.selectedItem = gi.languageWrittenIn
-    generalInformationPanel.statusField.selectedItem = gi.status
-    generalInformationPanel.objectiveTextField.text = gi.objective
-    generalInformationPanel.descriptionTextField.text = gi.description
 
     val scopePanel = ScopePanel(Scope())
     val dataBackgroundPanel = DataBackgroundPanel()
