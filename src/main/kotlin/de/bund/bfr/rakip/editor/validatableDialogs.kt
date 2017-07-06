@@ -376,14 +376,13 @@ class EditModelEquationPanel(equation: ModelEquation? = null, isAdvanced: Boolea
             tooltip = messages.getString("GM.EditModelEquationPanel.classTooltip"))
     val equationClassTextField = if (isAdvanced) JTextField(30) else null
 
+    val referencePanel = ReferencePanel(refs = equation?.equationReference ?: mutableListOf(), isAdvanced = isAdvanced)
+
     val scriptLabel = createLabel(text = messages.getString("GM.EditModelEquationPanel.scriptLabel") + " *",
             tooltip = messages.getString("GM.EditModelEquationPanel.scriptTooltip"))
     val scriptTextArea = JTextArea(5, 30)
 
     init {
-
-        val referencePanel = ReferencePanel(refs = equation?.equationReference ?: mutableListOf(), isAdvanced = isAdvanced)
-
         add(comp = equationNameLabel, gridy = 0, gridx = 0)
         add(comp = equationNameTextField, gridy = 0, gridx = 1)
 
@@ -396,6 +395,14 @@ class EditModelEquationPanel(equation: ModelEquation? = null, isAdvanced: Boolea
 
         add(comp = scriptLabel, gridy = 3, gridx = 0)
         add(comp = scriptTextArea, gridy = 3, gridx = 1, gridwidth = 2)
+
+        // Initialize with passed modelEquation
+        equation?.let {
+            equationNameTextField.text = it.equationName
+            equationClassTextField?.text = it.equationClass
+            // referencePanel is already initialized on declaration
+            scriptTextArea.text = it.equation
+        }
     }
 
     override fun validatePanel(): List<String> {
@@ -406,6 +413,20 @@ class EditModelEquationPanel(equation: ModelEquation? = null, isAdvanced: Boolea
             errors.add("Missing ${messages.getString("GM.EditModelEquationPanel.scriptLabel")}")
 
         return errors
+    }
+
+    fun toModelEquation() : ModelEquation {
+
+        // Mandatory properties
+        val equationName = equationNameTextField.text
+        val equation = scriptTextArea.text
+        val modelEquation = ModelEquation(equationName = equationName, equation = equation)
+
+        // Optional properties
+        modelEquation.equationClass = equationClassTextField?.text
+        referencePanel.refs?.forEach { modelEquation.equationReference.add(element = it) }
+
+        return modelEquation
     }
 }
 

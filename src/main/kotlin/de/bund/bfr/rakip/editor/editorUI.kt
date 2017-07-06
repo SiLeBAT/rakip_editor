@@ -1009,7 +1009,7 @@ class ModelEquationsPanel(
 
             val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Create equation")
             if (dlg.getValue() == JOptionPane.OK_OPTION) {
-                // TODO: process result
+                dtm.addRow(arrayOf(editPanel.toModelEquation()))
             }
         }
 
@@ -1021,9 +1021,8 @@ class ModelEquationsPanel(
                 val editPanel = EditModelEquationPanel(equation = equation, isAdvanced = isAdvanced)
 
                 val dlg = ValidatableDialog(panel = editPanel, dialogTitle = "Modify equation")
-
                 if (dlg.getValue() == JOptionPane.OK_OPTION) {
-                    // TODO: process result
+                    dtm.setValueAt(editPanel.toModelEquation(), rowToEdit, 0)
                 }
             }
         }
