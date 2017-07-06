@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Language field in `GeneralInformationPanel` is now a `AutoSuggestField`
 - Buttons in `DataBackgroundPanel` change their text when filled
 - Mark mandatory fields with an asterisk in `DietaryAssessmentMethodPanel`
+- Mark mandatory fields with an asterisk in `StudyPanel`
 
 ## [0.0.5a1]
 ### Changed

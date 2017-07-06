@@ -755,11 +755,11 @@ class DataBackgroundPanel(var dataBackground: DataBackground? = null) : Box(BoxL
 
 class StudyPanel(study: Study? = null) : JPanel(GridBagLayout()) {
 
-    val studyIdentifierLabel = createLabel(text = messages.getString("GM.StudyPanel.studyIdentifierLabel"),
+    val studyIdentifierLabel = createLabel(text = messages.getString("GM.StudyPanel.studyIdentifierLabel") + " *",
             tooltip = messages.getString("GM.StudyPanel.studyIdentifierTooltip"))
     val studyIdentifierTextField = JTextField(30)
 
-    val studyTitleLabel = createLabel(text = messages.getString("GM.StudyPanel.studyTitleLabel"),
+    val studyTitleLabel = createLabel(text = messages.getString("GM.StudyPanel.studyTitleLabel") + " *",
             tooltip = messages.getString("GM.StudyPanel.studyTitleTooltip"))
     val studyTitleTextField = JTextField(30)
 
