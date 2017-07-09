@@ -11,11 +11,11 @@ import javax.swing.JScrollPane
 import javax.swing.JTree
 import javax.swing.tree.DefaultMutableTreeNode
 
-fun DefaultMutableTreeNode.add(label: String, value: String) {
+private fun DefaultMutableTreeNode.add(label: String, value: String) {
     if (value.isNotBlank()) add(DefaultMutableTreeNode("$label: $value"))
 }
 
-fun DefaultMutableTreeNode.add(record: Record) {
+private fun DefaultMutableTreeNode.add(record: Record) {
 
     // isReferenceDescription is not supported
 
@@ -46,14 +46,14 @@ fun DefaultMutableTreeNode.add(record: Record) {
     // comment not supported
 }
 
-fun DefaultMutableTreeNode.add(vCard: VCard) {
+private fun DefaultMutableTreeNode.add(vCard: VCard) {
 
     vCard.nickname?.values?.firstOrNull()?.let { add(label = CREATOR_GIVENNAME, value = it) }
     vCard.formattedName?.value?.let { add(label = CREATOR_FAMILYNAME, value = it) }
     vCard.emails?.firstOrNull()?.let { add(label = CREATOR_CONTACT, value = it.value) }
 }
 
-fun DefaultMutableTreeNode.add(product: Product) {
+private fun DefaultMutableTreeNode.add(product: Product) {
 
     add(label = PRODUCT_NAME, value = product.environmentName)
     product.environmentDescription?.let { add(label = PRODUCT_DESC, value = it) }
@@ -84,7 +84,7 @@ fun DefaultMutableTreeNode.add(product: Product) {
     product.expirationDate?.let { add(label = PRODUCT_EXPIRATIONDATE, value = it.toString()) }
 }
 
-fun DefaultMutableTreeNode.add(hazard: Hazard) {
+private fun DefaultMutableTreeNode.add(hazard: Hazard) {
     
     add(label = HAZARD_TYPE, value = hazard.hazardType)
     add(label = HAZARD_NAME, value = hazard.hazardName)
@@ -108,7 +108,7 @@ fun DefaultMutableTreeNode.add(hazard: Hazard) {
     hazard.rangeOfContamination?.let { add(label = HAZARD_CONTAMINATION, value = it) }
 }
 
-fun DefaultMutableTreeNode.add(populationGroup: PopulationGroup) {
+private fun DefaultMutableTreeNode.add(populationGroup: PopulationGroup) {
 
     add(label = PG_NAME, value = populationGroup.populationName)
     populationGroup.targetPopulation?.let { add(label = PG_TARGET, value = it) }
@@ -175,7 +175,7 @@ fun DefaultMutableTreeNode.add(populationGroup: PopulationGroup) {
     }
 }
 
-fun DefaultMutableTreeNode.add(generalInformation: GeneralInformation) {
+private fun DefaultMutableTreeNode.add(generalInformation: GeneralInformation) {
 
     add(label = GI_STUDY_NAME, value = generalInformation.name)
     add(label = GI_ID, value = generalInformation.identifier)
@@ -226,7 +226,7 @@ fun DefaultMutableTreeNode.add(generalInformation: GeneralInformation) {
     generalInformation.description?.let { add(label = GI_DESC, value = it) }
 }
 
-fun DefaultMutableTreeNode.add(scope: Scope) {
+private fun DefaultMutableTreeNode.add(scope: Scope) {
 
     val productNode = DefaultMutableTreeNode(SCOPE_PRODUCT)
     scope.product?.let { productNode.add(product = it) }
@@ -256,7 +256,7 @@ fun DefaultMutableTreeNode.add(scope: Scope) {
     }
 }
 
-fun DefaultMutableTreeNode.add(dataBackground: DataBackground) {
+private fun DefaultMutableTreeNode.add(dataBackground: DataBackground) {
 
     dataBackground.study?.let {
         val node = DefaultMutableTreeNode("Study")
@@ -289,7 +289,7 @@ fun DefaultMutableTreeNode.add(dataBackground: DataBackground) {
     }
 }
 
-fun DefaultMutableTreeNode.add(study: Study) {
+private fun DefaultMutableTreeNode.add(study: Study) {
 
     add(label = STUDY_TITLE, value = study.title)
     study.description?.let { add(label = STUDY_DESC, value = it) }
@@ -310,7 +310,7 @@ fun DefaultMutableTreeNode.add(study: Study) {
     study.componentsType?.let { add(label = STUDY_COMPONENTS_TYPE, value = it) }
 }
 
-fun DefaultMutableTreeNode.add(studySample: StudySample) {
+private fun DefaultMutableTreeNode.add(studySample: StudySample) {
 
     add(label = SS_SAMPLE, value = studySample.sample)
     studySample.moisturePercentage?.let { add(label = SS_MOISTURE_PERC, value = it.toString()) }
@@ -326,7 +326,7 @@ fun DefaultMutableTreeNode.add(studySample: StudySample) {
     studySample.samplingPoint?.let { add(label = SS_SAMPLING_POINT, value = it) }
 }
 
-fun DefaultMutableTreeNode.add(dietaryAssessmentMethod: DietaryAssessmentMethod) {
+private fun DefaultMutableTreeNode.add(dietaryAssessmentMethod: DietaryAssessmentMethod) {
 
     add(label = DAM_TOOL, value = dietaryAssessmentMethod.collectionTool)
     add(label = DAM_NUMBER_NON_CONSECUTIVE, value = dietaryAssessmentMethod.numberOfNonConsecutiveOneDay.toString())
@@ -350,12 +350,12 @@ fun DefaultMutableTreeNode.add(dietaryAssessmentMethod: DietaryAssessmentMethod)
     }
 }
 
-fun DefaultMutableTreeNode.add(assay: Assay) {
+private fun DefaultMutableTreeNode.add(assay: Assay) {
     add(label = ASSAY_NAME, value = assay.name)
     assay.description?.let { add(label = ASSAY_DESC, value = it) }
 }
 
-fun DefaultMutableTreeNode.add(parameter: Parameter) {
+private fun DefaultMutableTreeNode.add(parameter: Parameter) {
 
     add(label = PARAMETER_ID, value = parameter.id)
     add(label = PARAMETER_CLASIF, value = parameter.classification.toString())
@@ -380,7 +380,7 @@ fun DefaultMutableTreeNode.add(parameter: Parameter) {
     parameter.error?.let { add(label = PARAMETER_ERROR, value = it.toString()) }
 }
 
-fun DefaultMutableTreeNode.add(modelEquation: ModelEquation) {
+private fun DefaultMutableTreeNode.add(modelEquation: ModelEquation) {
 
     add(label = MODEL_EQUATION_NAME, value = modelEquation.equationName)
     modelEquation.equationClass?.let { add(label = MODEL_EQUATION_CLASS, value = it) }
@@ -398,7 +398,7 @@ fun DefaultMutableTreeNode.add(modelEquation: ModelEquation) {
     add(label = MODEL_EQUATION_SCRIPT, value = modelEquation.equation)
 }
 
-fun DefaultMutableTreeNode.add(modelMath: ModelMath) {
+private fun DefaultMutableTreeNode.add(modelMath: ModelMath) {
 
     if (modelMath.parameter.isNotEmpty()) {
         val parentNode = DefaultMutableTreeNode("Parameters")
