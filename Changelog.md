@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Properties strings for *Process Model*
 - Properties strings for *Predictive Model*
 - Properties strings for *Other Empirical Model*
+- Static tree view of a *Generic Model*
 
 ## [0.0.6a1]
 ### Added
