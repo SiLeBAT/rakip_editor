@@ -459,7 +459,10 @@ fun createTree(genericModel: GenericModel) : JTree {
     rootNode.add(modelMathNode)
     rootNode.add(simulationNode)
 
-    return JTree(rootNode)
+    val tree = JTree(rootNode)
+    tree.isRootVisible = false
+
+    return tree
 }
 
 fun main(args: Array<String>) {
