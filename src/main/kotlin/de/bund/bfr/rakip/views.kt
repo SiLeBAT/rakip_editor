@@ -1,3 +1,5 @@
+package de.bund.bfr.rakip
+
 import com.gmail.gcolaianni5.jris.bean.Record
 import de.bund.bfr.rakip.*
 import de.bund.bfr.rakip.generic.*
@@ -10,6 +12,7 @@ import javax.swing.JFrame
 import javax.swing.JScrollPane
 import javax.swing.JTree
 import javax.swing.tree.DefaultMutableTreeNode
+import javax.swing.tree.TreeSelectionModel
 
 private fun DefaultMutableTreeNode.add(label: String, value: String) {
     if (value.isNotBlank()) add(DefaultMutableTreeNode("$label: $value"))
@@ -20,11 +23,11 @@ private fun DefaultMutableTreeNode.add(record: Record) {
     // isReferenceDescription is not supported
 
     record.type?.let { add(label = REFERENCE_TYPE, value = it.toString()) }
-    record.date?.let {add(label = REFERENCE_DATE, value = it) }
+    record.date?.let { add(label = REFERENCE_DATE, value = it) }
 
     // PubMedId is not supported
 
-    record.doi?.let {add(label = REFERENCE_DOI, value = it) }
+    record.doi?.let { add(label = REFERENCE_DOI, value = it) }
 
     if (record.authors != null && record.authors.isNotEmpty()) {
         val listNode = DefaultMutableTreeNode(REFERENCE_AUTHORLIST)
@@ -85,7 +88,7 @@ private fun DefaultMutableTreeNode.add(product: Product) {
 }
 
 private fun DefaultMutableTreeNode.add(hazard: Hazard) {
-    
+
     add(label = HAZARD_TYPE, value = hazard.hazardType)
     add(label = HAZARD_NAME, value = hazard.hazardName)
     hazard.hazardDescription?.let { add(label = HAZARD_DESCRIPTION, value = it) }
@@ -369,7 +372,7 @@ private fun DefaultMutableTreeNode.add(parameter: Parameter) {
     parameter.distribution?.let { add(label = PARAMETER_DIST, value = it) }
     parameter.value?.let { add(label = PARAMETER_VALUE, value = it) }
     parameter.reference?.let { add(label = PARAMETER_REFERENCE, value = it) }
-    parameter.variabilitySubject?.let { add(label = PARAMETER_VARIABILITY, value  = it) }
+    parameter.variabilitySubject?.let { add(label = PARAMETER_VARIABILITY, value = it) }
 
     if (parameter.modelApplicability.isNotEmpty()) {
         val parentNode = DefaultMutableTreeNode(PARAMETER_APPLICABILITY)
@@ -434,7 +437,7 @@ private fun DefaultMutableTreeNode.add(modelMath: ModelMath) {
     }
 }
 
-fun createTree(genericModel: GenericModel) : JTree {
+fun createTree(genericModel: GenericModel): JTree {
 
     val generalInformationNode = DefaultMutableTreeNode("General information")
     generalInformationNode.add(genericModel.generalInformation)
@@ -461,6 +464,7 @@ fun createTree(genericModel: GenericModel) : JTree {
 
     val tree = JTree(rootNode)
     tree.isRootVisible = false
+    tree.selectionModel.selectionMode = TreeSelectionModel.SINGLE_TREE_SELECTION
 
     return tree
 }
@@ -512,7 +516,7 @@ fun main(args: Array<String>) {
         return gi
     }
 
-    fun createExampleScope() : Scope {
+    fun createExampleScope(): Scope {
         val product = Product(
                 environmentName = "Cereals",
                 environmentDescription = "bla bla bla",
@@ -574,10 +578,10 @@ fun main(args: Array<String>) {
         return scope
     }
 
-    fun createExampleDataBackground() : DataBackground {
+    fun createExampleDataBackground(): DataBackground {
 
         val study = Study(
-            title = "title",
+                title = "title",
                 description = "description",
                 designType = "design type",
                 measurementType = "measurement type",
@@ -609,7 +613,7 @@ fun main(args: Array<String>) {
         )
 
         val dietaryAssessmentMethod = DietaryAssessmentMethod(
-            collectionTool = "collection tool",
+                collectionTool = "collection tool",
                 numberOfNonConsecutiveOneDay = 0,
                 softwareTool = "Software tool",
                 numberOfFoodItems = mutableListOf("1", "2", "3"),
@@ -626,7 +630,7 @@ fun main(args: Array<String>) {
                 assay = assay)
     }
 
-    fun createExampleModelMath() : ModelMath {
+    fun createExampleModelMath(): ModelMath {
 
         val param = Parameter(
                 id = "id",
@@ -660,7 +664,7 @@ fun main(args: Array<String>) {
 
         return ModelMath(
                 parameter = mutableListOf(param, param, param),
-                sse = .0, mse = .0, rmse = .0, rSquared = .0, aic = .0, bic =.0,
+                sse = .0, mse = .0, rmse = .0, rSquared = .0, aic = .0, bic = .0,
                 modelEquation = equation,
                 fittingProcedure = "fitting procedure",
                 exposure = exposure,
