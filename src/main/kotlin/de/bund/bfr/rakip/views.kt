@@ -1,12 +1,12 @@
 package de.bund.bfr.rakip
 
 import com.gmail.gcolaianni5.jris.bean.Record
-import de.bund.bfr.rakip.*
 import de.bund.bfr.rakip.generic.*
 import ezvcard.VCard
 import java.awt.Dimension
 import java.net.URI
 import java.net.URL
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.swing.JFrame
 import javax.swing.JScrollPane
@@ -14,8 +14,14 @@ import javax.swing.JTree
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeSelectionModel
 
+private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+
 private fun DefaultMutableTreeNode.add(label: String, value: String) {
     if (value.isNotBlank()) add(DefaultMutableTreeNode("$label: $value"))
+}
+
+private fun DefaultMutableTreeNode.add(label: String, date: Date) {
+    add(DefaultMutableTreeNode("$label: ${dateFormat.format(date)}"))
 }
 
 private fun DefaultMutableTreeNode.add(record: Record) {
@@ -83,8 +89,8 @@ private fun DefaultMutableTreeNode.add(product: Product) {
     product.originCountry?.let { add(label = PRODUCT_ORIGINCOUNTRY, value = it) }
     product.areaOfOrigin?.let { add(label = PRODUCT_ORIGINAREA, value = it) }
     product.fisheriesArea?.let { add(label = PRODUCT_FISHERIES, value = it) }
-    product.productionDate?.let { add(label = PRODUCT_PRODUCTIONDATE, value = it.toString()) }
-    product.expirationDate?.let { add(label = PRODUCT_EXPIRATIONDATE, value = it.toString()) }
+    product.productionDate?.let { add(label = PRODUCT_PRODUCTIONDATE, date = it) }
+    product.expirationDate?.let { add(label = PRODUCT_EXPIRATIONDATE, date = it) }
 }
 
 private fun DefaultMutableTreeNode.add(hazard: Hazard) {
@@ -194,12 +200,12 @@ private fun DefaultMutableTreeNode.add(generalInformation: GeneralInformation) {
         add(parentNode)
     }
 
-    add(label = GI_CREATION_DATE, value = generalInformation.creationDate.toString())
+    add(label = GI_CREATION_DATE, date = generalInformation.creationDate)
 
     generalInformation.modificationDate.let {
         // Parent node that holds all the modification dates
         val modificationDateNode = DefaultMutableTreeNode("Modification dates")
-        it.forEach { modificationDateNode.add(label = "Modification date", value = it.toString()) }
+        it.forEach { modificationDateNode.add(label = "Modification date", date = it) }
         add(modificationDateNode)
     }
 
