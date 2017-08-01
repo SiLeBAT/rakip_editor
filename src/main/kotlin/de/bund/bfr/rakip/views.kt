@@ -443,6 +443,7 @@ private fun DefaultMutableTreeNode.add(modelMath: ModelMath) {
     }
 }
 
+@Deprecated("To be removed asap")
 fun createTree(genericModel: GenericModel): JTree {
 
     val generalInformationNode = DefaultMutableTreeNode("General information")
